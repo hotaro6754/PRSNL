@@ -187,7 +187,26 @@ services:
     logging: *default-logging
 
   # =========================================================================
-  # 8. PROMETHEUS (Metrics)
+  # 8. REDIS (Host Profile State)
+  # =========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: sih26145-redis
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    logging: *default-logging
+
+  # =========================================================================
+  # 9. PROMETHEUS (Metrics)
   # =========================================================================
   prometheus:
     image: prom/prometheus:latest
@@ -220,6 +239,7 @@ services:
 volumes:
   mongo_data:
   redpanda_data:
+  redis_data:
   zeek_logs:
   prometheus_data:
   grafana_data:

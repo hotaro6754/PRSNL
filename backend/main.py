@@ -96,8 +96,39 @@ async def get_metrics():
     """Prometheus-compatible metrics endpoint"""
     return Response(content=prometheus_client.generate_latest(), media_type="text/plain")
 
-# ── Core Components ────────────────────────────────────────────────────
+# Globals for telemetry, metrics, and memory limits
+metrics_history: List[Dict[str, Any]] = []
 active_connections: List[WebSocket] = []
+ws_message_queue: List[Dict[str, Any]] = []
+
+async def websocket_flusher():
+    """Background task to batch and flush WS messages to prevent browser DOM freezing."""
+    while True:
+        await asyncio.sleep(1.0) # flush every 1 second
+        if not ws_message_queue or not active_connections:
+            ws_message_queue.clear()
+            continue
+            
+        # Take up to 50 alerts per second to send to the browser
+        batch = ws_message_queue[:50]
+        del ws_message_queue[:50]
+        
+        message = {
+            "type": "BATCH_ALERTS",
+            "alerts": [msg["alert"] for msg in batch if "alert" in msg]
+        }
+        
+        dead = []
+        for conn in active_connections:
+            try:
+                await conn.send_json(message)
+            except Exception:
+                dead.append(conn)
+        for d in dead:
+            if d in active_connections:
+                active_connections.remove(d)
+
+
 alert_queue: asyncio.Queue = asyncio.Queue()
 correlation_engine = CorrelationEngine(max_cases=1000, max_alerts_per_case=50)
 window_manager = WindowManager(window_size_ms=10000, allowed_lateness_ms=2000)
@@ -182,23 +213,12 @@ async def broadcast_alerts():
         except Exception as e:
             logger.error("Persistence error (detection continues): %s", e)
 
-        # Broadcast to WebSocket clients
-        if active_connections:
-            message = {
-                "type": "NEW_ALERT",
-                "alert": alert.model_dump(mode="json"),
-                "case": updated_case.model_dump(mode="json") if updated_case else None,
-            }
-            dead = []
-            for conn in active_connections:
-                try:
-                    await conn.send_json(message)
-                except Exception:
-                    dead.append(conn)
-            for d in dead:
-                if d in active_connections:
-                    active_connections.remove(d)
-
+        # Instead of broadcasting instantly, push to a batch queue to prevent WS explosion
+        ws_message_queue.append({
+            "type": "NEW_ALERT",
+            "alert": alert.model_dump(mode="json"),
+            "case": updated_case.model_dump(mode="json") if updated_case else None,
+        })
 
 # ── Kafka Consumer ─────────────────────────────────────────────────────
 async def kafka_consumer_task():
@@ -308,6 +328,7 @@ async def window_tick_task():
 @app.on_event("startup")
 async def startup_event():
     asyncio.create_task(broadcast_alerts())
+    asyncio.create_task(websocket_flusher())
     asyncio.create_task(kafka_consumer_task())
     asyncio.create_task(window_tick_task())
     asyncio.create_task(metrics_snapshot_task())
@@ -328,22 +349,32 @@ async def startup_event():
     )
 
 # ── API Routes ─────────────────────────────────────────────────────────
-@app.get("/api/cases", response_model=List[SecurityCase])
+@app.get("/api/cases")
 async def get_cases():
-    # If MongoDB is connected, get from Mongo
-    cases = await mongo.get_active_cases()
-    # Also fetch correlated ones in memory that haven't sync'd? No, get_all_cases gives active states 
-    # but since correlation engine handles updates, we return the correlation engine cases because they are the live objects.
-    # In production, we'd sync this. For this implementation we'll keep serving correlation_engine.get_all_cases() as the source of truth for UI speed.
-    return correlation_engine.get_all_cases()
-
+    try:
+        cursor = mongo.cases.find({}).sort("last_updated", -1).limit(100)
+        cases = await cursor.to_list(length=100)
+        for c in cases:
+            if "_id" in c:
+                del c["_id"]
+        return cases
+    except Exception as e:
+        logger.error(f"Error fetching cases from DB: {e}")
+        return []
 
 @app.get("/api/stats")
 async def get_stats():
+    try:
+        active = await mongo.cases.count_documents({"status": "OPEN"})
+        critical = await mongo.cases.count_documents({"severity": {"$in": ["CRITICAL", "HIGH"]}})
+    except:
+        active = 0
+        critical = 0
+        
     return {
         "environment": ENVIRONMENT.value,
-        "active_cases": len([c for c in correlation_engine.get_all_cases() if c.status == "OPEN"]),
-        "critical_cases": len([c for c in correlation_engine.get_all_cases() if c.severity in ("CRITICAL", "HIGH")]),
+        "active_cases": active,
+        "critical_cases": critical,
         "alerts_per_min": round(ALERTS_GENERATED._value.get() / max(1, (time.time() - telemetry["start_time"]) / 60), 2),
         "flows_processed": FLOWS_PROCESSED._value.get(),
         "ml_inferences": telemetry["total_ml_inferences"],
