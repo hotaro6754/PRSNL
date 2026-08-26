@@ -1,0 +1,21 @@
+profile: "mixed-enterprise"
+sample_interval: 10
+
+schedule:
+  - time: "0m"
+    action: "baseline_traffic"
+  - time: "10m"
+    action: "simulate_port_scan"
+  - time: "20m"
+    action: "simulate_dga"
+  - time: "30m"
+    action: "simulate_brute_force"
+  - time: "40m"
+    action: "restart_ml_worker"
+  - time: "60m"
+    action: "baseline_traffic"
+
+abort_conditions:
+  cpu_percent: 95
+  memory_percent: 90
+  kafka_lag_max: 50000
