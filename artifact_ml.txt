@@ -1,0 +1,19 @@
+sih26145-ml-worker  | Requirement already satisfied: prometheus_client in /usr/local/lib/python3.12/site-packages (0.26.0)
+sih26145-ml-worker  | Requirement already satisfied: aiofiles in /usr/local/lib/python3.12/site-packages (25.1.0)
+sih26145-ml-worker  | WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+sih26145-ml-worker  | 
+sih26145-ml-worker  | [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+sih26145-ml-worker  | [notice] To update, run: pip install --upgrade pip
+sih26145-ml-worker  | INFO:backend.ml.router:Loaded XGBoost model xgb_core_v1 (version 1.0-shadow)
+sih26145-ml-worker  | INFO:backend.ml.router:Loaded Isolation Forest model
+sih26145-ml-worker  | INFO:__main__:ML Inference Worker started. Listening on ml-feature-vectors
+sih26145-ml-worker  | ERROR:__main__:Kafka error: KafkaError{code=UNKNOWN_TOPIC_OR_PART,val=3,str="Subscribed topic not available: ml-feature-vectors: Broker: Unknown topic or partition"}
+sih26145-ml-worker  | Requirement already satisfied: prometheus_client in /usr/local/lib/python3.12/site-packages (0.26.0)
+sih26145-ml-worker  | Requirement already satisfied: aiofiles in /usr/local/lib/python3.12/site-packages (25.1.0)
+sih26145-ml-worker  | WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+sih26145-ml-worker  | 
+sih26145-ml-worker  | [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+sih26145-ml-worker  | [notice] To update, run: pip install --upgrade pip
+sih26145-ml-worker  | INFO:backend.ml.router:Loaded XGBoost model xgb_core_v1 (version 1.0-shadow)
+sih26145-ml-worker  | INFO:backend.ml.router:Loaded Isolation Forest model
+sih26145-ml-worker  | INFO:__main__:ML Inference Worker started. Listening on ml-feature-vectors

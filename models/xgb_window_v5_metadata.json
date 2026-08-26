@@ -1,0 +1,1 @@
+{"model_id": "xgb_window_v5", "version": "5.0", "feature_schema": "window_v5", "window": "10s", "status": "VALIDATING", "calibration_version": "isotonic_v1"}

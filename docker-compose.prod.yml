@@ -1,0 +1,193 @@
+version: '3.9'
+x-logging: &id001
+  driver: json-file
+  options:
+    max-size: 50m
+    max-file: '5'
+services:
+  mongodb:
+    image: mongo:7
+    container_name: sih26145-mongodb-prod
+    ports:
+    - 27017:27017
+    volumes:
+    - mongo_data:/data/db
+    healthcheck:
+      test:
+      - CMD
+      - mongosh
+      - --eval
+      - db.adminCommand('ping')
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    logging: *id001
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
+    container_name: sih26145-redpanda-prod
+    command:
+    - redpanda
+    - start
+    - --smp 2
+    - --memory 512M
+    - --overprovisioned
+    - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+    - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+    ports:
+    - 19092:19092
+    - 9644:9644
+    volumes:
+    - redpanda_data:/var/lib/redpanda/data
+    healthcheck:
+      test:
+      - CMD
+      - rpk
+      - cluster
+      - health
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    logging: *id001
+  zeek:
+    build:
+      context: .
+      dockerfile: Dockerfile.zeek
+    container_name: sih26145-zeek-prod
+    network_mode: host
+    cap_add:
+    - NET_ADMIN
+    - NET_RAW
+    working_dir: /var/log/zeek
+    command: ["-i", "eth0", "-C", "LogAscii::use_json=T", "local"]
+    volumes:
+    - zeek_logs:/var/log/zeek:rw
+    restart: always
+    logging: *id001
+  zeek_adapter:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: sih26145-zeek-adapter-prod
+    command:
+    - python
+    - -m
+    - backend.streaming.zeek_adapter
+    environment:
+    - APP_ENV=PRODUCTION
+    - ML_STAGE=PRODUCTION
+    - KAFKA_BROKERS=redpanda:9092
+    - ZEEK_LOG_PATH=/var/log/zeek/conn.log
+    volumes:
+    - zeek_logs:/var/log/zeek:ro
+    - ./backend:/app/backend:ro
+    - ./models:/app/models:ro
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    restart: always
+    logging: *id001
+  ml_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    command:
+    - python
+    - -m
+    - backend.ml.inference_worker
+    environment:
+    - APP_ENV=PRODUCTION
+    - ML_STAGE=PRODUCTION
+    - KAFKA_BROKERS=redpanda:9092
+    depends_on:
+      redpanda:
+        condition: service_healthy
+      redpanda_init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+    restart: always
+    logging: *id001
+    volumes:
+    - ./backend:/app/backend:ro
+    - ./models:/app/models:ro
+    deploy:
+      replicas: 4
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    command:
+    - uvicorn
+    - backend.main:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8000'
+    - --workers
+    - '4'
+    ports:
+    - "8000-8003:8000"
+    environment:
+    - APP_ENV=PRODUCTION
+    - ML_STAGE=PRODUCTION
+    - MONGO_URI=mongodb://mongodb:27017
+    - MONGO_DB=sih26145_prod
+    - KAFKA_BROKERS=redpanda:9092
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+      redpanda_init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+    healthcheck:
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:8000/health
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    restart: always
+    logging: *id001
+    volumes:
+    - ./backend:/app/backend:ro
+    - ./models:/app/models:ro
+    deploy:
+      replicas: 4
+  redpanda_init:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
+    container_name: sih26145-redpanda-init
+    entrypoint: [ "sh", "-c" ]
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    command:
+    - "rpk topic create network-observations -p 8 --brokers redpanda:9092 || true && rpk topic create network-observations-dlq -p 8 --brokers redpanda:9092 || true && rpk topic create ml-feature-vectors -p 8 --brokers redpanda:9092 || true && rpk topic create ml-predictions -p 8 --brokers redpanda:9092 || true"
+  redis:
+    image: redis:7-alpine
+    container_name: sih26145-redis-prod
+    command:
+    - redis-server
+    - --maxmemory
+    - 256mb
+    - --maxmemory-policy
+    - allkeys-lru
+    ports:
+    - 6379:6379
+    restart: always
+    networks:
+    - default
+    logging: *id001
+volumes:
+  mongo_data: null
+  redpanda_data: null
+  zeek_logs: null
+
+
+

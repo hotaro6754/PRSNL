@@ -1,0 +1,5 @@
+window_duration,packet_count,byte_count,src_packet_count,dst_packet_count,src_byte_count,dst_byte_count,packet_size_mean,packet_size_std,packet_size_min,packet_size_max,iat_mean,iat_std,iat_cv,packet_rate,byte_rate,syn_ratio,fin_ratio,rst_ratio,udp_ratio,tcp_ratio,icmp_ratio,directionality,fan_in,fan_out,dns_entropy,tls_sni_entropy,host_connections_5m,host_unique_dests_5m,host_unique_ports_5m,host_dns_queries_5m,host_tls_connections_5m,host_bytes_out_5m,host_bytes_in_5m,label,_pcap
+1.0,10,8361,10,0,8361,0,836.1,0.0,836.1,836.1,0.0,0.0,0.0,10.0,8361.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,1,1,0.0,0.0,0,0,0,0,0,0,0,BENIGN,api_polling.pcap
+1.0,15,9878,15,0,9878,0,658.5333333333333,0.0,658.5333333333333,658.5333333333333,0.0,0.0,0.0,15.0,9878.0,1.0,0.0,0.0,0.0,1.0,0.0,1.0,1,1,0.0,0.0,0,0,0,0,0,0,0,BENIGN,benign_api.pcap
+2.0,3,245,3,0,245,0,81.66666666666667,22.395436042987765,62.0,113.0,1000.0,0.0,0.0,1.5,122.5,0.0,0.0,0.0,1.0,0.0,0.0,1.0,1,1,0.0,0.0,0,0,0,0,0,0,0,ATTACK,dga_botnet.pcap
+1.0,999,527472,999,0,527472,0,528.0,0.0,528.0,528.0,0.0,0.0,0.0,999.0,527472.0,0.0,0.0,0.0,1.0,0.0,0.0,1.0,1,1,0.0,0.0,0,0,0,0,0,0,0,ATTACK,udp_flood.pcap
