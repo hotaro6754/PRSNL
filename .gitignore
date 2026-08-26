@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+.venv/
+*.pkl
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+frontend/node_modules/
+frontend/.next/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker volumes / data
+data/buffers/
+zeek_logs_parity/
+logs/
+
+# Test artifacts
+*.png
+*.pdf
+*.html
+test.py
+test_*.py
+debug_*.txt
+get-pip.py
+
+# Scratch / temp scripts
+fix_*.py
+patch_*.py
+verify_*.py
+rewrite*.py
+strip_quotes.py
+drop.py
+dummy_models.py
+parity_check*.py
+train_window_v*.py
+update_docker.py
+check_alerts.py
+host_profile_test.py
+
+# Build scripts (documentation)
+build_*.py
+
+# Evidence / dossier files
+dossier_*.txt
+evidence_*.txt
+
+# Pytest
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Env files
+.env
+.env.*
+
+# Gemini / AGY
+.gemini/

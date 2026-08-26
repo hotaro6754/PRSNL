@@ -1,0 +1,157 @@
+{
+  "timestamp": 1787652427.1334658,
+  "results": [
+    {
+      "test": "T1 Benign Web",
+      "expected": "BENIGN",
+      "detected": false,
+      "threat_class": "\u2014",
+      "confidence": "\u2014",
+      "detector": "\u2014",
+      "alerts": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "T2 Benign High Volume",
+      "expected": "BENIGN",
+      "detected": false,
+      "threat_class": "\u2014",
+      "confidence": "\u2014",
+      "detector": "\u2014",
+      "alerts": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "T3 SYN Flood",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "DDoS",
+      "confidence": 0.475,
+      "detector": "ddos_stat_v1",
+      "alerts": 2,
+      "status": "PASS"
+    },
+    {
+      "test": "T4 UDP Flood",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "DDoS",
+      "confidence": 0.45,
+      "detector": "ddos_stat_v1",
+      "alerts": 1,
+      "status": "PASS"
+    },
+    {
+      "test": "T5 Rigid Beacon",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "Beaconing",
+      "confidence": 0.9,
+      "detector": "beacon_stateful_v2",
+      "alerts": 2,
+      "status": "PASS"
+    },
+    {
+      "test": "T6 Jittered Beacon",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "Beaconing",
+      "confidence": 0.75,
+      "detector": "beacon_stateful_v2",
+      "alerts": 2,
+      "status": "PASS"
+    },
+    {
+      "test": "T7 DGA",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "DGA",
+      "confidence": 0.8,
+      "detector": "dga_lexical_v1",
+      "alerts": 1,
+      "status": "PASS"
+    },
+    {
+      "test": "T8 DNS Tunnel",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "Tunneling",
+      "confidence": 0.9,
+      "detector": "dns_tunnel_stateful_v1",
+      "alerts": 1,
+      "status": "PASS"
+    },
+    {
+      "test": "T9 Encrypted Session",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "Beaconing",
+      "confidence": 0.9,
+      "detector": "beacon_stateful_v2",
+      "alerts": 2,
+      "status": "PASS"
+    },
+    {
+      "test": "T10 Port Scan",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "PortScan",
+      "confidence": 0.45,
+      "detector": "scan_v2",
+      "alerts": 1,
+      "status": "PASS"
+    },
+    {
+      "test": "T11 Slow Scan",
+      "expected": "BENIGN",
+      "detected": false,
+      "threat_class": "\u2014",
+      "confidence": "\u2014",
+      "detector": "\u2014",
+      "alerts": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "T12 Data Exfiltration",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "Exfiltration",
+      "confidence": 0.85,
+      "detector": "exfil_v1",
+      "alerts": 1,
+      "status": "PASS"
+    },
+    {
+      "test": "T13 Slowloris",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "SlowHTTP",
+      "confidence": 1.0,
+      "detector": "slow_http_v1",
+      "alerts": 1,
+      "status": "PASS"
+    },
+    {
+      "test": "T14 High Fanout Benign",
+      "expected": "BENIGN",
+      "detected": false,
+      "threat_class": "\u2014",
+      "confidence": "\u2014",
+      "detector": "\u2014",
+      "alerts": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "T15 Spoofed-source SYN Flood",
+      "expected": "DETECT",
+      "detected": true,
+      "threat_class": "DDoS",
+      "confidence": 0.475,
+      "detector": "ddos_stat_v1",
+      "alerts": 2,
+      "status": "PASS"
+    }
+  ],
+  "passed": 15,
+  "failed": 0
+}

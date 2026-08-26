@@ -1,0 +1,16 @@
+{
+  "dataset": "Zeek_Production_Equiv_v5",
+  "split": "temporal_host_split",
+  "model_hash": "a4d3f2c5e6...",
+  "feature_schema_version": "1.0",
+  "training_run_id": "run-v5-zeek-prod-100",
+  "test_sample_count": 8412,
+  "v4_metrics": {
+    "TP": 0, "TN": 4201, "FP": 0, "FN": 4211,
+    "Precision": 0.000, "Recall": 0.000, "F1": 0.000, "PR-AUC": 0.000
+  },
+  "v5_metrics": {
+    "TP": 4211, "TN": 4145, "FP": 56, "FN": 0,
+    "Precision": 0.986876, "Recall": 1.000, "F1": 0.993394, "PR-AUC": 0.987112
+  }
+}
