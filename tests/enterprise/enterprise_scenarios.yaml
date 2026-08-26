@@ -1,0 +1,56 @@
+# PS26145 Enterprise Case Scenarios
+
+scenarios:
+  - id: "E01"
+    name: "Normal Enterprise Baseline"
+    category: "baseline"
+    description: "Web, DNS, TLS, internal traffic. No malicious cases."
+    expected_status: "CLEAN"
+    
+  - id: "E02"
+    name: "High-Volume Benign Burst"
+    category: "load"
+    description: "Large authorized file transfer."
+    expected_status: "CLEAN"
+
+  - id: "E03"
+    name: "High-Fanout Enterprise CDN Pattern"
+    category: "baseline"
+    description: "Many destinations, low depth."
+    expected_status: "CLEAN"
+
+  - id: "E04"
+    name: "Simultaneous Threat Mix"
+    category: "threat_mix"
+    description: "SYN flood + UDP flood + Beacon + DGA + DNS tunnel + Scan + Exfiltration at once."
+    expected_status: "INDEPENDENT_DETECTIONS"
+
+  - id: "E05"
+    name: "Multi-Host Incident"
+    category: "threat_mix"
+    description: "Multiple lab source entities performing different attacks."
+    expected_status: "ENTITY_SPECIFIC_CASES"
+
+  - id: "E16"
+    name: "ML WORKER FAILURE"
+    category: "chaos"
+    description: "Kill ML worker during real events."
+    expected_status: "DEGRADED_BUT_DETERMINISTIC_WORKS"
+
+  - id: "E18"
+    name: "REDPANDA FAILURE"
+    category: "chaos"
+    description: "Stop/restart Redpanda."
+    expected_status: "RECOVERED_AT_LEAST_ONCE"
+
+  - id: "E20"
+    name: "MONGODB FAILURE"
+    category: "chaos"
+    description: "Make MongoDB temporarily unavailable."
+    expected_status: "BUFFERED_AND_RECOVERED"
+
+  - id: "E36"
+    name: "MIXED ATTACK + FAILURE CHAOS"
+    category: "havoc"
+    description: "Benign + all attacks + random component restarts."
+    expected_status: "PARTIAL_DETECTION_NO_CRASH"

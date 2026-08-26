@@ -1,0 +1,83 @@
+[
+  {
+    "scenario_id": "E01",
+    "scenario": "Normal Enterprise Baseline",
+    "category": "baseline",
+    "traffic_source": "synthetic_lab",
+    "expected": "CLEAN",
+    "observed": "CLEAN",
+    "status": "PASS"
+  },
+  {
+    "scenario_id": "E02",
+    "scenario": "High-Volume Benign Burst",
+    "category": "load",
+    "traffic_source": "synthetic_lab",
+    "expected": "CLEAN",
+    "observed": "CLEAN",
+    "status": "PASS"
+  },
+  {
+    "scenario_id": "E03",
+    "scenario": "High-Fanout Enterprise CDN Pattern",
+    "category": "baseline",
+    "traffic_source": "synthetic_lab",
+    "expected": "CLEAN",
+    "observed": "CLEAN",
+    "status": "PASS"
+  },
+  {
+    "scenario_id": "E04",
+    "scenario": "Simultaneous Threat Mix",
+    "category": "threat_mix",
+    "traffic_source": "synthetic_lab",
+    "expected": "INDEPENDENT_DETECTIONS",
+    "observed": "INDEPENDENT_DETECTIONS",
+    "status": "PASS"
+  },
+  {
+    "scenario_id": "E05",
+    "scenario": "Multi-Host Incident",
+    "category": "threat_mix",
+    "traffic_source": "synthetic_lab",
+    "expected": "ENTITY_SPECIFIC_CASES",
+    "observed": "ENTITY_SPECIFIC_CASES",
+    "status": "PASS"
+  },
+  {
+    "scenario_id": "E16",
+    "scenario": "ML WORKER FAILURE",
+    "category": "chaos",
+    "traffic_source": "synthetic_lab",
+    "expected": "DEGRADED_BUT_DETERMINISTIC_WORKS",
+    "observed": "DEGRADED_BUT_DETERMINISTIC_WORKS",
+    "status": "PASS"
+  },
+  {
+    "scenario_id": "E18",
+    "scenario": "REDPANDA FAILURE",
+    "category": "chaos",
+    "traffic_source": "synthetic_lab",
+    "expected": "RECOVERED_AT_LEAST_ONCE",
+    "observed": "RECOVERED_AT_LEAST_ONCE",
+    "status": "PASS"
+  },
+  {
+    "scenario_id": "E20",
+    "scenario": "MONGODB FAILURE",
+    "category": "chaos",
+    "traffic_source": "synthetic_lab",
+    "expected": "BUFFERED_AND_RECOVERED",
+    "observed": "BUFFERED_AND_RECOVERED",
+    "status": "PASS"
+  },
+  {
+    "scenario_id": "E36",
+    "scenario": "MIXED ATTACK + FAILURE CHAOS",
+    "category": "havoc",
+    "traffic_source": "synthetic_lab",
+    "expected": "PARTIAL_DETECTION_NO_CRASH",
+    "observed": "PARTIAL_DETECTION_NO_CRASH",
+    "status": "PASS"
+  }
+]
