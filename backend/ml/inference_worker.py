@@ -55,7 +55,18 @@ class InferenceWorker:
         self.consumer.subscribe([TOPIC_FEATURES])
         logger.info(f"ML Inference Worker started. Listening on {TOPIC_FEATURES}")
         
+        last_sync = 0
+        
         while True:
+            import asyncio
+            now = time.time()
+            if now - last_sync > 5.0:
+                try:
+                    asyncio.run(self.resolver.sync_models())
+                    last_sync = now
+                except Exception as e:
+                    logger.error(f"Sync error: {e}")
+                    
             msg = self.consumer.poll(1.0)
             if msg is None:
                 continue
