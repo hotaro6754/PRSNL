@@ -23,6 +23,8 @@ export default function LiveThreatsPage() {
           const data = JSON.parse(event.data)
           if (data.type === 'NEW_ALERT' && data.alert) {
             setAlerts(prev => [data.alert, ...prev].slice(0, 100))
+          } else if (data.type === 'BATCH_ALERTS' && data.alerts) {
+            setAlerts(prev => [...data.alerts, ...prev].slice(0, 100))
           }
         } catch (err) {}
       }
