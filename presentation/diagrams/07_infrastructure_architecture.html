@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enterprise Infrastructure Architecture</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        :root {
+            --navy: #0B1F3A;
+            --sih-blue: #0066B3;
+            --blue-light: #EAF4FB;
+            --green: #198754;
+            --amber: #F4A62A;
+            --red: #D92D20;
+            --gray: #667085;
+            --light: #F7F9FC;
+            --white: #FFFFFF;
+        }
+        body {
+            margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif;
+            background: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+        .canvas {
+            width: 1600px; height: 900px; background: var(--white); box-sizing: border-box; padding: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; overflow: hidden;
+        }
+        .toolbar { position: absolute; top: -40px; right: 0; }
+        .toolbar button { background: var(--navy); color: var(--white); border: none; padding: 5px 15px; cursor: pointer; border-radius: 4px; }
+        h1 { color: var(--navy); font-size: 40px; margin: 0 0 10px 0; }
+        h2 { color: var(--gray); font-size: 24px; margin: 0 0 40px 0; font-weight: normal; }
+        .box { background: var(--white); border: 2px solid var(--sih-blue); border-radius: 8px; padding: 15px; text-align: center; font-size: 18px; font-weight: 600; color: var(--navy); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        @media print { body { background: none; } .toolbar { display: none; } .canvas { box-shadow: none; width: 100%; height: 100vh; page-break-after: always; padding: 20px; } }
+    </style>
+</head>
+<body>
+    <div style="position:relative;">
+        <div class="toolbar"><button onclick="window.print()">Print / Export PDF</button></div>
+        <div class="canvas">
+            <h1>Enterprise Infrastructure Architecture</h1>
+            <h2>Decoupled, high-throughput pipeline design</h2>
+            <div class="content">
+    <div style="display:flex; flex-direction:column; gap:60px; margin-top:60px; width:100%; max-width:1400px; margin-left:auto; margin-right:auto;">
+
+        <div style="background:var(--blue-light); border:2px solid var(--sih-blue); border-left:20px solid var(--sih-blue); border-radius:8px; padding:40px; position:relative;">
+            <div style="position:absolute; top:-18px; left:40px; background:var(--sih-blue); color:var(--white); padding:8px 20px; font-weight:bold; font-size:20px; border-radius:4px;">DATA PLANE</div>
+            <div style="display:flex; justify-content:space-around; align-items:center; margin-top:10px;">
+                <div class="box" style="flex:1; max-width:250px;">ZEEK</div>
+                <div style="font-size:30px; color:var(--sih-blue);">→</div>
+                <div class="box" style="flex:1; max-width:250px;">ZEEK ADAPTER</div>
+                <div style="font-size:30px; color:var(--sih-blue);">→</div>
+                <div class="box" style="flex:1; max-width:250px; background:var(--sih-blue); color:var(--white);">REDPANDA</div>
+            </div>
+        </div>
+
+        <div style="background:rgba(25, 135, 84, 0.1); border:2px solid var(--green); border-left:20px solid var(--green); border-radius:8px; padding:40px; position:relative;">
+            <div style="position:absolute; top:-18px; left:40px; background:var(--green); color:var(--white); padding:8px 20px; font-weight:bold; font-size:20px; border-radius:4px;">INTELLIGENCE PLANE</div>
+            <div style="display:flex; justify-content:space-around; align-items:center; margin-top:10px;">
+                <div class="box" style="flex:1; max-width:180px;">REDIS</div>
+                <div style="font-size:30px; color:var(--green);">→</div>
+                <div class="box" style="flex:1; max-width:180px;">WINDOW MANAGER</div>
+                <div style="font-size:30px; color:var(--green);">→</div>
+                <div class="box" style="flex:1; max-width:180px;">FEATURE ENGINE</div>
+                <div style="font-size:30px; color:var(--green);">→</div>
+                <div class="box" style="flex:1; max-width:180px;">RULES + XGBOOST</div>
+                <div style="font-size:30px; color:var(--green);">→</div>
+                <div class="box" style="flex:1; max-width:180px; background:var(--green); color:var(--white);">FUSION</div>
+            </div>
+        </div>
+
+        <div style="background:#E8EBF0; border:2px solid var(--navy); border-left:20px solid var(--navy); border-radius:8px; padding:40px; position:relative;">
+            <div style="position:absolute; top:-18px; left:40px; background:var(--navy); color:var(--white); padding:8px 20px; font-weight:bold; font-size:20px; border-radius:4px;">SOC PLANE</div>
+            <div style="display:flex; justify-content:space-around; align-items:center; margin-top:10px;">
+                <div class="box" style="flex:1; max-width:250px;">MONGODB</div>
+                <div style="font-size:30px; color:var(--navy);">→</div>
+                <div class="box" style="flex:1; max-width:250px;">FASTAPI</div>
+                <div style="font-size:30px; color:var(--navy);">→</div>
+                <div class="box" style="flex:1; max-width:250px;">WEBSOCKET</div>
+                <div style="font-size:30px; color:var(--navy);">→</div>
+                <div class="box" style="flex:1; max-width:250px; background:var(--navy); color:var(--white);">NEXT.JS SOC</div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+        </div>
+    </div>
+</body>
+</html>
