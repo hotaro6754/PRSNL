@@ -56,13 +56,15 @@ class InferenceWorker:
         logger.info(f"ML Inference Worker started. Listening on {TOPIC_FEATURES}")
         
         last_sync = 0
+        import asyncio
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         
         while True:
-            import asyncio
             now = time.time()
             if now - last_sync > 5.0:
                 try:
-                    asyncio.run(self.resolver.sync_models())
+                    loop.run_until_complete(self.resolver.sync_models())
                     last_sync = now
                 except Exception as e:
                     logger.error(f"Sync error: {e}")
