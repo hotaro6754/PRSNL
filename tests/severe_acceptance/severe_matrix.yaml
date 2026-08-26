@@ -1,0 +1,15 @@
+levels:
+  standard:
+    description: "Functional regression T1-T15"
+    scenarios: ["T1", "T3", "T7", "T10", "T11"]
+  severe:
+    description: "High load + mixed threats + failures"
+    scenarios: ["T1-T15", "THREAT_SATURATION", "WORKER_KILL"]
+  extreme:
+    description: "Simultaneous pressure across multiple layers"
+    scenarios: ["T1-T15", "SIMULTANEOUS_MULTI_THREAT", "HIGH_VOLUME_BURST", "REDIS_KILL", "MONGO_KILL"]
+
+threat_saturation:
+  - "port_scan"
+  - "brute_force"
+  - "dga"
