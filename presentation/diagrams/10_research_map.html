@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Research & Ecosystem</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        :root {
+            --navy: #0B1F3A;
+            --sih-blue: #0066B3;
+            --blue-light: #EAF4FB;
+            --green: #198754;
+            --amber: #F4A62A;
+            --red: #D92D20;
+            --gray: #667085;
+            --light: #F7F9FC;
+            --white: #FFFFFF;
+        }
+        body {
+            margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif;
+            background: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+        .canvas {
+            width: 1600px; height: 900px; background: var(--white); box-sizing: border-box; padding: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; overflow: hidden;
+        }
+        .toolbar { position: absolute; top: -40px; right: 0; }
+        .toolbar button { background: var(--navy); color: var(--white); border: none; padding: 5px 15px; cursor: pointer; border-radius: 4px; }
+        h1 { color: var(--navy); font-size: 40px; margin: 0 0 10px 0; }
+        h2 { color: var(--gray); font-size: 24px; margin: 0 0 40px 0; font-weight: normal; }
+        .box { background: var(--white); border: 2px solid var(--sih-blue); border-radius: 8px; padding: 15px; text-align: center; font-size: 18px; font-weight: 600; color: var(--navy); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        @media print { body { background: none; } .toolbar { display: none; } .canvas { box-shadow: none; width: 100%; height: 100vh; page-break-after: always; padding: 20px; } }
+    </style>
+</head>
+<body>
+    <div style="position:relative;">
+        <div class="toolbar"><button onclick="window.print()">Print / Export PDF</button></div>
+        <div class="canvas">
+            <h1>Research & Ecosystem</h1>
+            <h2>Standing on the shoulders of the cybersecurity open-source community</h2>
+            <div class="content">
+    <div style="position:relative; width:1200px; height:650px; margin:40px auto 0 auto;">
+        <!-- SVGs for connections -->
+        <svg style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;" pointer-events="none">
+            <line x1="600" y1="325" x2="300" y2="150" stroke="#0066B3" stroke-width="2" />
+            <line x1="600" y1="325" x2="600" y2="100" stroke="#0066B3" stroke-width="2" />
+            <line x1="600" y1="325" x2="900" y2="150" stroke="#0066B3" stroke-width="2" />
+            <line x1="600" y1="325" x2="1000" y2="325" stroke="#0066B3" stroke-width="2" />
+            <line x1="600" y1="325" x2="900" y2="500" stroke="#0066B3" stroke-width="2" />
+            <line x1="600" y1="325" x2="600" y2="550" stroke="#0066B3" stroke-width="2" />
+            <line x1="600" y1="325" x2="300" y2="500" stroke="#0066B3" stroke-width="2" />
+            <line x1="600" y1="325" x2="200" y2="325" stroke="#0066B3" stroke-width="2" />
+        </svg>
+        
+        <!-- Center -->
+        <div style="position:absolute; top:250px; left:480px; width:240px; height:150px; background:var(--navy); color:var(--white); border-radius:75px; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:2; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+            <div style="font-weight:bold; font-size:32px;">PS26145</div>
+            <div style="font-size:20px; font-weight:normal; color:#EAF4FB; margin-top:5px;">PASSIVE NDR</div>
+        </div>
+        
+        <!-- Nodes -->
+        
+        <div style="position:absolute; top:100px; left:150px; width:260px; background:var(--white); border:2px solid var(--sih-blue); border-radius:8px; padding:20px; text-align:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-weight:bold; color:var(--navy); font-size:22px;">ZEEK</div>
+            <div style="font-size:16px; color:var(--gray); margin-top:10px; font-weight:600;">NETWORK TELEMETRY</div>
+        </div>
+        
+        <div style="position:absolute; top:20px; left:470px; width:260px; background:var(--white); border:2px solid var(--sih-blue); border-radius:8px; padding:20px; text-align:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-weight:bold; color:var(--navy); font-size:22px;">CICIDS2017</div>
+            <div style="font-size:16px; color:var(--gray); margin-top:10px; font-weight:600;">INTRUSION DATA</div>
+        </div>
+        
+        <div style="position:absolute; top:100px; left:790px; width:260px; background:var(--white); border:2px solid var(--sih-blue); border-radius:8px; padding:20px; text-align:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-weight:bold; color:var(--navy); font-size:22px;">UNSW-NB15</div>
+            <div style="font-size:16px; color:var(--gray); margin-top:10px; font-weight:600;">CROSS-DOMAIN VALIDATION</div>
+        </div>
+        
+        <div style="position:absolute; top:280px; left:890px; width:260px; background:var(--white); border:2px solid var(--sih-blue); border-radius:8px; padding:20px; text-align:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-weight:bold; color:var(--navy); font-size:22px;">XGBOOST</div>
+            <div style="font-size:16px; color:var(--gray); margin-top:10px; font-weight:600;">ML CLASSIFICATION</div>
+        </div>
+        
+        <div style="position:absolute; top:470px; left:790px; width:260px; background:var(--white); border:2px solid var(--sih-blue); border-radius:8px; padding:20px; text-align:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-weight:bold; color:var(--navy); font-size:22px;">DNS / DGA</div>
+            <div style="font-size:16px; color:var(--gray); margin-top:10px; font-weight:600;">RESEARCH</div>
+        </div>
+        
+        <div style="position:absolute; top:520px; left:470px; width:260px; background:var(--white); border:2px solid var(--sih-blue); border-radius:8px; padding:20px; text-align:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-weight:bold; color:var(--navy); font-size:22px;">C2 BEACON</div>
+            <div style="font-size:16px; color:var(--gray); margin-top:10px; font-weight:600;">RESEARCH</div>
+        </div>
+        
+        <div style="position:absolute; top:470px; left:150px; width:260px; background:var(--white); border:2px solid var(--sih-blue); border-radius:8px; padding:20px; text-align:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-weight:bold; color:var(--navy); font-size:22px;">ENCRYPTED TRAFFIC</div>
+            <div style="font-size:16px; color:var(--gray); margin-top:10px; font-weight:600;">METADATA RESEARCH</div>
+        </div>
+        
+        <div style="position:absolute; top:280px; left:50px; width:260px; background:var(--white); border:2px solid var(--sih-blue); border-radius:8px; padding:20px; text-align:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div style="font-weight:bold; color:var(--navy); font-size:22px;">REDPANDA</div>
+            <div style="font-size:16px; color:var(--gray); margin-top:10px; font-weight:600;">STREAMING</div>
+        </div>
+        
+    </div>
+    </div>
+        </div>
+    </div>
+</body>
+</html>
