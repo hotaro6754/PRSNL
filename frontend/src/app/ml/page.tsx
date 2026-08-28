@@ -13,6 +13,10 @@ const calibrationData = [
 ];
 
 export default function ModelLab() {
+
+  const [prCurveData, setPrCurveData] = useState([]);
+  const [featureImportance, setFeatureImportance] = useState([]);
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-slate-300 font-mono flex flex-col p-6 space-y-6 max-w-7xl mx-auto w-full">
       <header className="border-b border-slate-800 pb-4 flex justify-between items-end">
