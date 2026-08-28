@@ -24,3 +24,4 @@ class Alert(BaseModel):
     explanation: Optional[str] = None
     window_start: Optional[datetime] = None
     window_end: Optional[datetime] = None
+    primary_entity: Optional[str] = None

@@ -22,7 +22,15 @@ FEATURE_COLUMNS = [
     "directionality", "fan_in", "fan_out", "dns_entropy", "tls_sni_entropy",
     "host_connections_5m", "host_unique_dests_5m", "host_unique_ports_5m",
     "host_dns_queries_5m", "host_tls_connections_5m", "host_bytes_out_5m",
-    "host_bytes_in_5m"
+    "host_bytes_in_5m",
+    
+    "host_connections_1h", "host_unique_dests_1h", "host_unique_ports_1h",
+    "host_dns_queries_1h", "host_tls_connections_1h", "host_bytes_out_1h",
+    "host_bytes_in_1h",
+    
+    "host_connections_24h", "host_unique_dests_24h", "host_unique_ports_24h",
+    "host_dns_queries_24h", "host_tls_connections_24h", "host_bytes_out_24h",
+    "host_bytes_in_24h"
 ]
 
 def _fv_to_array(fv: FeatureVector) -> np.ndarray:
@@ -126,11 +134,10 @@ class EvidenceFusionEngine:
         if xgb_pred and xgb_pred["probability"] > 0.85:
             # We must use EvidenceItem
             ev = EvidenceItem(
-                evidence_type="ML_SUPERVISED_ANOMALY",
-                confidence=xgb_pred["probability"],
-                description=f"High probability of malicious flow (XGB v{xgb_pred['version']})",
-                model_version=xgb_pred["version"],
-                raw_data=xgb_pred
+                feature="ML_SUPERVISED_PROBABILITY",
+                value=xgb_pred["probability"],
+                contribution=xgb_pred["probability"],
+                explanation=f"High probability of malicious flow (XGB v{xgb_pred['version']})"
             )
             from backend.contracts.alert import Alert, ThreatClass, Severity
             alert = Alert(

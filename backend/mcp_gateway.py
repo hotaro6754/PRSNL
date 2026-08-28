@@ -143,6 +143,58 @@ async def _ip_reputation_handler(query: str, **kwargs) -> Dict[str, Any]:
     return {"ip": query, "status": "UNCONFIGURED"}
 
 
+async def _virustotal_handler(query: str, **kwargs) -> Dict[str, Any]:
+    """VirusTotal URL reputation check."""
+    from backend.content.threat_intel import ThreatIntelProvider
+    provider = ThreatIntelProvider()
+    evidence_list = await provider.get_virustotal_evidence(query)
+    
+    if not evidence_list:
+         return {
+             "url": query,
+             "status": "degraded",
+             "note": "Failed to fetch from real API or API key missing, fallback to mock data",
+             "positives": 0,
+             "total": 0,
+             "malicious": False
+         }
+         
+    ev = evidence_list[0]
+    return {
+        "url": query,
+        "status": "success",
+        "positives": ev.details.get("malicious_hits", 0),
+        "total": sum(ev.details.get("stats", {}).values()) if ev.details.get("stats") else 0,
+        "malicious": ev.evidence_class == "FACT",
+        "note": "Real data from VirusTotal"
+    }
+
+
+async def _phishtank_handler(query: str, **kwargs) -> Dict[str, Any]:
+    """PhishTank URL lookup."""
+    from backend.content.threat_intel import ThreatIntelProvider
+    provider = ThreatIntelProvider()
+    evidence_list = await provider.get_phishtank_evidence(query)
+    
+    if not evidence_list:
+         return {
+             "url": query,
+             "status": "degraded",
+             "in_database": False,
+             "verified_phish": False,
+             "note": "Failed to fetch from real API or API key missing, fallback to mock data"
+         }
+         
+    ev = evidence_list[0]
+    return {
+        "url": query,
+        "status": "success",
+        "in_database": True,
+        "verified_phish": ev.evidence_class == "FACT",
+        "note": "Real data from PhishTank"
+    }
+
+
 # ── The Orchestrator ───────────────────────────────────────────────────
 
 class MCPOrchestrator:
@@ -210,6 +262,118 @@ class MCPOrchestrator:
             )],
             read_only=True,
             handler=_ip_reputation_handler,
+        ))
+
+        self.register_tool(MCPTool(
+            tool_id="builtin:virustotal",
+            server_id="builtin",
+            name="VirusTotal URL Check",
+            description="Check URL against VirusTotal engines",
+            trust_level=TrustLevel.INVESTIGATION,
+            plane=PlaneAssignment.INVESTIGATION_PLANE,
+            capabilities=[MCPCapability(
+                name="vt_url_reputation",
+                description="Check URL reputation score",
+                input_schema={"query": "string (URL)"},
+                output_schema={"positives": "int", "total": "int", "malicious": "bool"},
+                category="url_reputation",
+            )],
+            read_only=True,
+            handler=_virustotal_handler,
+        ))
+
+        self.register_tool(MCPTool(
+            tool_id="builtin:phishtank",
+            server_id="builtin",
+            name="PhishTank Lookup",
+            description="Check URL against PhishTank database",
+            trust_level=TrustLevel.INVESTIGATION,
+            plane=PlaneAssignment.INVESTIGATION_PLANE,
+            capabilities=[MCPCapability(
+                name="phishtank_lookup",
+                description="Check if URL is verified phishing",
+                input_schema={"query": "string (URL)"},
+                output_schema={"in_database": "bool", "verified_phish": "bool"},
+                category="url_reputation",
+            )],
+            read_only=True,
+            handler=_phishtank_handler,
+        ))
+
+        self.register_tool(MCPTool(
+            tool_id="builtin:openphish",
+            server_id="builtin",
+            name="OpenPhish Lookup",
+            description="Check URL against OpenPhish database",
+            trust_level=TrustLevel.INVESTIGATION,
+            plane=PlaneAssignment.INVESTIGATION_PLANE,
+            capabilities=[MCPCapability(
+                name="openphish_lookup",
+                description="Check if URL is in OpenPhish",
+                input_schema={"query": "string (URL)"},
+                output_schema={"is_phish": "bool"},
+                category="url_reputation",
+            )],
+            read_only=True,
+            handler=None, # scaffold
+        ))
+        
+        self.register_tool(MCPTool(
+            tool_id="builtin:urlhaus",
+            server_id="builtin",
+            name="URLhaus Lookup",
+            description="Check URL against URLhaus database",
+            trust_level=TrustLevel.INVESTIGATION,
+            plane=PlaneAssignment.INVESTIGATION_PLANE,
+            capabilities=[MCPCapability(
+                name="urlhaus_lookup",
+                description="Check if URL distributes malware",
+                input_schema={"query": "string (URL)"},
+                output_schema={"is_malware": "bool", "tags": "list"},
+                category="url_reputation",
+            )],
+            read_only=True,
+            handler=None, # scaffold
+        ))
+
+        self.register_tool(MCPTool(
+            tool_id="external:misp",
+            server_id="misp",
+            name="MISP Threat Intel",
+            description="Query MISP for IOCs",
+            trust_level=TrustLevel.INVESTIGATION,
+            plane=PlaneAssignment.INVESTIGATION_PLANE,
+            capabilities=[MCPCapability(
+                name="misp_query",
+                description="Search MISP for IOC",
+                input_schema={"query": "string (IOC)"},
+                output_schema={"events": "list", "sightings": "int"},
+                category="threat_intel",
+            )],
+            requires_authorization=False,
+            read_only=True,
+            available=False,  # scaffold
+            handler=None,
+        ))
+
+        self.register_tool(MCPTool(
+            tool_id="external:opencti",
+            server_id="opencti",
+            name="OpenCTI Intel",
+            description="Query OpenCTI for Threat Actors and Campaigns",
+            trust_level=TrustLevel.INVESTIGATION,
+            plane=PlaneAssignment.INVESTIGATION_PLANE,
+            capabilities=[MCPCapability(
+                name="opencti_query",
+                description="Search OpenCTI for IOC",
+                input_schema={"query": "string (IOC)"},
+                output_schema={"reports": "list", "actors": "list"},
+                category="threat_intel",
+            )],
+            requires_authorization=False,
+            read_only=True,
+            available=False,  # scaffold
+            handler=None,
         ))
 
         # Red-team tools — declared but requiring explicit authorization

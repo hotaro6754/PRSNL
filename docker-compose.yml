@@ -118,6 +118,16 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     container_name: sih26145-ml-worker
+    security_opt:
+      - seccomp=unconfined
+    cap_drop:
+      - ALL
+    user: "1000:1000"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
     command: ["bash", "-c", "pip install prometheus_client aiofiles && python -m backend.ml.inference_worker"]
     environment:
       - APP_ENV=${APP_ENV:-PRODUCTION}
@@ -140,7 +150,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     container_name: sih26145-backend
-    command: ["bash", "-c", "pip install prometheus_client aiofiles websockets && uvicorn backend.main:app --host 0.0.0.0 --port 8000"]
+    command: ["bash", "-c", "pip install prometheus_client aiofiles websockets httpx playwright && uvicorn backend.main:app --host 0.0.0.0 --port 8000"]
     volumes:
       - ./backend:/app/backend
       - ./models:/app/models

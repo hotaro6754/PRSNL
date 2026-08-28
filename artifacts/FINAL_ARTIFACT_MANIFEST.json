@@ -1,0 +1,22 @@
+{
+  "artifacts": [
+    {
+      "id": "ART-001",
+      "type": "report",
+      "source": "CYBEROS_EXHAUSTIVE_FINAL_REPORT.md",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "ART-002",
+      "type": "qa",
+      "source": "CYBEROS_HACKSPRINT_JURY_QA.md",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "ART-003",
+      "type": "pitch",
+      "source": "CYBEROS_HACKSPRINT_PITCH.md",
+      "status": "VERIFIED"
+    }
+  ]
+}

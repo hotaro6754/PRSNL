@@ -12,6 +12,15 @@ class ThreatClass(str, Enum):
     Exfiltration = "Exfiltration"
     SlowHTTP = "SlowHTTP"
     BruteForce = "BruteForce"
+    PhishingURL = "PhishingURL"
+    PhishingEmail = "PhishingEmail"
+    Smishing = "Smishing"
+    Quishing = "Quishing"
+    CredentialHarvesting = "CredentialHarvesting"
+    BrandImpersonation = "BrandImpersonation"
+    SocialEngineering = "SocialEngineering"
+    ANOMALOUS_NETWORK_ACTIVITY = "ANOMALOUS_NETWORK_ACTIVITY"
+    AttackChain = "AttackChain"
 
 class Severity(str, Enum):
     """Enumeration of alert severity levels."""

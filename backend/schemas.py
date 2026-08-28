@@ -4,6 +4,6 @@
 from backend.contracts.observation import NetworkObservation
 from backend.contracts.evidence import DetectionEvidence as EvidenceItem
 from backend.contracts.alert import Alert
-from backend.contracts.case import SecurityCase
+from backend.contracts.case import CyberCase
 from backend.contracts.features import FeatureVector
 from backend.contracts.prediction import MLPrediction

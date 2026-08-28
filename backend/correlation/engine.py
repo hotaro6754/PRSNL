@@ -3,40 +3,41 @@ from typing import Dict, List, Optional
 from datetime import datetime, timezone
 import logging
 
-from backend.schemas import Alert, SecurityCase
+from backend.schemas import Alert, CyberCase
 from backend.config import ThreatClass, Severity
 
 logger = logging.getLogger(__name__)
 
 class CorrelationEngine:
     def __init__(self, max_cases: int = 1000, max_alerts_per_case: int = 50, case_ttl_seconds: int = 86400):
-        self.cases: Dict[str, SecurityCase] = {} # Keyed by source_ip
+        self.cases: Dict[str, CyberCase] = {} # Keyed by primary_entity
         self.max_cases = max_cases
         self.max_alerts_per_case = max_alerts_per_case
         self.case_ttl_seconds = case_ttl_seconds
 
-    def ingest_alert(self, alert: Alert) -> Optional[SecurityCase]:
+    def ingest_alert(self, alert: Alert) -> Optional[CyberCase]:
         """
-        Ingests a raw alert and correlates it into a SecurityCase.
-        Returns the updated SecurityCase.
+        Ingests a raw alert and correlates it into a CyberCase.
+        Returns the updated CyberCase.
         """
-        src_ip = alert.source_ip
-        if not src_ip or src_ip == "UNKNOWN":
+        entity = alert.primary_entity or alert.source_ip
+        if not entity or entity == "UNKNOWN":
             return None
 
         # 1. Deduplication and Garbage Collection
         self._garbage_collect(current_time=alert.timestamp)
         
         # Enforce global case memory bound
-        if src_ip not in self.cases and len(self.cases) >= self.max_cases:
+        if entity not in self.cases and len(self.cases) >= self.max_cases:
             logger.warning("Correlation Engine hit MAX_CASES boundary. Dropping new case.")
             return None
 
-        if src_ip not in self.cases:
+        if entity not in self.cases:
             # Create new case
-            case = SecurityCase(
+            case = CyberCase(
                 case_id=uuid.uuid4(),
-                source_ip=src_ip,
+                primary_entity=entity,
+                source_ip=alert.source_ip,
                 status="OPEN",
                 severity=alert.severity,
                 threat_summary=f"Isolated {alert.threat_class} detected",
@@ -44,10 +45,10 @@ class CorrelationEngine:
                 last_seen=alert.timestamp,
                 alerts=[alert]
             )
-            self.cases[src_ip] = case
+            self.cases[entity] = case
         else:
             # Update existing case
-            case = self.cases[src_ip]
+            case = self.cases[entity]
             case.last_seen = alert.timestamp
             
             # Deduplication: don't store exact duplicate alerts based on threat class + destination + time window if they are extremely close.
@@ -56,13 +57,17 @@ class CorrelationEngine:
                 case.alerts.pop(0) # Evict oldest evidence to prevent memory unboundedness
             
             case.alerts.append(alert)
+            if alert.evidence and case.evidence is not None:
+                case.evidence.extend(alert.evidence)
+            elif alert.evidence:
+                case.evidence = list(alert.evidence)
             
         # 2. Relationship Correlation (Severity & Summary Escalation)
         self._evaluate_case_escalation(case)
             
         return case
 
-    def _evaluate_case_escalation(self, case: SecurityCase):
+    def _evaluate_case_escalation(self, case: CyberCase):
         """
         Analyzes the set of alerts inside a case and escalates the severity / summary
         based on behavioral patterns, strictly avoiding blind confidence summation.
@@ -114,13 +119,13 @@ class CorrelationEngine:
     def _garbage_collect(self, current_time: datetime):
         """Purge cases that have exceeded their TTL."""
         expired = []
-        for src, case in self.cases.items():
+        for entity, case in self.cases.items():
             delta = (current_time - case.last_seen).total_seconds()
             if delta > self.case_ttl_seconds:
-                expired.append(src)
+                expired.append(entity)
                 
-        for src in expired:
-            del self.cases[src]
+        for entity in expired:
+            del self.cases[entity]
 
-    def get_all_cases(self) -> List[SecurityCase]:
+    def get_all_cases(self) -> List[CyberCase]:
         return list(self.cases.values())

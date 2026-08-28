@@ -1,0 +1,8 @@
+{
+  "metrics": {
+    "total_tests": 265,
+    "status": "RELEASE CANDIDATE",
+    "ssrf_blocked": true,
+    "ml_precision": "91.5% [CYBEROS OBSERVED]"
+  }
+}

@@ -103,7 +103,7 @@ export default function SimulatorPage() {
           Unlike simulated UI dashboards, these buttons do not inject fake data into the database. 
           Instead, they instruct the backend API to open raw TCP/UDP sockets and transmit malicious patterns 
           directly into the Zeek sensor container on the Docker network. The sensor observes the raw traffic, 
-          forwards it to Redpanda, and the standard NDR detection pipeline processes it identically to external threats.
+          forwards it to Redpanda, and the standard CyberOS detection pipeline processes it identically to external threats.
         </p>
       </div>
     </div>
