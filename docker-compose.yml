@@ -1,257 +1,258 @@
-version: "3.9"
-
-x-logging: &default-logging
-  driver: "json-file"
+version: '3.9'
+x-logging: &id001
+  driver: json-file
   options:
-    max-size: "10m"
-    max-file: "3"
-
+    max-size: 10m
+    max-file: '3'
 services:
-  # =========================================================================
-  # 1. MONGODB (Persistence)
-  # =========================================================================
   mongodb:
     image: mongo:7
     container_name: sih26145-mongodb
     ports:
-      - "27017:27017"
+    - 27017:27017
     volumes:
-      - mongo_data:/data/db
+    - mongo_data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test:
+      - CMD
+      - mongosh
+      - --eval
+      - db.adminCommand('ping')
       interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 2. REDPANDA (Kafka-compatible Streaming)
-  # =========================================================================
+    logging: *id001
   redpanda:
     image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
     container_name: sih26145-redpanda
     command:
-      - redpanda
-      - start
-      - --smp 1
-      - --memory 512M
-      - --overprovisioned
-      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
-      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+    - redpanda
+    - start
+    - --smp 1
+    - --memory 512M
+    - --overprovisioned
+    - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+    - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
     ports:
-      - "19092:19092"
-      - "9644:9644"
+    - 19092:19092
+    - 9644:9644
     volumes:
-      - redpanda_data:/var/lib/redpanda/data
+    - redpanda_data:/var/lib/redpanda/data
     healthcheck:
-      test: ["CMD", "rpk", "cluster", "health"]
+      test:
+      - CMD
+      - rpk
+      - cluster
+      - health
       interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 3. ZEEK (Passive Sensor)
-  # =========================================================================
+    logging: *id001
   zeek:
     build:
       context: .
       dockerfile: Dockerfile.zeek
     container_name: sih26145-zeek
     cap_add:
-      - NET_ADMIN
-      - NET_RAW
-    entrypoint: ["sh", "-c"]
+    - NET_ADMIN
+    - NET_RAW
+    entrypoint:
+    - sh
+    - -c
     command:
-      - >
-        mkdir -p /var/log/zeek && 
-        cd /var/log/zeek && 
-        echo 'redef tcp_attempt_delay = 5 sec;' > /usr/local/zeek/share/zeek/site/local.zeek &&
-        echo 'redef tcp_close_delay = 5 sec;' >> /usr/local/zeek/share/zeek/site/local.zeek &&
-        zeek -i eth0 -C LogAscii::use_json=T local
-    volumes:
-      - zeek_logs:/var/log/zeek
-    restart: unless-stopped
-    logging: *default-logging
+    - 'mkdir -p /var/log/zeek &&  cd /var/log/zeek &&  echo ''redef tcp_attempt_delay
+      = 5 sec;'' > /usr/local/zeek/share/zeek/site/local.zeek && echo ''redef tcp_close_delay
+      = 5 sec;'' >> /usr/local/zeek/share/zeek/site/local.zeek && zeek -i eth0 -C
+      LogAscii::use_json=T local
 
-  # =========================================================================
-  # 3.1 LAB DNS (For testing DNS traffic across the bridge)
-  # =========================================================================
+      '
+    volumes:
+    - zeek_logs:/var/log/zeek
+    restart: unless-stopped
+    logging: *id001
   lab_dns:
     image: coredns/coredns
     container_name: sih26145-lab-dns
     command: -dns.port 53
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 4. ZEEK ADAPTER (Ingestion to Redpanda)
-  # =========================================================================
+    logging: *id001
   zeek_adapter:
     build:
       context: .
       dockerfile: Dockerfile.backend
     container_name: sih26145-zeek-adapter
-    command: ["bash", "-c", "pip install prometheus_client aiofiles && python -m backend.streaming.zeek_adapter"]
+    command:
+    - bash
+    - -c
+    - pip install prometheus_client aiofiles && python -m backend.streaming.zeek_adapter
     environment:
-      - APP_ENV=${APP_ENV:-PRODUCTION}
-      - KAFKA_BROKERS=redpanda:9092
-      - ZEEK_LOG_PATH=/var/log/zeek/conn.log
+    - APP_ENV=${APP_ENV:-PRODUCTION}
+    - KAFKA_BROKERS=redpanda:9092
+    - ZEEK_LOG_PATH=/var/log/zeek/conn.log
     volumes:
-      - zeek_logs:/var/log/zeek:ro
-      - ./backend:/app/backend
+    - zeek_logs:/var/log/zeek:ro
+    - ./backend:/app/backend
     depends_on:
       redpanda:
         condition: service_healthy
       zeek:
         condition: service_started
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 5. ML INFERENCE WORKER
-  # =========================================================================
+    logging: *id001
   ml_worker:
     build:
       context: .
       dockerfile: Dockerfile.backend
     container_name: sih26145-ml-worker
     security_opt:
-      - seccomp=unconfined
+    - seccomp=unconfined
     cap_drop:
-      - ALL
-    user: "1000:1000"
+    - ALL
+    user: 1000:1000
     deploy:
       resources:
         limits:
           cpus: '0.50'
           memory: 512M
-    command: ["bash", "-c", "pip install prometheus_client aiofiles && python -m backend.ml.inference_worker"]
+    command:
+    - bash
+    - -c
+    - pip install prometheus_client aiofiles && python -m backend.ml.inference_worker
     environment:
-      - APP_ENV=${APP_ENV:-PRODUCTION}
-      - KAFKA_BROKERS=redpanda:9092
-      - MONGO_URI=${MONGODB_URI:-mongodb://mongodb:27017}
+    - APP_ENV=${APP_ENV:-PRODUCTION}
+    - KAFKA_BROKERS=redpanda:9092
+    - MONGO_URI=${MONGODB_URI:-mongodb://mongodb:27017}
     volumes:
-      - ./models:/app/models
-      - ./backend:/app/backend
+    - ./models:/app/models
+    - ./backend:/app/backend
     depends_on:
       redpanda:
         condition: service_healthy
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 6. BACKEND API (Correlation & Fusion & Detectors)
-  # =========================================================================
+    logging: *id001
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
     container_name: sih26145-backend
-    command: ["bash", "-c", "pip install prometheus_client aiofiles websockets httpx playwright && uvicorn backend.main:app --host 0.0.0.0 --port 8000"]
+    command:
+    - bash
+    - -c
+    - pip install prometheus_client aiofiles websockets httpx playwright && uvicorn
+      backend.main:app --host 0.0.0.0 --port 8000
     volumes:
-      - ./backend:/app/backend
-      - ./models:/app/models
+    - ./backend:/app/backend
+    - ./models:/app/models
     ports:
-      - "8000:8000"
+    - 8000:8000
     environment:
-      - APP_ENV=${APP_ENV:-PRODUCTION}
-      - MONGO_URI=${MONGODB_URI:-mongodb://mongodb:27017}
-      - MONGO_DB=sih26145
-      - KAFKA_BROKERS=${REDPANDA_BROKERS:-redpanda:9092}
-      - KAFKA_TOPIC_OBSERVATIONS=${KAFKA_TOPIC_OBSERVATIONS:-network-observations}
-      - KAFKA_TOPIC_FEATURES=${KAFKA_TOPIC_FEATURES:-ml-feature-vectors}
-      - KAFKA_TOPIC_PREDICTIONS=${KAFKA_TOPIC_PREDICTIONS:-ml-predictions}
+    - APP_ENV=${APP_ENV:-PRODUCTION}
+    - MONGO_URI=${MONGODB_URI:-mongodb://mongodb:27017}
+    - MONGO_DB=sih26145
+    - KAFKA_BROKERS=${REDPANDA_BROKERS:-redpanda:9092}
+    - KAFKA_TOPIC_OBSERVATIONS=${KAFKA_TOPIC_OBSERVATIONS:-network-observations}
+    - KAFKA_TOPIC_FEATURES=${KAFKA_TOPIC_FEATURES:-ml-feature-vectors}
+    - KAFKA_TOPIC_PREDICTIONS=${KAFKA_TOPIC_PREDICTIONS:-ml-predictions}
     depends_on:
       mongodb:
         condition: service_healthy
       redpanda:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:8000/health
       interval: 15s
       timeout: 5s
       retries: 3
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 7. FRONTEND (SOC Dashboard)
-  # =========================================================================
+    logging: *id001
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: sih26145-frontend
-    command: ["npm", "run", "dev"]
+    command:
+    - npm
+    - run
+    - dev
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    - ./frontend:/app
+    - /app/node_modules
     ports:
-      - "3000:3000"
+    - 3000:3000
     environment:
-      - NEXT_PUBLIC_API_URL=${API_BASE_URL:-http://localhost:8000}
+    - NEXT_PUBLIC_API_URL=${API_BASE_URL:-http://localhost:8000}
     depends_on:
-      - backend
+    - backend
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 8. REDIS (Host Profile State)
-  # =========================================================================
+    logging: *id001
   redis:
     image: redis:7-alpine
     container_name: sih26145-redis
-    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+    command:
+    - redis-server
+    - --appendonly
+    - 'yes'
+    - --appendfsync
+    - everysec
     ports:
-      - "6379:6379"
+    - 6379:6379
     volumes:
-      - redis_data:/data
+    - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 9. PROMETHEUS (Metrics)
-  # =========================================================================
+    logging: *id001
   prometheus:
     image: prom/prometheus:latest
     container_name: sih26145-prometheus
     ports:
-      - "9090:9090"
+    - 9090:9090
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    - prometheus_data:/prometheus
     restart: unless-stopped
-    logging: *default-logging
-
-  # =========================================================================
-  # 9. GRAFANA (Observability)
-  # =========================================================================
+    logging: *id001
   grafana:
     image: grafana/grafana:latest
     container_name: sih26145-grafana
     ports:
-      - "3001:3000"
+    - 3001:3000
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+    - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      - grafana_data:/var/lib/grafana
+    - grafana_data:/var/lib/grafana
     depends_on:
-      - prometheus
+    - prometheus
     restart: unless-stopped
-    logging: *default-logging
-
+    logging: *id001
+  init-redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
+    container_name: sih26145-init-redpanda
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    command:
+    - sh
+    - -c
+    - rpk topic create ml-feature-vectors network-observations --brokers=redpanda:9092
+      || true
+    restart: on-failure
 volumes:
-  mongo_data:
-  redpanda_data:
-  redis_data:
-  zeek_logs:
-  prometheus_data:
-  grafana_data:
+  mongo_data: null
+  redpanda_data: null
+  redis_data: null
+  zeek_logs: null
+  prometheus_data: null
+  grafana_data: null
