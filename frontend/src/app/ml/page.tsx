@@ -4,10 +4,6 @@ import React, { useState } from 'react'
 import { Database, Activity, Target, Zap, Shield, GitBranch, Cpu, Network, CheckCircle2, FileJson, Search } from 'lucide-react'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
 
-const [prCurveData, setPrCurveData] = useState([]);
-
-const [featureImportance, setFeatureImportance] = useState([]);
-
 const calibrationData = [
   { prob: 0.1, actual: 0.12 },
   { prob: 0.3, actual: 0.28 },
