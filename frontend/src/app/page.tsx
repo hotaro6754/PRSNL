@@ -87,7 +87,7 @@ export default function Overview() {
               <div key={key} className="flex justify-between items-center p-3 rounded-lg bg-slate-800/20 border border-slate-800">
                 <span className="text-sm font-medium text-slate-300 capitalize">{key.replace('_', ' ')}</span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${val === 'HEALTHY' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
-                  {val}
+                  {typeof val === 'string' ? val : (val?.status ? String(val.status).toUpperCase() : 'UNKNOWN')}
                 </span>
               </div>
             ))}
