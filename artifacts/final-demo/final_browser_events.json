@@ -1,0 +1,8 @@
+[
+  {
+    "timestamp": "2026-08-29T08:34:31.116425Z",
+    "url": "http://evil.com/login",
+    "action": "blocked",
+    "risk_score": 95
+  }
+]

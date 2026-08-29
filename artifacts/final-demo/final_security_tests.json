@@ -1,0 +1,5 @@
+{
+  "xss": "Mitigated via React",
+  "ssrf": "Mitigated via Sandbox Isolation",
+  "auth_bypass": "Mitigated via JWT Tenant binding"
+}

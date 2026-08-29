@@ -1,0 +1,8 @@
+{
+  "scenario": "GOLDEN_PATH",
+  "browser_intercept": true,
+  "api_response": 200,
+  "ml_inference_latency_ms": 110,
+  "case_id_generated": "CYB-2048",
+  "prometheus_counter_incremented": true
+}
