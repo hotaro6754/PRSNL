@@ -141,6 +141,51 @@ export default function ScanPage() {
             </button>
           </div>
         </form>
+
+        {/* Quick Demo Payloads */}
+        <div className="flex gap-2 flex-wrap mt-6 pt-4 border-t border-slate-800/50">
+          <span className="text-xs text-slate-500 my-auto uppercase font-bold tracking-wider mr-2">Auto-Load Demos:</span>
+          
+          <button 
+            type="button" 
+            onClick={() => { setType("sms"); setContent("URGENT: Your SBI KYC is suspended. Update your PAN card immediately at http://sbi-pan-update.xyz to prevent account blocking."); }}
+            className="text-xs bg-red-900/20 text-red-400 border border-red-900/50 px-3 py-1.5 rounded hover:bg-red-900/40 transition-colors"
+          >
+            🚨 High Risk SMS
+          </button>
+          
+          <button 
+            type="button" 
+            onClick={() => { setType("sms"); setContent("Your Flipkart package is arriving today by 8 PM. Tracking: FLP123456"); }}
+            className="text-xs bg-emerald-900/20 text-emerald-400 border border-emerald-900/50 px-3 py-1.5 rounded hover:bg-emerald-900/40 transition-colors"
+          >
+            ✅ Safe SMS
+          </button>
+          
+          <button 
+            type="button" 
+            onClick={() => { setType("url"); setContent("http://169.254.169.254/latest/meta-data/"); }}
+            className="text-xs bg-red-900/20 text-red-400 border border-red-900/50 px-3 py-1.5 rounded hover:bg-red-900/40 transition-colors"
+          >
+            🚨 SSRF Attack (URL)
+          </button>
+          
+          <button 
+            type="button" 
+            onClick={() => { setType("url"); setContent("https://www.google.com/search?q=cyber+security"); }}
+            className="text-xs bg-emerald-900/20 text-emerald-400 border border-emerald-900/50 px-3 py-1.5 rounded hover:bg-emerald-900/40 transition-colors"
+          >
+            ✅ Safe URL
+          </button>
+
+          <button 
+            type="button" 
+            onClick={() => { setType("email"); setContent("From: PayPal Support <admin@evil-hacker.com>\nDMARC: fail\n\nPlease verify your credentials immediately at http://evil.com/login"); }}
+            className="text-xs bg-orange-900/20 text-orange-400 border border-orange-900/50 px-3 py-1.5 rounded hover:bg-orange-900/40 transition-colors"
+          >
+            🎣 Phishing Email
+          </button>
+        </div>
       </div>
 
       {error && (
