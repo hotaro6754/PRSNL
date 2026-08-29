@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 import asyncio
 from typing import List
 
-from playwright.async_api import async_playwright
+from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 from backend.contracts.evidence import CyberEvidence, Provenance
 
 class SSRFViolationError(Exception):
@@ -24,9 +24,14 @@ def is_safe_ip(ip_str: str) -> bool:
     except ValueError:
         return False
 
+
 def resolve_and_check_ssrf(url: str):
+    if url.startswith("data:"):
+        return True
+    
     parsed = urlparse(url)
     hostname = parsed.hostname
+
     if not hostname:
         raise SSRFViolationError("Invalid URL: missing hostname")
     
@@ -71,7 +76,7 @@ async def analyze_web_page(url: str) -> List[CyberEvidence]:
         await page.route("**/*", route_interceptor)
         
         try:
-            await page.goto(url, wait_until="networkidle")
+            await page.goto(url, wait_until="domcontentloaded", timeout=8000)
             
             forms_count = await page.locator("form").count()
             password_inputs = await page.locator("input[type='password']").count()

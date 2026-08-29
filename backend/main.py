@@ -825,3 +825,13 @@ async def get_ml_metrics():
         return meta
     except Exception as e:
         return {"error": str(e)}
+
+from fastapi.responses import HTMLResponse
+@app.get('/lab/benign', response_class=HTMLResponse)
+async def lab_benign():
+    return '<html><body><h1>Benign Controlled Page</h1></body></html>'
+
+@app.get('/lab/login', response_class=HTMLResponse)
+async def lab_login():
+    return '<html><body><form><input type=\
+text\/><input type=\password\/></form></body></html>'

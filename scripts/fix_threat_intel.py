@@ -1,36 +1,9 @@
-import httpx
-import logging
+import re
 
-logger = logging.getLogger('ThreatIntel')
+with open('backend/content/threat_intel.py', 'r') as f:
+    code = f.read()
 
-async def check_misp_urlhaus(url: str, score: float) -> list:
-    evidence = []
-    
-    # URLHaus Real API Check
-    try:
-        async with httpx.AsyncClient(timeout=3.0) as client:
-            resp = await client.post('https://urlhaus-api.abuse.ch/v1/url/', data={'url': url})
-            if resp.status_code == 200:
-                data = resp.json()
-                if data.get('query_status') == 'ok':
-                    evidence.append({
-                        "evidence_type": "URLHaus_Blacklist_Match",
-                        "details": {
-                            "source": "URLHaus API", 
-                            "match": url,
-                            "threat": data.get('threat', 'unknown'),
-                            "tags": data.get('tags', [])
-                        }
-                    })
-    except Exception as e:
-        logger.warning(f"URLHaus lookup failed: {e}")
-        evidence.append({
-            "evidence_type": "URLHaus_Status",
-            "details": {"source": "URLHaus API", "status": "DEGRADED", "error": str(e)}
-        })
-        
-    return evidence
-
+replacement = """
 from backend.content.web_analyzer import analyze_web_page, SSRFViolationError
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 
@@ -77,16 +50,10 @@ async def check_playwright(url: str, score: float) -> list:
         })
         
     return evidence
+"""
 
-async def check_agent_reach(text: str, score: float) -> list:
-    evidence = []
-    # Agent reach is external LLM
-    evidence.append({
-        "evidence_type": "Agent-Reach_NLP",
-        "details": {"source": "Agent-Reach", "status": "DEGRADED", "reason": "No provider API key configured"}
-    })
-    return evidence
+code = re.sub(r'from backend\.content\.web_analyzer import analyze_web_page, SSRFViolationError[\s\S]*?async def check_playwright[\s\S]*?return evidence', replacement.strip(), code)
 
-class ThreatIntelProvider:
-    def __init__(self):
-        pass
+with open('backend/content/threat_intel.py', 'w') as f:
+    f.write(code)
+print("Updated threat_intel.py with precise exception handling")
