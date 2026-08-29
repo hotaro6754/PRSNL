@@ -15,3 +15,8 @@ onnxruntime>=1.15.0
 redis==5.0.1
 
 playwright
+PyJWT
+prometheus_client
+aiofiles
+websockets
+httpx

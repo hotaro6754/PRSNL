@@ -80,11 +80,9 @@ services:
     - grafana_data:/var/lib/grafana
     - ./grafana/provisioning:/etc/grafana/provisioning
   init-redpanda:
+    entrypoint: ["sh", "-c"]
     command:
-    - sh
-    - -c
-    - rpk topic create ml-feature-vectors network-observations --brokers=redpanda:9092
-      || true
+    - rpk topic create ml-feature-vectors network-observations --brokers=redpanda:9092 || true
     container_name: cyberos-init-redpanda
     depends_on:
       redpanda:
@@ -106,7 +104,7 @@ services:
     command:
     - bash
     - -c
-    - pip install PyJWT prometheus_client aiofiles && python -m backend.ml.inference_worker
+    - python -m backend.ml.inference_worker
     container_name: cyberos-ml-worker
     depends_on:
       redpanda:
@@ -235,7 +233,7 @@ services:
     command:
     - bash
     - -c
-    - pip install PyJWT prometheus_client aiofiles && python -m backend.streaming.zeek_adapter
+    - python -m backend.streaming.zeek_adapter
     container_name: cyberos-zeek-adapter
     depends_on:
       redpanda:
