@@ -122,8 +122,9 @@ services:
     environment:
       - APP_ENV=${APP_ENV:-PRODUCTION}
       - KAFKA_BROKERS=redpanda:9092
+      - MONGO_URI=${MONGODB_URI:-mongodb://mongodb:27017}
     volumes:
-      - ./models:/app/models:ro
+      - ./models:/app/models
       - ./backend:/app/backend
     depends_on:
       redpanda:
@@ -142,6 +143,7 @@ services:
     command: ["bash", "-c", "pip install prometheus_client aiofiles websockets && uvicorn backend.main:app --host 0.0.0.0 --port 8000"]
     volumes:
       - ./backend:/app/backend
+      - ./models:/app/models
     ports:
       - "8000:8000"
     environment:
