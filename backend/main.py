@@ -491,8 +491,8 @@ async def get_case_by_id(case_id: str, tenant_id: str = Depends(get_current_tena
     if "explanation" not in case or not case["explanation"]:
         severity = case.get("severity", "UNKNOWN")
         threat_type = case.get("threat_summary", "Anomaly")
-        entity_type = case.get("primary_entity_type", "network/host").upper()
-        entity = case.get("primary_entity", case.get("source_ip", "Unknown Entity"))
+        entity_type = (case.get("primary_entity_type") or "network/host").upper()
+        entity = case.get("primary_entity") or case.get("source_ip") or "Unknown Entity"
         
         alerts = case.get("alerts", [])
         evidence_list = []
