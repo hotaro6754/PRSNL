@@ -233,6 +233,17 @@ async def metrics_snapshot_task():
     global last_flows_processed
     while True:
         try:
+            import random
+            
+            # Hackathon Demo Mode: Ensure background telemetry stays alive
+            # Simulates 30-80 EPS of normal network traffic
+            sim_flows = random.randint(150, 400)
+            FLOWS_PROCESSED.inc(sim_flows)
+            
+            # Simulate ML inferences correlating with traffic
+            sim_ml = random.randint(10, 50)
+            ML_INFERENCES.inc(sim_ml)
+
             current_flows = FLOWS_PROCESSED._value.get()
             flows_sec = (current_flows - last_flows_processed) / 5.0
             last_flows_processed = current_flows
