@@ -106,7 +106,7 @@ export default function SystemHealthDashboard() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="timestamp" stroke="#64748b" fontSize={12} tickFormatter={(t) => new Date(t*1000).toLocaleTimeString()} />
+                <XAxis dataKey="timestamp" stroke="#64748b" fontSize={12} tickFormatter={(t) => new Date(t).toLocaleTimeString()} />
                 <YAxis stroke="#64748b" fontSize={12} />
                 <Tooltip contentStyle={{backgroundColor: '#0f172a', borderColor: '#1e293b'}} itemStyle={{color: '#fff'}} />
                 <Area type="monotone" dataKey="flows_processed" stroke="#10b981" fillOpacity={1} fill="url(#colorEps)" />
@@ -123,7 +123,7 @@ export default function SystemHealthDashboard() {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={metrics}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="timestamp" stroke="#64748b" fontSize={12} tickFormatter={(t) => new Date(t*1000).toLocaleTimeString()} />
+                <XAxis dataKey="timestamp" stroke="#64748b" fontSize={12} tickFormatter={(t) => new Date(t).toLocaleTimeString()} />
                 <YAxis stroke="#64748b" fontSize={12} />
                 <Tooltip contentStyle={{backgroundColor: '#0f172a', borderColor: '#1e293b'}} itemStyle={{color: '#fff'}} />
                 <Line type="monotone" dataKey="ml_inferences" stroke="#6366f1" strokeWidth={2} dot={false} activeDot={{ r: 6 }} />
@@ -139,7 +139,7 @@ export default function SystemHealthDashboard() {
              <h3 className="text-lg font-semibold text-white flex items-center"><Network className="w-5 h-5 mr-2 text-sky-500"/> Grafana / Prometheus (Live Metrics)</h3>
           </div>
           <div className="h-[400px] p-0 overflow-hidden rounded-b-xl border-t border-slate-800 bg-black">
-             <iframe src="http://localhost:3001/d/cyberos-system-health?orgId=1&kiosk=tv&theme=dark" width="100%" height="100%" frameBorder="0" className="opacity-90"></iframe>
+             <iframe src="http://localhost:3001/d/cyber-01/cyberos-realtime?orgId=1&kiosk=tv&theme=dark" width="100%" height="100%" frameBorder="0" className="opacity-90"></iframe>
           </div>
          </div>
       </div>
