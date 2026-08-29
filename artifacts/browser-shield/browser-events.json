@@ -1,0 +1,7 @@
+[
+  {
+    "event": "navigation_intercepted",
+    "url": "http://evil.com",
+    "risk": 95
+  }
+]

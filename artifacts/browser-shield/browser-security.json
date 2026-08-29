@@ -1,0 +1,5 @@
+{
+  "vulnerabilities": 0,
+  "warnings": 1,
+  "notes": "No Auth headers"
+}
