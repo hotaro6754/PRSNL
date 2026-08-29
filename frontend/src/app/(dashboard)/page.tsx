@@ -42,7 +42,7 @@ export default function CyberOSDashboard() {
             entity: (c.primary_entity || c.source_ip || 'unknown').substring(0, 40),
             type: (c.attack_chain && c.attack_chain[0]) || 'ANOMALY',
             severity: c.severity || 'LOW',
-            score: Math.round((c.risk_score || 0) * 100),
+            score: Math.min(100, Math.round(c.risk_score || 0)),
             case_id: (c.case_id || '').substring(0, 8),
           }))
           setThreats(mapped)
