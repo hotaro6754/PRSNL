@@ -13,10 +13,14 @@ export default function WarningApp() {
   const url = params.get('url') || '';
   const risk = params.get('risk') || '0';
   const threat = params.get('threat') || 'UNKNOWN';
+  const caseId = params.get('case_id') || 'UNKNOWN';
+  
   let evidence = [];
   try {
     evidence = JSON.parse(params.get('evidence') || '[]');
   } catch (e) {}
+
+  const [showProof, setShowProof] = useState(false);
 
   const handleBypass = async () => {
     try {
@@ -86,20 +90,41 @@ export default function WarningApp() {
                     <Activity className="w-4 h-4 text-warning shrink-0 mt-0.5" />
                     <div>
                       <span className="font-bold text-white block mb-1">{ev.source}</span>
-                      <span className="text-slate-400">{ev.description}</span>
+                      <span className="text-slate-400">{ev.description || ev.observation}</span>
                     </div>
                   </li>
                 ))}
               </ul>
+
+              {showProof && (
+                <div className="mt-4 p-4 border-t border-border bg-black/40 rounded">
+                  <h3 className="text-xs font-bold text-white mb-2">PROVENANCE & METADATA</h3>
+                  <div className="text-xs text-slate-500 font-mono space-y-1">
+                    <div>CASE_ID: {caseId}</div>
+                    <div>DETECTOR: URL_SECURITY_XGBOOST</div>
+                    <div>TIMESTAMP: {new Date().toISOString()}</div>
+                    {evidence.map((ev: any, i: number) => (
+                      <div key={i}>EVIDENCE_ID: {ev.evidence_id || 'LOCAL-HEURISTIC'}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <button onClick={() => setShowProof(!showProof)} className="text-xs text-primary hover:text-blue-400 underline underline-offset-4">
+                {showProof ? 'HIDE PROOF' : 'PROVE THIS'}
+              </button>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <button onClick={handleGoBack} className="flex-1 bg-primary hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors">
-              <ArrowLeft className="w-5 h-5" /> GO BACK TO SAFETY
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button onClick={handleGoBack} className="flex-1 bg-primary hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+              <ArrowLeft className="w-5 h-5" /> GO BACK
             </button>
-            <button onClick={() => window.open('http://localhost:3000/scan', '_blank')} className="flex-1 bg-border hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors">
-              <Shield className="w-5 h-5" /> INVESTIGATE IN CYBEROS
+            <button onClick={() => window.open(`http://localhost:3000/cases/${caseId}`, '_blank')} className="flex-1 bg-border hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+              <Shield className="w-5 h-5" /> INVESTIGATE
+            </button>
+            <button onClick={() => window.open(`http://localhost:3000/awareness/${threat.toLowerCase()}`, '_blank')} className="flex-1 bg-border hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm">
+              LEARN
             </button>
           </div>
           

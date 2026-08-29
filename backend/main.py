@@ -238,36 +238,6 @@ async def metrics_snapshot_task():
             import time
             import uuid
             
-            # Hackathon Demo Mode: Ensure background telemetry stays alive
-            sim_flows = random.randint(150, 400)
-            FLOWS_PROCESSED.inc(sim_flows)
-            ML_INFERENCES.inc(random.randint(10, 50))
-            
-            # Simulate Recent Uni-Directional IP flows for the UI table
-            for _ in range(random.randint(1, 4)):
-                src = f"192.168.1.{random.randint(10,250)}"
-                dst = f"{random.randint(1,220)}.{random.randint(1,250)}.{random.randint(1,250)}.{random.randint(1,250)}"
-                f = NetworkObservation(
-                    organization_id="default",
-                    observation_id=str(uuid.uuid4()),
-                    timestamp=int(time.time() * 1000),
-                    source_ip=src,
-                    destination_ip=dst,
-                    source_port=random.randint(1024, 65535),
-                    destination_port=random.choice([80, 443, 53, 22, 3389]),
-                    protocol=6 if random.random() > 0.3 else 17,
-                    flow_id=str(uuid.uuid4()),
-                    first_seen=int(time.time() * 1000),
-                    last_seen=int(time.time() * 1000),
-                    duration=random.random() * 5.0,
-                    orig_packets=random.randint(1, 15),
-                    resp_packets=0, # Uni-directional!
-                    orig_ip_bytes=random.randint(40, 1500),
-                    resp_ip_bytes=0,
-                    state="S0"
-                )
-                recent_flows_buffer.append(f)
-
             current_flows = FLOWS_PROCESSED._value.get()
             flows_sec = (current_flows - last_flows_processed) / 5.0
             last_flows_processed = current_flows

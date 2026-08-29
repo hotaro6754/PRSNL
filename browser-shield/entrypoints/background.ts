@@ -19,17 +19,22 @@ export default defineBackground(() => {
         return; 
       }
 
-      // 2. Call CyberOS API Bridge
+      // 2. Auth & API Bridge
+      const { cyberos_token } = await chrome.storage.local.get('cyberos_token');
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (cyberos_token) {
+        headers['Authorization'] = `Bearer ${cyberos_token}`;
+      }
+
       const res = await fetch('http://localhost:8000/api/scan', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ type: 'url', content: url })
       });
 
       if (!res.ok) return;
 
       const data = await res.json();
-      
       await chrome.storage.local.set({ [`verdict_${tabId}`]: data });
 
       // 3. Apply Policy
@@ -38,6 +43,7 @@ export default defineBackground(() => {
           `?url=${encodeURIComponent(url)}` +
           `&risk=${data.risk_score}` +
           `&threat=${encodeURIComponent(data.threat_type)}` +
+          `&case_id=${encodeURIComponent(data.case_id || 'UNKNOWN')}` +
           `&evidence=${encodeURIComponent(JSON.stringify(data.evidence))}`;
           
         chrome.tabs.update(tabId, { url: warningUrl });
