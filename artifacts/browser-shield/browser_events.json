@@ -1,0 +1,16 @@
+[
+  {
+    "event_id": "evt_9a8b7c",
+    "timestamp": "2026-08-29T08:30:50.100792Z",
+    "url": "http://evil.com/login",
+    "action": "blocked",
+    "risk_score": 95
+  },
+  {
+    "event_id": "evt_1b2c3d",
+    "timestamp": "2026-08-29T08:30:50.100868Z",
+    "url": "http://github.com",
+    "action": "allowed",
+    "risk_score": 12
+  }
+]

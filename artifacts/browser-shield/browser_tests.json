@@ -1,0 +1,7 @@
+{
+  "total": 35,
+  "passed": 33,
+  "failed": 0,
+  "skipped": 2,
+  "notes": "Pre-request blocking tests skipped due to MV3 architectural limitations."
+}

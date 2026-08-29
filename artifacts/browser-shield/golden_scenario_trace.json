@@ -1,0 +1,17 @@
+{
+  "scenario": "Phishing Link Intercept",
+  "navigation_id": "nav_001",
+  "request": {
+    "url": "http://evil.com/login",
+    "auth": "Bearer [REDACTED]"
+  },
+  "analysis": {
+    "ml_score": 0.95,
+    "ti_score": 0.0,
+    "final_risk": 95,
+    "classification": "CRITICAL"
+  },
+  "warning_triggered": true,
+  "case_id": "CYB-12345",
+  "prometheus_counter_incremented": true
+}

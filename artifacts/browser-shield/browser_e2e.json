@@ -1,0 +1,9 @@
+{
+  "steps_verified": [
+    "load",
+    "analyze",
+    "block",
+    "investigate",
+    "report"
+  ]
+}

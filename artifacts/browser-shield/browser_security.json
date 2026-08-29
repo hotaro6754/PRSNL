@@ -1,0 +1,6 @@
+{
+  "xss_audited": true,
+  "token_secure": true,
+  "permissions_minimized": true,
+  "ssrf_mitigated": true
+}

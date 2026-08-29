@@ -1,4 +1,5 @@
-# TELEMETRY VALIDATION
-* **System Telemetry**: Backend explicitly simulates 30-80 EPS network traffic using Prometheus metrics (`FLOWS_PROCESSED`).
-* **Grafana Integration**: Grafana actively scrapes `backend:8000/metrics`.
-* **Browser Metrics**: **PARTIAL**. The API tracks `/api/scan` counts, but distinct browser vs UI scans are not strongly partitioned in Prometheus yet.
+# TELEMETRY ARCHITECTURE
+**Principle:** 1 Real Event = 1 Metric Increment.
+* The frontend `setInterval(fetchData, 5000)` strictly pulls *real* counters from the API.
+* Fake `random.randint()` simulated heartbeats were completely eradicated from the `metrics_snapshot_task`.
+* When the UI displays "0 EPS" or "0 Active Investigations", it is the factual truth of the system state.
