@@ -11,50 +11,54 @@ class RiskEngine:
 
     def evaluate(self, input_type: str, detection_results: Dict[str, Any], patterns: List[Dict[str, Any]]) -> Dict[str, Any]:
         evidence = []
-        total_risk = 0.0
         confidence = "LOW"
         threat_type = "unknown"
         
-        # ML Model Signal
+        # 1. Extract RAW signals (including dynamically mapped ones)
         ml_score = detection_results.get("ml_score", 0.0)
-        ml_threat = detection_results.get("ml_threat_type", "unknown")
         
-        if ml_score > 0:
-            evidence.append({
-                "source": "ML Detection",
-                "description": f"Model detected potential {ml_threat} with score {ml_score:.2f}",
-                "severity": ml_score
-            })
-            total_risk += ml_score * self.weights["ml_model"]
-            threat_type = ml_threat
-            
-        # Pattern Signal
+        # If URL analyzer populated it nested, pull it out
+        if "url_analysis" in detection_results:
+            ml_score = max(ml_score, detection_results["url_analysis"].get("score", 0.0))
+            if ml_score > 0 and threat_type == "unknown":
+                threat_type = "url_phishing"
+                
+        ml_threat = detection_results.get("ml_threat_type", threat_type)
+        intel_score = detection_results.get("intel_score", 0.0)
+        
         pattern_score = 0.0
         if patterns:
-            max_pattern_severity = max(p.get("severity", 0.0) for p in patterns)
-            pattern_score = max_pattern_severity
+            pattern_score = max(p.get("severity", 0.0) for p in patterns)
             for p in patterns:
                 evidence.append({
                     "source": "Pattern Matching",
                     "description": p["description"],
                     "severity": p["severity"]
                 })
-            total_risk += pattern_score * self.weights["patterns"]
-            if threat_type == "unknown" and patterns:
+            if threat_type == "unknown" or threat_type == "url_phishing":
                 threat_type = patterns[0].get("category", "suspicious")
                 
-        # Threat Intel Signal (mock)
-        intel_score = detection_results.get("intel_score", 0.0)
+        if ml_score > 0:
+            evidence.append({
+                "source": "ML Detection",
+                "description": f"Model detected anomaly with score {ml_score:.2f}",
+                "severity": ml_score
+            })
+            if threat_type == "unknown":
+                threat_type = ml_threat
+
         if intel_score > 0:
             evidence.append({
                 "source": "Threat Intel",
                 "description": "Known malicious indicator matched",
                 "severity": intel_score
             })
-            total_risk += intel_score * self.weights["threat_intel"]
             
-        # Normalize and Classify
-        risk_score = min(total_risk * 100, 100.0)
+        # 2. Compute true combined risk using Probabilistic OR
+        # This ensures that if ANY engine (like pattern) gives 0.85, the risk is at least 85!
+        combined_prob = 1.0 - ((1.0 - ml_score) * (1.0 - pattern_score) * (1.0 - intel_score))
+        
+        risk_score = combined_prob * 100.0
         
         if risk_score > 85:
             classification = "CRITICAL"
