@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Impact / Benefits</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        :root {
+            --navy: #0B1F3A;
+            --sih-blue: #0066B3;
+            --blue-light: #EAF4FB;
+            --green: #198754;
+            --amber: #F4A62A;
+            --red: #D92D20;
+            --gray: #667085;
+            --light: #F7F9FC;
+            --white: #FFFFFF;
+        }
+        body {
+            margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif;
+            background: #e0e0e0; display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+        .canvas {
+            width: 1600px; height: 900px; background: var(--white); box-sizing: border-box; padding: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; overflow: hidden;
+        }
+        .toolbar { position: absolute; top: -40px; right: 0; }
+        .toolbar button { background: var(--navy); color: var(--white); border: none; padding: 5px 15px; cursor: pointer; border-radius: 4px; }
+        h1 { color: var(--navy); font-size: 40px; margin: 0 0 10px 0; }
+        h2 { color: var(--gray); font-size: 24px; margin: 0 0 40px 0; font-weight: normal; }
+        .box { background: var(--white); border: 2px solid var(--sih-blue); border-radius: 8px; padding: 15px; text-align: center; font-size: 18px; font-weight: 600; color: var(--navy); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        @media print { body { background: none; } .toolbar { display: none; } .canvas { box-shadow: none; width: 100%; height: 100vh; page-break-after: always; padding: 20px; } }
+    </style>
+</head>
+<body>
+    <div style="position:relative;">
+        <div class="toolbar"><button onclick="window.print()">Print / Export PDF</button></div>
+        <div class="canvas">
+            <h1>Impact / Benefits</h1>
+            <h2>Securing one-way infrastructure</h2>
+            <div class="content">
+    <div style="display:flex; gap:80px; margin-top:60px; height:500px;">
+        <!-- BEFORE -->
+        <div style="flex:1; background:#FEF3F2; border:2px solid var(--red); border-radius:8px; padding:40px; display:flex; flex-direction:column; align-items:center;">
+            <div style="font-size:28px; font-weight:bold; color:var(--red); margin-bottom:40px;">BEFORE</div>
+            <div class="box arrow-down" style="width:70%; border-color:var(--red);">ONE-WAY TRAFFIC</div>
+            <div class="box arrow-down" style="width:70%; border-color:var(--red);">RAW OBSERVATIONS</div>
+            <div class="box arrow-down" style="width:70%; border-color:var(--red);">MANUAL ANALYSIS</div>
+            <div class="box arrow-down" style="width:70%; border-color:var(--red);">DELAYED RESPONSE</div>
+            <div class="box" style="width:70%; background:var(--red); color:var(--white); border-color:var(--red);">HIGH ANALYST LOAD</div>
+        </div>
+        <!-- AFTER -->
+        <div style="flex:1; background:#F0FDF4; border:2px solid var(--green); border-radius:8px; padding:40px; display:flex; flex-direction:column; align-items:center;">
+            <div style="font-size:28px; font-weight:bold; color:var(--green); margin-bottom:40px;">WITH PLATFORM</div>
+            <div class="box arrow-down" style="width:70%; border-color:var(--green);">ONE-WAY TRAFFIC</div>
+            <div class="box arrow-down" style="width:70%; border-color:var(--green);">PASSIVE TELEMETRY</div>
+            <div class="box arrow-down" style="width:70%; border-color:var(--green);">BEHAVIORAL INTELLIGENCE</div>
+            <div class="box arrow-down" style="width:70%; border-color:var(--green);">ML + RULES &rarr; EVIDENCE</div>
+            <div class="box" style="width:70%; background:var(--green); color:var(--white); border-color:var(--green);">PRIORITIZED SECURITY CASE</div>
+        </div>
+    </div>
+    <div style="margin-top:60px; text-align:center; font-size:30px; font-weight:bold; color:var(--navy); background:var(--light); padding:30px; border-radius:8px; border:2px solid var(--sih-blue);">
+        "Turn a one-way security constraint into an intelligence advantage."
+    </div>
+    </div>
+        </div>
+    </div>
+</body>
+</html>
