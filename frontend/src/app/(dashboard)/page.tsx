@@ -374,7 +374,7 @@ export default function CyberOSDashboard() {
                  <span>GRAFANA: ML ENGINE THROUGHPUT</span>
                  <a href="http://localhost:3001" target="_blank" className="text-blue-400 hover:underline">Open Grafana ↗</a>
                </div>
-               <iframe src="http://localhost:3001/d-solo/cyber-01/cyberos-core?orgId=1&panelId=2&theme=dark" className="flex-1 w-full border-0 opacity-80" />
+               <iframe src="http://localhost:3001/d-solo/cyber-01/cyberos-realtime?orgId=1&panelId=2&theme=dark" className="flex-1 w-full border-0 opacity-80" />
             </div>
             <div className="bg-[#111] border border-slate-800 rounded-lg overflow-hidden flex flex-col">
                <div className="bg-slate-900 p-2 text-xs font-bold tracking-widest text-slate-400 flex justify-between">
