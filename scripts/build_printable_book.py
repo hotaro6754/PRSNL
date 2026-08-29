@@ -2,13 +2,13 @@ import os
 import html
 import base64
 
-BASE_DIR = r"E:\sih26145-prototype\educational_dashboard"
+BASE_DIR = r"E:\cyberos-prototype\educational_dashboard"
 RAW_MODULES_DIR = os.path.join(BASE_DIR, "raw_modules")
-DIAGRAMS_DIR = r"E:\sih26145-prototype\presentation\diagrams"
+DIAGRAMS_DIR = r"E:\cyberos-prototype\presentation\diagrams"
 ASSETS_DIR = os.path.join(BASE_DIR, "assets", "screenshots")
 
-OUT_HTML = os.path.join(BASE_DIR, "PS26145_Master_Course.html")
-OUT_MD = os.path.join(BASE_DIR, "PS26145_Master_Course.md")
+OUT_HTML = os.path.join(BASE_DIR, "CyberOS_Master_Course.html")
+OUT_MD = os.path.join(BASE_DIR, "CyberOS_Master_Course.md")
 
 def get_base64_file(filepath, mimetype):
     try:
@@ -37,7 +37,7 @@ def build():
     print("Aggregating 53 modules into Master Book...")
     
     diagrams = process_html_diagrams()
-    master_md = "# PS26145: Passive Threat Detection Master Course\n\n"
+    master_md = "# CyberOS: Passive Threat Detection Master Course\n\n"
     master_md += "## System Architecture Gallery\n\n"
     
     for diag in diagrams:
@@ -70,7 +70,7 @@ def build():
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PS26145 Master Course</title>
+    <title>CyberOS Master Course</title>
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>

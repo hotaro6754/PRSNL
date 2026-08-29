@@ -1,7 +1,7 @@
 # Module 33: Kafka and Redpanda (Message Brokers)
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-Imagine a massive post office. Millions of letters (data messages) arrive every second. Without a system, it would be chaos. A Message Broker is like the ultimate post office sorting facility. Apache Kafka and Redpanda are popular software tools that act as message brokers. In the PS26145 architecture, when hundreds of sensors detect suspicious activity, they don't send data directly to the database. They send it to Kafka or Redpanda, which organizes the messages into "topics" and holds them safely until the analysis servers are ready to read them.
+Imagine a massive post office. Millions of letters (data messages) arrive every second. Without a system, it would be chaos. A Message Broker is like the ultimate post office sorting facility. Apache Kafka and Redpanda are popular software tools that act as message brokers. In the CyberOS architecture, when hundreds of sensors detect suspicious activity, they don't send data directly to the database. They send it to Kafka or Redpanda, which organizes the messages into "topics" and holds them safely until the analysis servers are ready to read them.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

@@ -1,7 +1,7 @@
 import os
 from playwright.sync_api import sync_playwright
 
-ASSETS_DIR = r"E:\sih26145-prototype\ps26145-docs\docs\assets\screenshots"
+ASSETS_DIR = r"E:\cyberos-prototype\cyberos-docs\docs\assets\screenshots"
 os.makedirs(ASSETS_DIR, exist_ok=True)
 
 def capture():

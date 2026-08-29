@@ -1,7 +1,7 @@
 # Module 35: Tumbling Windows in Stream Processing
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-Imagine you are counting cars on a highway. Instead of counting forever, you decide to count how many cars pass every 5 minutes. At 1:00, you start counting. At 1:05, you write down the total, reset the counter to zero, and start counting again for the 1:05-1:10 period. These distinct, non-overlapping time chunks are called "Tumbling Windows." In stream processing (PS26145), we analyze millions of security logs by grouping them into tumbling windows (e.g., exactly 1-minute blocks) to detect spikes in traffic or continuous password guessing.
+Imagine you are counting cars on a highway. Instead of counting forever, you decide to count how many cars pass every 5 minutes. At 1:00, you start counting. At 1:05, you write down the total, reset the counter to zero, and start counting again for the 1:05-1:10 period. These distinct, non-overlapping time chunks are called "Tumbling Windows." In stream processing (CyberOS), we analyze millions of security logs by grouping them into tumbling windows (e.g., exactly 1-minute blocks) to detect spikes in traffic or continuous password guessing.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

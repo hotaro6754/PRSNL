@@ -83,7 +83,7 @@ async def test_websocket_stream():
 
 async def run_all_tests():
     print(colored("==================================================", "magenta", attrs=["bold"]))
-    print(colored("  PS26145 EXHAUSTIVE E2E & SECURITY TEST HARNESS", "magenta", attrs=["bold"]))
+    print(colored("  CyberOS EXHAUSTIVE E2E & SECURITY TEST HARNESS", "magenta", attrs=["bold"]))
     print(colored("==================================================", "magenta", attrs=["bold"]))
     
     try:

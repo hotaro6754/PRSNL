@@ -1,6 +1,6 @@
 import os
 
-BASE_DIR = r"E:\sih26145-prototype\ps26145-docs"
+BASE_DIR = r"E:\cyberos-prototype\cyberos-docs"
 
 def write_file(path, content):
     with open(os.path.join(BASE_DIR, path), "w", encoding="utf-8") as f:
@@ -100,7 +100,7 @@ Using the DNS protocol as a transport layer for non-DNS data (e.g., exfiltrating
 # Encrypted Sessions
 
 ## The Constraint: NO DECRYPTION
-PS26145 demands we operate entirely on metadata. We cannot decrypt TLS or QUIC payloads.
+CyberOS demands we operate entirely on metadata. We cannot decrypt TLS or QUIC payloads.
 
 ## Detection Implementation
 * **Detector**: `tls_behavioral_v1`

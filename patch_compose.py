@@ -1,15 +1,19 @@
-import yaml
+"""
+Patch docker-compose.yml to mount Grafana provisioning.
+"""
+import re
 
-with open('docker-compose.prod.yml', 'r') as f:
-    data = yaml.safe_load(f)
+with open('docker-compose.yml', 'r', encoding='utf-8') as f:
+    content = f.read()
 
-if 'volumes' not in data['services']['backend']:
-    data['services']['backend']['volumes'] = []
-data['services']['backend']['volumes'].append('./models:/app/models:ro')
-
-if 'volumes' not in data['services']['ml_worker']:
-    data['services']['ml_worker']['volumes'] = []
-data['services']['ml_worker']['volumes'].append('./models:/app/models:ro')
-
-with open('docker-compose.prod.yml', 'w') as f:
-    yaml.dump(data, f, sort_keys=False)
+pattern = r'(grafana:\n.*?volumes:\n.*?-\s*grafana_data:/var/lib/grafana)'
+match = re.search(pattern, content, re.DOTALL)
+if match:
+    old_volumes = match.group(1)
+    new_volumes = old_volumes + "\n    - ./grafana/provisioning:/etc/grafana/provisioning\n    - ./grafana/dashboards:/etc/grafana/provisioning/dashboards"
+    content = content.replace(old_volumes, new_volumes)
+    with open('docker-compose.yml', 'w', encoding='utf-8') as f:
+        f.write(content)
+    print("Patched docker-compose.yml for Grafana provisioning.")
+else:
+    print("Could not find grafana volumes block!")

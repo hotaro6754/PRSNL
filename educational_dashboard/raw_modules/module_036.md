@@ -1,7 +1,7 @@
 # Module 36: The Canonical Observation Layer (L2 vs L3 fix)
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-In networking, data travels in layers. Layer 2 (L2) deals with MAC addresses (physical hardware limits, usually confined to one building). Layer 3 (L3) deals with IP addresses (the internet, routed globally). A common problem in security architectures is losing the original hardware (MAC) address when traffic jumps over a router to an L3 network. The "Canonical Observation Layer" in PS26145 is a dedicated design pattern where we extract and attach the L2 physical hardware data to the logs *before* it gets routed to L3, ensuring we always know exactly which physical machine generated the threat.
+In networking, data travels in layers. Layer 2 (L2) deals with MAC addresses (physical hardware limits, usually confined to one building). Layer 3 (L3) deals with IP addresses (the internet, routed globally). A common problem in security architectures is losing the original hardware (MAC) address when traffic jumps over a router to an L3 network. The "Canonical Observation Layer" in CyberOS is a dedicated design pattern where we extract and attach the L2 physical hardware data to the logs *before* it gets routed to L3, ensuring we always know exactly which physical machine generated the threat.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

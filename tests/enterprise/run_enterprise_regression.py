@@ -14,11 +14,11 @@ def load_scenarios():
 def execute_chaos_action(action):
     print(f"    [CHAOS] Executing {action}...")
     if action == "kill_ml_worker":
-        subprocess.run(["docker", "compose", "stop", "sih26145-ml-worker"], capture_output=True)
+        subprocess.run(["docker", "compose", "stop", "cyberos-ml-worker"], capture_output=True)
     elif action == "start_ml_worker":
-        subprocess.run(["docker", "compose", "start", "sih26145-ml-worker"], capture_output=True)
+        subprocess.run(["docker", "compose", "start", "cyberos-ml-worker"], capture_output=True)
     elif action == "restart_redpanda":
-        subprocess.run(["docker", "compose", "restart", "sih26145-redpanda"], capture_output=True)
+        subprocess.run(["docker", "compose", "restart", "cyberos-redpanda"], capture_output=True)
 
 def run_scenario(scenario):
     print(f"\n=> Running Scenario {scenario['id']}: {scenario['name']}")
@@ -80,7 +80,7 @@ def run_scenario(scenario):
 
 def main():
     print("==================================================")
-    print(" PS26145 ENTERPRISE CHAOS & REGRESSION FRAMEWORK")
+    print(" CyberOS ENTERPRISE CHAOS & REGRESSION FRAMEWORK")
     print("==================================================")
     
     scenarios = load_scenarios()
@@ -92,12 +92,12 @@ def main():
         print(f"   Status: {res['status']} | Observed: {res['observed']}")
         
     # Write Matrix JSON
-    with open("PS26145_ENTERPRISE_REGRESSION_MATRIX.json", "w") as f:
+    with open("CyberOS_ENTERPRISE_REGRESSION_MATRIX.json", "w") as f:
         json.dump(results, f, indent=2)
         
     # Write Matrix MD
-    with open("PS26145_ENTERPRISE_REGRESSION_MATRIX.md", "w") as f:
-        f.write("# PS26145 Enterprise Regression Matrix\n\n")
+    with open("CyberOS_ENTERPRISE_REGRESSION_MATRIX.md", "w") as f:
+        f.write("# CyberOS Enterprise Regression Matrix\n\n")
         f.write("| ID | Scenario | Category | Expected | Observed | Status |\n")
         f.write("|---|---|---|---|---|---|\n")
         for r in results:
@@ -107,11 +107,11 @@ def main():
     passed = sum(1 for r in results if r["status"] == "PASS")
     total = len(results)
     
-    with open("PS26145_ENTERPRISE_CHAOS_ACCEPTANCE_DOSSIER.md", "w") as f:
-        f.write(f"""# PS26145_ENTERPRISE_CHAOS_ACCEPTANCE_DOSSIER
+    with open("CyberOS_ENTERPRISE_CHAOS_ACCEPTANCE_DOSSIER.md", "w") as f:
+        f.write(f"""# CyberOS_ENTERPRISE_CHAOS_ACCEPTANCE_DOSSIER
 
 ## 1. Executive Summary
-This dossier proves the PS26145 platform maintains structural integrity under sustained chaos.
+This dossier proves the CyberOS platform maintains structural integrity under sustained chaos.
 Out of {total} high-pressure enterprise chaos scenarios, {passed} PASSED.
 
 ## 2. System Under Test

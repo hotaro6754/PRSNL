@@ -1,7 +1,7 @@
 # Module 40: Zero-Trust Hardware Deployment
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-In the old days of cybersecurity, the network was like a castle with a moat. If you made it inside the walls (by plugging into an Ethernet port in the building), you were trusted. "Zero-Trust" means exactly what it sounds like: Trust no one, not even devices already inside the building. In the PS26145 architecture, Zero-Trust Hardware Deployment means that before a new server, switch, or sensor is allowed to talk to the network, it must cryptographically prove its identity using secure hardware chips. Just being plugged in is no longer enough.
+In the old days of cybersecurity, the network was like a castle with a moat. If you made it inside the walls (by plugging into an Ethernet port in the building), you were trusted. "Zero-Trust" means exactly what it sounds like: Trust no one, not even devices already inside the building. In the CyberOS architecture, Zero-Trust Hardware Deployment means that before a new server, switch, or sensor is allowed to talk to the network, it must cryptographically prove its identity using secure hardware chips. Just being plugged in is no longer enough.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

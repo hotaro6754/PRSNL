@@ -1,6 +1,6 @@
 import os
 
-BASE_DIR = r"E:\sih26145-prototype\ps26145-docs"
+BASE_DIR = r"E:\cyberos-prototype\cyberos-docs"
 
 def write_file(path, content):
     with open(os.path.join(BASE_DIR, path), "w", encoding="utf-8") as f:

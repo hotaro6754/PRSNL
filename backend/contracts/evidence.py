@@ -40,6 +40,7 @@ class CyberEvidence(BaseModel):
         return self
 
 class DetectionEvidence(BaseModel):
+    organization_id: str = "default_org"
     """
     Structured evidence produced by a detector.
     """

@@ -1,6 +1,6 @@
 import os
 
-OUTPUT_DIR = r"E:\sih26145-prototype\ps26145-docs\docs\handbook"
+OUTPUT_DIR = r"E:\cyberos-prototype\cyberos-docs\docs\handbook"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def write_file(filename, content):
@@ -25,7 +25,7 @@ The flaw in legacy IDS/IPS is their reliance on signatures. If the malware is a 
 Security Information and Event Management (SIEM) aggregates logs from endpoints, firewalls, and active directories. SIEMs lack deep visibility into the raw network wires.
 
 ## Chapter 24: Passive vs Active Defense
-Active defense actively blocks traffic (IPS, Firewalls). Passive defense merely observes, generating intelligence without risking network disruption. PS26145 is strictly passive.
+Active defense actively blocks traffic (IPS, Firewalls). Passive defense merely observes, generating intelligence without risking network disruption. CyberOS is strictly passive.
 
 ## Chapter 25: The SOC
 The Security Operations Center (SOC) is the human element. An NDR system must not flood the SOC with false positives. Alert fatigue causes analysts to ignore critical warnings.
@@ -46,7 +46,7 @@ To monitor a network passively, you must copy the traffic.
 * **Network TAP**: A physical hardware device spliced into the fiber optic cable that duplicates the light signal. TAPs are completely invisible to the network.
 
 ## Chapter 28: PCAP Analysis
-Packet Capture (PCAP) files are the ground truth of network analysis. When a SOC analyst investigates a PS26145 alert, they pull the raw PCAP to verify the telemetry.
+Packet Capture (PCAP) files are the ground truth of network analysis. When a SOC analyst investigates a CyberOS alert, they pull the raw PCAP to verify the telemetry.
 
 ## Chapter 29: Behavioral Heuristics
 Instead of looking for a specific malware signature (`hash=XYZ123`), behavioral heuristics look for the *actions* of malware. (e.g., "This device is contacting 500 IPs per second").
@@ -56,16 +56,16 @@ No single detection is absolute. True NDR systems cross-reference internal heuri
 """
 
 # ==========================================
-# VOLUME 4: THE PS26145 ARCHITECTURE
+# VOLUME 4: THE CyberOS ARCHITECTURE
 # ==========================================
 VOL4_CONTENT = """
-# Volume 4: The PS26145 Architecture
+# Volume 4: The CyberOS Architecture
 
 ## Chapter 31: The Unidirectional Problem
-High-security enclaves (e.g., military, nuclear) cannot risk their security tools becoming attack vectors. Thus, the PS26145 mandate requires a **Unidirectional Network Monitoring System**. The system must receive traffic, process it, and alert the SOC, with zero physical or software capability to send packets *back* into the enclave.
+High-security enclaves (e.g., military, nuclear) cannot risk their security tools becoming attack vectors. Thus, the CyberOS mandate requires a **Unidirectional Network Monitoring System**. The system must receive traffic, process it, and alert the SOC, with zero physical or software capability to send packets *back* into the enclave.
 
 ## Chapter 32: Asynchronous Streaming
-If traffic spikes to 10Gbps, a monolithic Python script will crash. PS26145 uses an asynchronous streaming architecture to decouple ingestion (Zeek) from processing (XGBoost).
+If traffic spikes to 10Gbps, a monolithic Python script will crash. CyberOS uses an asynchronous streaming architecture to decouple ingestion (Zeek) from processing (XGBoost).
 
 ## Chapter 33: Kafka and Redpanda
 We utilize **Redpanda**, a Kafka-compatible message broker written in C++. 
@@ -93,7 +93,7 @@ We built the **Canonical Observation Layer**, a strict Pydantic schema that forc
 To fix the V4 hallucination, we re-ran our entire training dataset through an offline Zeek engine, retrained the XGBoost model, and deployed V5. Precision instantly recovered to 99.3%.
 
 ## Chapter 38: Microservices and Fault Tolerance
-PS26145 is containerized using Docker. 
+CyberOS is containerized using Docker. 
 * If a worker crashes, Redpanda's Consumer Group rebalances the load.
 * If MongoDB goes down, workers cache their offsets until it returns.
 
@@ -102,7 +102,7 @@ The SOC frontend is built in React. It connects to the Python backend via WebSoc
 ![Dashboard UI](../../assets/screenshots/dashboard_full.png)
 
 ## Chapter 40: Zero-Trust Deployment
-In production, PS26145 resides on a completely isolated management VLAN. It pulls data from a Data Diode (hardware enforcing one-way flow).
+In production, CyberOS resides on a completely isolated management VLAN. It pulls data from a Data Diode (hardware enforcing one-way flow).
 """
 
 def generate():

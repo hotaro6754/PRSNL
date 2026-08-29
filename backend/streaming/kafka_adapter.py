@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 KAFKA_BROKERS = os.getenv("KAFKA_BROKERS", "localhost:9092")
 TOPIC_OBSERVATIONS = os.getenv("KAFKA_TOPIC", "network-observations")
 TOPIC_DLQ = f"{TOPIC_OBSERVATIONS}-dlq"
-CONSUMER_GROUP = os.getenv("KAFKA_GROUP", "sih26145-ndr-group")
+CONSUMER_GROUP = os.getenv("KAFKA_GROUP", "cyberos-ndr-group")
 
 class KafkaObservationProducer:
     """Produces NetworkObservation messages to Kafka/Redpanda."""

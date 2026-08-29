@@ -1,5 +1,5 @@
 {
-  "timestamp": 1787842532.2890608,
+  "timestamp": 1787966286.837121,
   "results": [
     {
       "test": "T1 Benign Web",
@@ -56,7 +56,7 @@
       "expected": "DETECT",
       "detected": true,
       "threat_class": "Beaconing",
-      "confidence": 0.9,
+      "confidence": 0.75,
       "detector": "beacon_stateful_v2",
       "alerts": 2,
       "status": "PASS"

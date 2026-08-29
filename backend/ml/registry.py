@@ -17,7 +17,7 @@ class ModelRegistry:
     """
     def __init__(self, mongo_uri: str = None):
         if not mongo_uri:
-            mongo_uri = os.getenv("MONGO_URI", "mongodb://sih26145-mongo-prod:27017")
+            mongo_uri = os.getenv("MONGO_URI", "mongodb://cyberos-mongo-prod:27017")
         self.client = AsyncIOMotorClient(mongo_uri)
         self.db = self.client.ndr_database
         self.collection = self.db.model_registry

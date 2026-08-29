@@ -1,7 +1,7 @@
 # Module 32: Asynchronous Streaming Architecture
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-When you order food at a busy fast-food restaurant, you don't stand at the counter waiting while they cook it. You take a receipt, sit down, and they call your number when it's ready. Meanwhile, the cashier keeps taking orders. This is "asynchronous" processing. In cybersecurity architectures like PS26145, an Asynchronous Streaming Architecture means that systems generate alerts and logs continuously without pausing to wait for the analysis engine to finish reading the previous one. Data flows in a constant, independent stream.
+When you order food at a busy fast-food restaurant, you don't stand at the counter waiting while they cook it. You take a receipt, sit down, and they call your number when it's ready. Meanwhile, the cashier keeps taking orders. This is "asynchronous" processing. In cybersecurity architectures like CyberOS, an Asynchronous Streaming Architecture means that systems generate alerts and logs continuously without pausing to wait for the analysis engine to finish reading the previous one. Data flows in a constant, independent stream.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

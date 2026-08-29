@@ -7,7 +7,7 @@ x-logging: &id001
 services:
   mongodb:
     image: mongo:7
-    container_name: sih26145-mongodb-prod
+    container_name: cyberos-mongodb-prod
     ports:
     - 27017:27017
     volumes:
@@ -25,7 +25,7 @@ services:
     logging: *id001
   redpanda:
     image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
-    container_name: sih26145-redpanda-prod
+    container_name: cyberos-redpanda-prod
     command:
     - redpanda
     - start
@@ -54,7 +54,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.zeek
-    container_name: sih26145-zeek-prod
+    container_name: cyberos-zeek-prod
     network_mode: host
     cap_add:
     - NET_ADMIN
@@ -69,7 +69,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    container_name: sih26145-zeek-adapter-prod
+    container_name: cyberos-zeek-adapter-prod
     command:
     - python
     - -m
@@ -133,7 +133,7 @@ services:
     - APP_ENV=PRODUCTION
     - ML_STAGE=PRODUCTION
     - MONGO_URI=mongodb://mongodb:27017
-    - MONGO_DB=sih26145_prod
+    - MONGO_DB=cyberos_prod
     - KAFKA_BROKERS=redpanda:9092
     depends_on:
       mongodb:
@@ -162,7 +162,7 @@ services:
       replicas: 4
   redpanda_init:
     image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
-    container_name: sih26145-redpanda-init
+    container_name: cyberos-redpanda-init
     entrypoint: [ "sh", "-c" ]
     depends_on:
       redpanda:
@@ -171,7 +171,7 @@ services:
     - "rpk topic create network-observations -p 8 --brokers redpanda:9092 || true && rpk topic create network-observations-dlq -p 8 --brokers redpanda:9092 || true && rpk topic create ml-feature-vectors -p 8 --brokers redpanda:9092 || true && rpk topic create ml-predictions -p 8 --brokers redpanda:9092 || true"
   redis:
     image: redis:7-alpine
-    container_name: sih26145-redis-prod
+    container_name: cyberos-redis-prod
     command:
     - redis-server
     - --maxmemory

@@ -1,6 +1,6 @@
 import os
 
-output_dir = r"E:\sih26145-prototype\educational_dashboard\raw_modules"
+output_dir = r"E:\cyberos-prototype\educational_dashboard\raw_modules"
 os.makedirs(output_dir, exist_ok=True)
 
 modules = {

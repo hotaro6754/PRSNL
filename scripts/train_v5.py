@@ -94,7 +94,7 @@ def extract_dataset(pcaps, label_map):
             "-v", f"{pcap_dir}:/pcaps",
             "-v", f"{temp_dir}:/logs",
             "-w", "/logs",
-            "sih26145-prototype-zeek:latest",
+            "cyberos-prototype-zeek:latest",
             "-C", "-r", f"/pcaps/{base_name}", "LogAscii::use_json=T", "local"
         ]
         
@@ -245,7 +245,7 @@ def main():
         
     try:
         client = MongoClient("mongodb://localhost:27017/")
-        db = client["sih26145_prod"]
+        db = client["cyberos_prod"]
         collection = db["models"]
         
         collection.update_one(

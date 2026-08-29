@@ -1,6 +1,6 @@
 import os
 
-BASE_DIR = r"E:\sih26145-prototype\ps26145-docs"
+BASE_DIR = r"E:\cyberos-prototype\cyberos-docs"
 
 def write_file(path, content):
     with open(os.path.join(BASE_DIR, path), "w", encoding="utf-8") as f:
@@ -18,7 +18,7 @@ def build_part4():
 
 ## Directory Structure
 ```text
-sih26145-prototype/
+cyberos-prototype/
 ├── backend/
 │   ├── detectors/
 │   ├── ml/
@@ -131,7 +131,7 @@ Our project builds heavily upon open-source research and standard datasets.
 * **CICIDS2017 & UNSW-NB15**: Standard intrusion sets used for training/validation.
 
 ## Tools
-* **Agent-Reach**: A research-access AI layer used to explore documentation rapidly. *Agent-Reach is NOT part of the PS26145 passive network detection hot path.*
+* **Agent-Reach**: A research-access AI layer used to explore documentation rapidly. *Agent-Reach is NOT part of the CyberOS passive network detection hot path.*
 * **Zeek**: The core passive engine. (PRODUCTION)
 * **Redpanda**: The streaming broker. (PRODUCTION)
     """)
@@ -157,7 +157,7 @@ A: We DO NOT decrypt. We use TLS metadata (JA3 fingerprints) combined with behav
 
 ```mermaid
 timeline
-    title PS26145 Engineering Journey
+    title CyberOS Engineering Journey
     Phase 1 : Initial Architecture
     Phase 2 : ML Integration
     Phase 3 : Feature Parity Discovery (V4 Failure)

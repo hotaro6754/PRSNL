@@ -1,6 +1,6 @@
 import os
 
-BASE_DIR = r"E:\sih26145-prototype\ps26145-docs\docs"
+BASE_DIR = r"E:\cyberos-prototype\cyberos-docs\docs"
 
 def write_file(path, content):
     full_path = os.path.join(BASE_DIR, path)
@@ -19,7 +19,7 @@ def generate():
 
 ## The Physics of a Flood
 
-To understand how PS26145 detects volumetric attacks, we must first examine the physics of the network. A network interface has a finite processing capacity (measured in packets per second, or **pps**) and a finite bandwidth capacity (measured in bits per second, or **bps**).
+To understand how CyberOS detects volumetric attacks, we must first examine the physics of the network. A network interface has a finite processing capacity (measured in packets per second, or **pps**) and a finite bandwidth capacity (measured in bits per second, or **bps**).
 
 When an attacker wishes to take a service offline, they exploit these finite ceilings. 
 
@@ -46,7 +46,7 @@ sequenceDiagram
 
 ## Passive Detection Strategy
 
-Because PS26145 operates unidirectionally (passively), we cannot use active mitigation techniques like SYN Cookies or TCP RST injection. We must detect the flood *behaviorally*.
+Because CyberOS operates unidirectionally (passively), we cannot use active mitigation techniques like SYN Cookies or TCP RST injection. We must detect the flood *behaviorally*.
 
 ### The `ddos_stat_v1` Detector
 
@@ -107,7 +107,7 @@ Because volumetric DDoS detection relies on measuring rates within a window, a h
 
 > **An engineering axiom:** A machine learning model is only as valid as the representation shared by its training environment and its production environment.
 
-In this chapter, we document the most significant engineering failure of the PS26145 project, how we discovered it, and the architectural pivot that resolved it. We do not hide failures.
+In this chapter, we document the most significant engineering failure of the CyberOS project, how we discovered it, and the architectural pivot that resolved it. We do not hide failures.
 
 ## The V4 Catastrophe
 
@@ -211,7 +211,7 @@ It performed flawlessly.
 
 When dealing with unidirectional IP traffic, the ingestion engine (Zeek) generates logs at a ferocious rate. If the intelligence engine (the Python backend running XGBoost) processes these logs synchronously, any spike in traffic will cause the ingestion engine to block, leading to dropped packets and memory exhaustion.
 
-To solve this, PS26145 implements a **Distributed Streaming Architecture**.
+To solve this, CyberOS implements a **Distributed Streaming Architecture**.
 
 ## The Asynchronous Broker: Redpanda
 
@@ -240,7 +240,7 @@ sequenceDiagram
 All network observations are published to a topic named `network_telemetry`. To allow multiple ML workers to process the traffic simultaneously, the topic is split into **Partitions** (e.g., 4 partitions).
 
 ### Consumer Groups
-Our backend workers all join a single **Consumer Group** (`ps26145-group`). Redpanda automatically assigns one partition to each worker. 
+Our backend workers all join a single **Consumer Group** (`cyberos-group`). Redpanda automatically assigns one partition to each worker. 
 * If a worker crashes, Redpanda reassigns its partition to a surviving worker. 
 * If traffic spikes, we can simply spin up `Worker 3` and `Worker 4`, and Redpanda will rebalance the load instantly.
 

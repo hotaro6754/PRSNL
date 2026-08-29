@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class CorrelationEngine:
     def __init__(self, max_cases: int = 1000, max_alerts_per_case: int = 50, case_ttl_seconds: int = 86400):
-        self.cases: Dict[str, CyberCase] = {} # Keyed by primary_entity
+        self.cases: Dict[str, CyberCase] = {} # Keyed by org_id:primary_entity
         self.max_cases = max_cases
         self.max_alerts_per_case = max_alerts_per_case
         self.case_ttl_seconds = case_ttl_seconds
@@ -23,19 +23,23 @@ class CorrelationEngine:
         entity = alert.primary_entity or alert.source_ip
         if not entity or entity == "UNKNOWN":
             return None
+            
+        org_id = getattr(alert, "organization_id", "default_org")
+        correlation_key = f"{org_id}:{entity}"
 
         # 1. Deduplication and Garbage Collection
         self._garbage_collect(current_time=alert.timestamp)
         
         # Enforce global case memory bound
-        if entity not in self.cases and len(self.cases) >= self.max_cases:
+        if correlation_key not in self.cases and len(self.cases) >= self.max_cases:
             logger.warning("Correlation Engine hit MAX_CASES boundary. Dropping new case.")
             return None
 
-        if entity not in self.cases:
+        if correlation_key not in self.cases:
             # Create new case
             case = CyberCase(
                 case_id=uuid.uuid4(),
+                organization_id=org_id,
                 primary_entity=entity,
                 source_ip=alert.source_ip,
                 status="OPEN",
@@ -45,10 +49,10 @@ class CorrelationEngine:
                 last_seen=alert.timestamp,
                 alerts=[alert]
             )
-            self.cases[entity] = case
+            self.cases[correlation_key] = case
         else:
             # Update existing case
-            case = self.cases[entity]
+            case = self.cases[correlation_key]
             case.last_seen = alert.timestamp
             
             # Deduplication: don't store exact duplicate alerts based on threat class + destination + time window if they are extremely close.

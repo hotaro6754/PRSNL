@@ -5,6 +5,7 @@ from datetime import datetime
 from backend.contracts.alert import Alert
 
 class CyberCase(BaseModel):
+    organization_id: str = "default_org"
     """
     Normalized Security Case schema.
     """

@@ -1,5 +1,5 @@
 """
-PS26145 Full Regression Test
+CyberOS Full Regression Test
 =============================
 Tests all 15 threat/benign scenarios after adding SlowHTTPDetector
 and fixing the DDoS detector's Pydantic compatibility.
@@ -108,7 +108,7 @@ def test(label, flows, expect_detect, expected_class=None):
 
 
 print("=" * 100)
-print("PS26145 FULL REGRESSION TEST")
+print("CyberOS FULL REGRESSION TEST")
 print("=" * 100)
 
 # T1: Benign Web

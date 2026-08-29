@@ -1,0 +1,203 @@
+{
+  "modules": {
+    "phishing": {
+      "title": "How Credential Phishing Works",
+      "why_it_works": "Attackers create convincing replicas of trusted websites to trick you into entering your username and password. They exploit trust, urgency, and fear to bypass your critical thinking.",
+      "how_to_spot": [
+        "Check the URL carefully - look for misspellings or extra characters in the domain",
+        "Legitimate services rarely ask you to verify credentials via email links",
+        "Look for HTTPS and verify the certificate matches the expected organization",
+        "Hover over links before clicking to see the actual destination",
+        "Watch for generic greetings like 'Dear Customer' instead of your name"
+      ],
+      "content": "Phishing is the most common cyber attack vector, responsible for over 80% of reported security incidents.",
+      "quiz": {
+        "question": "You receive an email from 'support@g00gle.com' asking you to verify your password. What should you do?",
+        "options": [
+          "Click the link and enter your password to verify",
+          "Reply to the email asking if it is legitimate",
+          "Ignore the email and navigate directly to google.com to check your account",
+          "Forward it to all your contacts as a warning"
+        ],
+        "answer": 2,
+        "explanation": "Never click links in suspicious emails. Always navigate directly to the official website by typing the URL yourself."
+      }
+    },
+    "credential_harvesting": {
+      "title": "How Credential Harvesting Works",
+      "why_it_works": "Attackers set up fake login pages that look identical to real ones. When you enter your credentials, they capture them instantly and gain access to your real account.",
+      "how_to_spot": [
+        "The URL domain does not match the service you expect",
+        "The page asks for more information than usual (e.g., SSN, bank details)",
+        "The SSL certificate does not match the organization",
+        "After submitting, you are redirected to the real site (to avoid suspicion)"
+      ],
+      "content": "Credential harvesting is a targeted form of phishing focused specifically on stealing login credentials.",
+      "quiz": {
+        "question": "A website asks for your bank login AND your ATM PIN. Is this normal?",
+        "options": [
+          "Yes, banks always need both for verification",
+          "No, legitimate banks never ask for your ATM PIN online",
+          "Only if the URL starts with HTTPS",
+          "Yes, if the email looks official"
+        ],
+        "answer": 1,
+        "explanation": "Banks never ask for ATM PINs online. This is a clear sign of credential harvesting."
+      }
+    },
+    "url_phishing": {
+      "title": "Recognizing Malicious URLs",
+      "why_it_works": "Attackers use deceptive URLs that mimic legitimate websites. They exploit the fact that most people don't carefully examine URLs before clicking.",
+      "how_to_spot": [
+        "Look for misspelled brand names (e.g., 'paypa1.com' instead of 'paypal.com')",
+        "Be wary of URLs with IP addresses instead of domain names",
+        "Check for suspicious top-level domains (.xyz, .tk, .click)",
+        "Watch for excessive subdomains (e.g., 'login.verify.account.evil.com')"
+      ],
+      "content": "URL phishing accounts for the majority of cyber fraud attempts.",
+      "quiz": {
+        "question": "Which URL is most likely a phishing attempt?",
+        "options": [
+          "https://www.paypal.com/login",
+          "http://paypal-verify.account-security.xyz/login",
+          "https://www.paypal.com/us/signin",
+          "https://paypal.com"
+        ],
+        "answer": 1,
+        "explanation": "The URL 'paypal-verify.account-security.xyz' uses a suspicious domain (.xyz) and mimics PayPal's branding. Always check the actual domain name."
+      }
+    },
+    "financial_fraud": {
+      "title": "Financial Fraud & Payment Scams",
+      "why_it_works": "Scammers create urgency around financial transactions, claiming refunds, prizes, or payment failures to trick you into transferring money or sharing banking credentials.",
+      "how_to_spot": [
+        "Unexpected refund or prize notifications",
+        "Requests to share UPI PIN, OTP, or banking passwords",
+        "Pressure to act immediately on financial matters",
+        "Unknown payment requests from unfamiliar sources"
+      ],
+      "content": "Financial fraud causes billions in losses annually. Never share banking credentials or OTPs with anyone.",
+      "quiz": {
+        "question": "A caller from 'your bank' asks for your OTP to process a refund. What should you do?",
+        "options": [
+          "Share the OTP since they are from the bank",
+          "Ask them to call back later",
+          "Hang up and call the bank's official number to verify",
+          "Share only part of the OTP"
+        ],
+        "answer": 2,
+        "explanation": "Banks never ask for OTPs over the phone. Hang up and call the official bank number to verify any claims."
+      }
+    },
+    "social_engineering": {
+      "title": "Social Engineering Tactics",
+      "why_it_works": "Attackers manipulate human psychology using urgency, authority, fear, and curiosity to bypass your rational thinking and make you act impulsively.",
+      "how_to_spot": [
+        "Messages creating extreme urgency ('Your account will be deleted in 24 hours')",
+        "Claims of authority ('This is from the CEO', 'IT Department requires...')",
+        "Emotional manipulation through fear or excitement",
+        "Requests that bypass normal procedures"
+      ],
+      "content": "Social engineering exploits human psychology rather than technical vulnerabilities.",
+      "quiz": {
+        "question": "An email from 'the CEO' urgently requests a wire transfer before end of day. What's the best action?",
+        "options": [
+          "Process it immediately since it's from the CEO",
+          "Verify the request through a separate channel (phone call, in-person)",
+          "Reply to the email asking for confirmation",
+          "Forward it to your team to handle"
+        ],
+        "answer": 1,
+        "explanation": "Always verify urgent financial requests through a separate channel. CEO fraud (BEC) is one of the costliest cyber attacks."
+      }
+    },
+    "malware": {
+      "title": "Malware & Malicious Attachments",
+      "why_it_works": "Malware disguises itself as legitimate files or software. Once executed, it can steal data, encrypt files for ransom, or give attackers remote access to your system.",
+      "how_to_spot": [
+        "Unexpected email attachments, especially .exe, .bat, .js, .vbs files",
+        "Documents requesting you to 'enable macros' or 'enable content'",
+        "Files from unknown senders or unexpected sources",
+        "Double file extensions (e.g., 'document.pdf.exe')"
+      ],
+      "content": "Never open attachments from unknown sources. Malware can compromise your entire system.",
+      "quiz": {
+        "question": "You receive a Word document that asks you to 'Enable Macros' to view content. What should you do?",
+        "options": [
+          "Enable macros - it's just a Word document",
+          "Do NOT enable macros - this is a common malware delivery technique",
+          "Save the file and scan it later",
+          "Forward it to a colleague to check"
+        ],
+        "answer": 1,
+        "explanation": "Macro-enabled documents are one of the most common malware delivery methods. Never enable macros in documents from untrusted sources."
+      }
+    },
+    "impersonation": {
+      "title": "Brand & Authority Impersonation",
+      "why_it_works": "Attackers impersonate trusted brands, government agencies, or authority figures to exploit the trust you have in these entities.",
+      "how_to_spot": [
+        "Check sender email domains carefully (e.g., 'support@amaz0n-help.com' vs 'support@amazon.com')",
+        "Official organizations rarely contact you via SMS with links",
+        "Government agencies don't request personal info via email",
+        "Look for poor grammar or generic templates"
+      ],
+      "content": "Impersonation attacks are highly effective because they exploit pre-existing trust relationships.",
+      "quiz": {
+        "question": "An SMS from 'HDFC Bank' asks you to update KYC via a link. The sender ID shows 'HDFCBNK'. Is it safe?",
+        "options": [
+          "Yes, the sender ID matches HDFC",
+          "No, sender IDs can be spoofed. Visit the bank branch or official app instead",
+          "Safe if the link starts with HTTPS",
+          "Safe if I don't enter my password"
+        ],
+        "answer": 1,
+        "explanation": "SMS sender IDs can be easily spoofed. Always use official bank apps or visit a branch for KYC updates."
+      }
+    },
+    "unknown": {
+      "title": "General Cybersecurity Awareness",
+      "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+      "how_to_spot": [
+        "Any unsolicited communication requesting personal information",
+        "Offers that seem too good to be true",
+        "Pressure to act quickly without time to think",
+        "Requests to bypass standard security procedures"
+      ],
+      "content": "Stay vigilant and always verify before you trust.",
+      "quiz": {
+        "question": "What is the single most important thing you can do to protect your online accounts?",
+        "options": [
+          "Use the same strong password everywhere",
+          "Use unique passwords and enable two-factor authentication",
+          "Only use websites that look professional",
+          "Never use public WiFi"
+        ],
+        "answer": 1,
+        "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+      }
+    },
+    "general_security": {
+      "title": "Basic Security Hygiene",
+      "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+      "how_to_spot": [
+        "Keep all software and operating systems updated",
+        "Use unique, strong passwords for every account",
+        "Enable two-factor authentication wherever possible",
+        "Be skeptical of unsolicited communications"
+      ],
+      "content": "Good security hygiene prevents most common attacks.",
+      "quiz": {
+        "question": "Why is reusing passwords across multiple accounts dangerous?",
+        "options": [
+          "It makes passwords harder to remember",
+          "If one account is breached, all accounts using that password are compromised",
+          "It slows down your computer",
+          "It violates terms of service"
+        ],
+        "answer": 1,
+        "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+      }
+    }
+  }
+}

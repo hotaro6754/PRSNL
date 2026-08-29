@@ -11,7 +11,7 @@ class JSONEncoder(json.JSONEncoder):
         return str(obj)
 
 client = MongoClient("mongodb://localhost:27017/")
-db = client["sih26145_prod"]
+db = client["cyberos_prod"]
 
 print("--- RECENT CASES ---")
 cases = db.security_cases.find().sort("created_at", -1).limit(50)

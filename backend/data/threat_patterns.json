@@ -1,0 +1,39 @@
+{
+  "url": [
+    {"name": "HTTP_NO_TLS", "regex": "^http://", "description": "URL uses HTTP instead of HTTPS (unencrypted)", "category": "url_security", "severity": 0.4},
+    {"name": "IP_ADDRESS_HOST", "regex": "https?://\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}", "description": "URL uses a raw IP address instead of a domain name", "category": "url_obfuscation", "severity": 0.7},
+    {"name": "SUSPICIOUS_TLD", "regex": "\\.(xyz|top|click|gq|ml|cf|tk|buzz|live|icu|work)(/|$)", "description": "URL uses a suspicious or free top-level domain", "category": "url_reputation", "severity": 0.5},
+    {"name": "EXCESSIVE_SUBDOMAINS", "regex": "(\\w+\\.){4,}", "description": "URL has an excessive number of subdomains (4+)", "category": "url_obfuscation", "severity": 0.6},
+    {"name": "LOGIN_PATH", "regex": "(login|signin|verify|account|auth|secure|update|confirm)", "description": "URL contains credential/authentication-related path keywords", "category": "credential_harvesting", "severity": 0.65},
+    {"name": "PAYMENT_PATH", "regex": "(pay|wallet|transfer|bank|billing|invoice)", "description": "URL contains payment or financial transaction keywords", "category": "financial_fraud", "severity": 0.7},
+    {"name": "URL_ENCODING", "regex": "%[0-9a-fA-F]{2}.*%[0-9a-fA-F]{2}", "description": "URL contains multiple encoded characters (potential obfuscation)", "category": "url_obfuscation", "severity": 0.55},
+    {"name": "BRAND_IMPERSONATION", "regex": "(paypal|apple|google|microsoft|amazon|netflix|facebook|instagram|whatsapp)", "description": "URL references a major brand name (potential impersonation)", "category": "brand_abuse", "severity": 0.6},
+    {"name": "SHORTENED_URL", "regex": "(bit\\.ly|t\\.co|tinyurl|goo\\.gl|is\\.gd|shorturl|rb\\.gy)", "description": "URL uses a URL shortening service to hide the destination", "category": "url_obfuscation", "severity": 0.5},
+    {"name": "VERY_LONG_URL", "regex": ".{200,}", "description": "URL is unusually long (200+ characters)", "category": "url_obfuscation", "severity": 0.4}
+  ],
+  "sms": [
+    {"name": "URGENCY", "regex": "(urgent|immediately|expire|suspend|block|deactivat|last chance|act now|hurry)", "description": "Message uses urgency language to pressure immediate action", "category": "social_engineering", "severity": 0.7},
+    {"name": "ACCOUNT_SUSPENSION", "regex": "(account.*suspend|account.*block|account.*lock|access.*restrict)", "description": "Message claims account suspension or restriction", "category": "social_engineering", "severity": 0.75},
+    {"name": "OTP_REQUEST", "regex": "(otp|one.time|verification code|pin.*share|share.*code)", "description": "Message requests sharing of OTP or verification codes", "category": "credential_harvesting", "severity": 0.85},
+    {"name": "FINANCIAL_REQUEST", "regex": "(transfer|payment|upi|bank|refund|reward|prize|lottery|cashback)", "description": "Message contains financial or monetary solicitation", "category": "financial_fraud", "severity": 0.8},
+    {"name": "FAKE_DELIVERY", "regex": "(delivery|package|parcel|shipment|tracking|courier)", "description": "Message impersonates delivery/logistics notification", "category": "impersonation", "severity": 0.6},
+    {"name": "SUSPICIOUS_LINK", "regex": "https?://", "description": "SMS contains a clickable link (common in smishing)", "category": "url_phishing", "severity": 0.5},
+    {"name": "KYC_SCAM", "regex": "(kyc|verify.*identity|pan.*card|aadhaar|document.*upload)", "description": "Message requests KYC or identity document submission", "category": "credential_harvesting", "severity": 0.8}
+  ],
+  "email": [
+    {"name": "URGENCY", "regex": "(urgent|immediate|critical|action required|respond now|deadline)", "description": "Email uses urgency language to pressure the recipient", "category": "social_engineering", "severity": 0.6},
+    {"name": "WIRE_TRANSFER", "regex": "(wire transfer|bank transfer|payment.*due|invoice.*attached|remittance)", "description": "Email references financial transfers (BEC indicator)", "category": "financial_fraud", "severity": 0.8},
+    {"name": "CREDENTIAL_REQUEST", "regex": "(password|credential|login.*details|verify.*account|confirm.*identity)", "description": "Email requests passwords or login credentials", "category": "credential_harvesting", "severity": 0.85},
+    {"name": "ATTACHMENT_EXE", "regex": "\\.(exe|bat|cmd|scr|js|vbs|ps1|msi)", "description": "Email references executable file attachment", "category": "malware", "severity": 0.9},
+    {"name": "IMPERSONATION", "regex": "(ceo|manager|director|admin|support|helpdesk|it department)", "description": "Email impersonates authority figure or IT support", "category": "impersonation", "severity": 0.65},
+    {"name": "MACRO_ATTACHMENT", "regex": "(enable.*macro|enable.*content|enable.*editing|xlsm|docm)", "description": "Email requests enabling macros in attached document", "category": "malware", "severity": 0.85},
+    {"name": "SUSPICIOUS_LINK", "regex": "https?://", "description": "Email contains embedded links", "category": "url_phishing", "severity": 0.4}
+  ],
+  "qr": [
+    {"name": "SUSPICIOUS_URL", "regex": "https?://", "description": "QR code decodes to a URL", "category": "url_phishing", "severity": 0.5},
+    {"name": "PAYMENT_DEST", "regex": "(upi|pay|wallet|razorpay|paytm|gpay|phonepe)", "description": "QR code contains payment-related destination", "category": "financial_fraud", "severity": 0.75},
+    {"name": "SHORTENED_URL", "regex": "(bit\\.ly|t\\.co|tinyurl|goo\\.gl|is\\.gd|shorturl)", "description": "QR code uses a shortened URL to hide the destination", "category": "url_obfuscation", "severity": 0.6},
+    {"name": "CREDENTIAL_PAGE", "regex": "(login|signin|verify|auth|account|secure)", "description": "QR code points to a credential harvesting page", "category": "credential_harvesting", "severity": 0.8},
+    {"name": "UNKNOWN_DOMAIN", "regex": "\\.(xyz|top|click|gq|ml|cf|tk|buzz)", "description": "QR code destination uses a suspicious domain", "category": "url_reputation", "severity": 0.65}
+  ]
+}

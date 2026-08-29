@@ -1,7 +1,7 @@
 # Module 37: Microservices and Fault Tolerance
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-Imagine a giant cruise ship. If it has only one hull and gets a hole, the whole ship sinks (this is a "monolithic" app). Now imagine a ship made of 100 separate, sealed compartments. If one gets a hole, only that compartment floods, and the ship keeps sailing. This is "Microservices and Fault Tolerance." In the PS26145 architecture, the security system is broken into small, independent programs (microservices). If the 'Log Reader' service crashes, the 'Alert Dashboard' keeps running perfectly fine. Fault tolerance is the ability to survive those crashes.
+Imagine a giant cruise ship. If it has only one hull and gets a hole, the whole ship sinks (this is a "monolithic" app). Now imagine a ship made of 100 separate, sealed compartments. If one gets a hole, only that compartment floods, and the ship keeps sailing. This is "Microservices and Fault Tolerance." In the CyberOS architecture, the security system is broken into small, independent programs (microservices). If the 'Log Reader' service crashes, the 'Alert Dashboard' keeps running perfectly fine. Fault tolerance is the ability to survive those crashes.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

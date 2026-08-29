@@ -2,7 +2,7 @@ import os
 import time
 from playwright.sync_api import sync_playwright
 
-ASSETS_DIR = r"E:\sih26145-prototype\educational_dashboard\assets\screenshots"
+ASSETS_DIR = r"E:\cyberos-prototype\educational_dashboard\assets\screenshots"
 os.makedirs(ASSETS_DIR, exist_ok=True)
 
 def generate_evidence():

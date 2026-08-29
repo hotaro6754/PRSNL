@@ -10,9 +10,9 @@ with open("mock_conn.log", "w") as f:
         f.write(base_line)
 
 print("Appending to live zeek log (adapter will pick it up)...")
-os.system("docker cp mock_conn.log sih26145-zeek-prod:/tmp/mock_conn.log")
+os.system("docker cp mock_conn.log cyberos-zeek-prod:/tmp/mock_conn.log")
 start = time.perf_counter()
-os.system("docker exec sih26145-zeek-prod sh -c 'cat /tmp/mock_conn.log >> /var/log/zeek/conn.log'")
+os.system("docker exec cyberos-zeek-prod sh -c 'cat /tmp/mock_conn.log >> /var/log/zeek/conn.log'")
 
 # Poll the backend stats endpoint instead of kafka locally
 import urllib.request

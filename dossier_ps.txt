@@ -1,10 +1,10 @@
 NAME                    IMAGE                                               COMMAND                  SERVICE        CREATED         STATUS                        PORTS
-sih26145-backend        sih26145-prototype-backend                          "bash -c 'pip instal…"   backend        2 minutes ago   Up About a minute (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
-sih26145-frontend       sih26145-prototype-frontend                         "docker-entrypoint.s…"   frontend       2 minutes ago   Up 2 minutes                  0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
-sih26145-grafana        grafana/grafana:latest                              "/run.sh"                grafana        2 minutes ago   Up 2 minutes                  0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
-sih26145-ml-worker      sih26145-prototype-ml_worker                        "bash -c 'pip instal…"   ml_worker      2 minutes ago   Up About a minute             8000/tcp
-sih26145-mongodb        mongo:7                                             "docker-entrypoint.s…"   mongodb        2 minutes ago   Up 2 minutes (healthy)        0.0.0.0:27017->27017/tcp, [::]:27017->27017/tcp
-sih26145-prometheus     prom/prometheus:latest                              "/bin/prometheus --c…"   prometheus     2 minutes ago   Up 2 minutes                  0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
-sih26145-redpanda       docker.redpanda.com/redpandadata/redpanda:v24.1.1   "/entrypoint.sh redp…"   redpanda       2 minutes ago   Up 2 minutes (healthy)        0.0.0.0:9644->9644/tcp, [::]:9644->9644/tcp, 0.0.0.0:19092->19092/tcp, [::]:19092->19092/tcp
-sih26145-zeek           blacktop/zeek:latest                                "sh -c 'mkdir -p /va…"   zeek           2 minutes ago   Up 2 minutes                  
-sih26145-zeek-adapter   sih26145-prototype-zeek_adapter                     "bash -c 'pip instal…"   zeek_adapter   2 minutes ago   Up About a minute             8000/tcp
+cyberos-backend        cyberos-prototype-backend                          "bash -c 'pip instal…"   backend        2 minutes ago   Up About a minute (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+cyberos-frontend       cyberos-prototype-frontend                         "docker-entrypoint.s…"   frontend       2 minutes ago   Up 2 minutes                  0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+cyberos-grafana        grafana/grafana:latest                              "/run.sh"                grafana        2 minutes ago   Up 2 minutes                  0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
+cyberos-ml-worker      cyberos-prototype-ml_worker                        "bash -c 'pip instal…"   ml_worker      2 minutes ago   Up About a minute             8000/tcp
+cyberos-mongodb        mongo:7                                             "docker-entrypoint.s…"   mongodb        2 minutes ago   Up 2 minutes (healthy)        0.0.0.0:27017->27017/tcp, [::]:27017->27017/tcp
+cyberos-prometheus     prom/prometheus:latest                              "/bin/prometheus --c…"   prometheus     2 minutes ago   Up 2 minutes                  0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
+cyberos-redpanda       docker.redpanda.com/redpandadata/redpanda:v24.1.1   "/entrypoint.sh redp…"   redpanda       2 minutes ago   Up 2 minutes (healthy)        0.0.0.0:9644->9644/tcp, [::]:9644->9644/tcp, 0.0.0.0:19092->19092/tcp, [::]:19092->19092/tcp
+cyberos-zeek           blacktop/zeek:latest                                "sh -c 'mkdir -p /va…"   zeek           2 minutes ago   Up 2 minutes                  
+cyberos-zeek-adapter   cyberos-prototype-zeek_adapter                     "bash -c 'pip instal…"   zeek_adapter   2 minutes ago   Up About a minute             8000/tcp

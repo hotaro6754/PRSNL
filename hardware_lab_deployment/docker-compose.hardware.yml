@@ -2,7 +2,7 @@ version: "3.8"
 services:
   redpanda:
     image: docker.redpanda.com/redpandadata/redpanda:v23.1.2
-    container_name: sih26145-redpanda
+    container_name: cyberos-redpanda
     network_mode: host
     command: ["redpanda", "start", "--smp", "1", "--memory", "1G", "--reserve-memory", "0M", "--overprovisioned", "--node-id", "0", "--kafka-addr", "PLAINTEXT://0.0.0.0:9092", "--advertise-kafka-addr", "PLAINTEXT://127.0.0.1:9092"]
     restart: always
@@ -10,7 +10,7 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile.zeek
-    container_name: sih26145-zeek-sensor
+    container_name: cyberos-zeek-sensor
     network_mode: host
     cap_add: ["NET_ADMIN", "NET_RAW"]
     working_dir: /var/log/zeek
@@ -21,7 +21,7 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile.backend
-    container_name: sih26145-adapter
+    container_name: cyberos-adapter
     command: ["python", "-m", "backend.streaming.zeek_adapter"]
     environment:
       - KAFKA_BROKERS=127.0.0.1:9092
@@ -30,19 +30,19 @@ services:
     restart: always
   redis:
     image: redis:7.0-alpine
-    container_name: sih26145-redis
+    container_name: cyberos-redis
     network_mode: host
     restart: always
   mongodb:
     image: mongo:6.0
-    container_name: sih26145-mongo
+    container_name: cyberos-mongo
     network_mode: host
     restart: always
   backend:
     build:
       context: ../
       dockerfile: Dockerfile.backend
-    container_name: sih26145-backend
+    container_name: cyberos-backend
     network_mode: host
     command: ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
     environment: ["KAFKA_BROKERS=127.0.0.1:9092", "REDIS_URL=redis://127.0.0.1:6379", "MONGO_URI=mongodb://127.0.0.1:27017"]

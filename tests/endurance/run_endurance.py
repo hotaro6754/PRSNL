@@ -48,12 +48,12 @@ def run_action(action):
     elif action == "simulate_brute_force":
         requests.post(f"{API_BASE}/api/simulate/brute_force")
     elif action == "restart_ml_worker":
-        subprocess.run(["docker", "compose", "restart", "sih26145-ml-worker"])
+        subprocess.run(["docker", "compose", "restart", "cyberos-ml-worker"])
 
 def generate_report(run_dir, target_duration, actual_duration, metrics):
     status = "PASS" if actual_duration >= target_duration else "INCOMPLETE"
     
-    report = f"""# PS26145_CONTINUOUS_RELIABILITY_MASTER_REPORT
+    report = f"""# CyberOS_CONTINUOUS_RELIABILITY_MASTER_REPORT
 
 ## 1. Test Information
 - **Target Duration:** {target_duration} seconds
