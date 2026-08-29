@@ -493,7 +493,7 @@ For network security, we must choose between detail and efficiency. Packets (PCA
 ]
 
 def main():
-    base_dir = r"E:\sih26145-prototype\educational_dashboard\raw_modules"
+    base_dir = r"E:\cyberos-prototype\educational_dashboard\raw_modules"
     os.makedirs(base_dir, exist_ok=True)
     
     for mod in modules:

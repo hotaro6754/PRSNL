@@ -1,7 +1,7 @@
 # Module 36: The Canonical Observation Layer
 
 ## 1. What is the Canonical Observation Layer?
-A machine learning model is only as intelligent as the data you feed it. In PS26145, we encountered a catastrophic failure during Phase 3: our XGBoost model achieved 99% accuracy offline, but 0% accuracy in production.
+A machine learning model is only as intelligent as the data you feed it. In CyberOS, we encountered a catastrophic failure during Phase 3: our XGBoost model achieved 99% accuracy offline, but 0% accuracy in production.
 The **Canonical Observation Layer** is a strict, typed data schema (built with Pydantic) that sits between the network sensor and the ML engine. It forces all data—whether from training PCAPs or live production streams—into the exact same semantic format.
 
 ## 2. Why is it needed? (The L2 vs L3 Bug)

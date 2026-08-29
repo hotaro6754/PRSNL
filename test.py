@@ -1,4 +1,4 @@
-content = open(r'E:\sih26145-prototype\educational_dashboard\index.html', encoding='utf-8').read()
+content = open(r'E:\cyberos-prototype\educational_dashboard\index.html', encoding='utf-8').read()
 import re
 idx = content.find('11 Metrics')
 idx_srcdoc = content.find('srcdoc="', idx)

@@ -2,7 +2,7 @@ import os
 import time
 from playwright.sync_api import sync_playwright
 
-ASSETS_DIR = r"E:\sih26145-prototype\ps26145-docs\docs\assets\screenshots"
+ASSETS_DIR = r"E:\cyberos-prototype\cyberos-docs\docs\assets\screenshots"
 os.makedirs(ASSETS_DIR, exist_ok=True)
 
 def capture_screenshots():
@@ -33,7 +33,7 @@ def capture_screenshots():
             print("Fallback: Attempting to capture the HTML Dossier instead...")
             # Fallback to the generated HTML dossier if React isn't up
             try:
-                page.goto(f"file://E:/sih26145-prototype/presentation/PS26145_MASTER_DOSSIER.html")
+                page.goto(f"file://E:/cyberos-prototype/presentation/CyberOS_MASTER_DOSSIER.html")
                 page.wait_for_timeout(2000)
                 dossier_path = os.path.join(ASSETS_DIR, "html_dossier_overview.png")
                 page.screenshot(path=dossier_path, full_page=False)

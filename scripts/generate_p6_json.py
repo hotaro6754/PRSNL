@@ -35,7 +35,7 @@ matrix_results = [
     {"requirement": "Automated Rollback", "implementation": "Canary Monitor", "status": "VERIFIED", "limitation": "None"},
     {"requirement": "Live Physical Interface", "implementation": "N/A", "status": "NOT VALIDATED", "limitation": "Requires authorized hardware lab"}
 ]
-with open(os.path.join(artifact_dir, "ps26145_acceptance_matrix.json"), "w") as f:
+with open(os.path.join(artifact_dir, "cyberos_acceptance_matrix.json"), "w") as f:
     json.dump(matrix_results, f, indent=2)
 
 print("JSON files generated successfully in artifacts dir.")

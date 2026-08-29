@@ -2,10 +2,10 @@ import os
 import json
 import base64
 
-BASE_DIR = r"E:\sih26145-prototype\educational_dashboard"
+BASE_DIR = r"E:\cyberos-prototype\educational_dashboard"
 RAW_MODULES_DIR = os.path.join(BASE_DIR, "raw_modules")
 ASSETS_DIR = os.path.join(BASE_DIR, "assets", "screenshots")
-DIAGRAMS_DIR = r"E:\sih26145-prototype\presentation\diagrams"
+DIAGRAMS_DIR = r"E:\cyberos-prototype\presentation\diagrams"
 INDEX_PATH = os.path.join(BASE_DIR, "index.html")
 
 os.makedirs(ASSETS_DIR, exist_ok=True)
@@ -48,8 +48,8 @@ def build_dashboard():
     # Generate Main Page Content (Gallery)
     main_page_html = f"""
         <div class="content-container">
-            <h1>PS26145 Master Architecture Gallery</h1>
-            <p style="font-size: 1.1em; color: #555;">Welcome to the PS26145 Educational Dashboard. Below are the core architectural and systemic diagrams. Select a module from the left sidebar to dive into the technical details.</p>
+            <h1>CyberOS Master Architecture Gallery</h1>
+            <p style="font-size: 1.1em; color: #555;">Welcome to the CyberOS Educational Dashboard. Below are the core architectural and systemic diagrams. Select a module from the left sidebar to dive into the technical details.</p>
             <hr style="border: 1px solid #eee; margin: 30px 0;">
     """
     
@@ -104,7 +104,7 @@ def build_dashboard():
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PS26145 Educational Dashboard</title>
+    <title>CyberOS Educational Dashboard</title>
     <!-- Marked.js for Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <!-- Highlight.js -->
@@ -146,7 +146,7 @@ def build_dashboard():
 <body>
 
     <div id="sidebar">
-        <div class="sidebar-header" onclick="goHome()">PS26145 Home</div>
+        <div class="sidebar-header" onclick="goHome()">CyberOS Home</div>
         <div id="module-list"></div>
     </div>
 

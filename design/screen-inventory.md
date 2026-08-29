@@ -9,7 +9,7 @@
 - Dashboard (Posture, Live Feed, Threat Landscape)
 - Active Cases (Case Detail, Evidence, Entity Graph)
 - Threat Intelligence Status
-- Network (PS26145 Zeek Detections)
+- Network (CyberOS Zeek Detections)
 - Reports (Quarkdown Archive)
 
 ## Admin Mode

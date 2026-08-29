@@ -1,7 +1,7 @@
 # Module 39: End-to-End Playwright Testing
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-Imagine building a car and only testing the engine and the brakes separately, but never actually driving the car on a road to see if they work together. That's a bad idea. In software, "End-to-End (E2E) Testing" is like driving the car. It uses a robot to open a real web browser, click real buttons, and verify the whole system works from the database to the screen. Playwright is a modern tool created by Microsoft that writes these robotic browser tests. For PS26145, we use Playwright to ensure the security dashboard correctly displays alerts when a simulated attack happens.
+Imagine building a car and only testing the engine and the brakes separately, but never actually driving the car on a road to see if they work together. That's a bad idea. In software, "End-to-End (E2E) Testing" is like driving the car. It uses a robot to open a real web browser, click real buttons, and verify the whole system works from the database to the screen. Playwright is a modern tool created by Microsoft that writes these robotic browser tests. For CyberOS, we use Playwright to ensure the security dashboard correctly displays alerts when a simulated attack happens.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

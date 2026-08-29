@@ -1,7 +1,7 @@
 # Module 38: The React WebSockets Dashboard
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-When you browse a normal website, you have to click "Refresh" to see new information. This is called polling. In a cybersecurity command center, clicking refresh is too slow—you need to see a hacker's IP pop up the exact millisecond they attack. "WebSockets" is a technology that keeps a permanent, open pipeline between the server and the browser. A React WebSockets Dashboard (used in PS26145) updates live, on its own, streaming alerts to the security analyst's screen in real-time without ever reloading the page.
+When you browse a normal website, you have to click "Refresh" to see new information. This is called polling. In a cybersecurity command center, clicking refresh is too slow—you need to see a hacker's IP pop up the exact millisecond they attack. "WebSockets" is a technology that keeps a permanent, open pipeline between the server and the browser. A React WebSockets Dashboard (used in CyberOS) updates live, on its own, streaming alerts to the security analyst's screen in real-time without ever reloading the page.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid
@@ -67,4 +67,4 @@ export default SecurityDashboard;
 9. `return ( <div>... )`: The HTML/JSX that actually draws the list of alerts in red text.
 
 ## 5. Summary
-WebSockets replace the clunky "refresh to update" model with a continuous, real-time data stream. By pairing WebSockets with React, the PS26145 dashboard instantly reflects the live state of the network, giving analysts a zero-latency view of active threats.
+WebSockets replace the clunky "refresh to update" model with a continuous, real-time data stream. By pairing WebSockets with React, the CyberOS dashboard instantly reflects the live state of the network, giving analysts a zero-latency view of active threats.

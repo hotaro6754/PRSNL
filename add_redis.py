@@ -5,7 +5,7 @@ with open('docker-compose.prod.yml', 'r') as f:
 
 data['services']['redis'] = {
     'image': 'redis:7-alpine',
-    'container_name': 'sih26145-redis-prod',
+    'container_name': 'cyberos-redis-prod',
     'command': ['redis-server', '--maxmemory', '256mb', '--maxmemory-policy', 'allkeys-lru'],
     'ports': ['6379:6379'],
     'restart': 'always',

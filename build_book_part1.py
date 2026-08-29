@@ -1,6 +1,6 @@
 import os
 
-BASE_DIR = r"E:\sih26145-prototype\ps26145-docs"
+BASE_DIR = r"E:\cyberos-prototype\cyberos-docs"
 DOCS_DIR = os.path.join(BASE_DIR, "docs")
 
 def create_dirs():
@@ -16,8 +16,8 @@ def write_file(path, content):
         f.write(content.strip())
 
 mkdocs_yml = """
-site_name: PS26145 Technical Book
-site_description: Deep technical publication for PS26145
+site_name: CyberOS Technical Book
+site_description: Deep technical publication for CyberOS
 theme:
   name: material
   features:
@@ -67,7 +67,7 @@ nav:
   - 1. Basics:
     - 01_basics/networks.md
     - 01_basics/soc_and_ndr.md
-    - 01_basics/ps26145_problem.md
+    - 01_basics/cyberos_problem.md
   - 2. Theory:
     - 02_theory/zeek.md
     - 02_theory/canonical_observation.md
@@ -105,7 +105,7 @@ nav:
 """
 
 index_md = """
-# Welcome to the PS26145 Knowledge System
+# Welcome to the CyberOS Knowledge System
 
 **A Quarkdown-inspired cybersecurity research textbook, implementation manual, architecture reference, engineering diary, and validation dossier.**
 
@@ -201,11 +201,11 @@ flowchart LR
 | **SIEM** | No (Uses Logs) | No | Log aggregation & alerting |
 | **NDR** | Yes | Yes (via integration) | Behavioral ML threat detection |
 
-PS26145 is a purely passive NDR solution.
+CyberOS is a purely passive NDR solution.
     """)
     
-    write_file("docs/01_basics/ps26145_problem.md", """
-# PS26145 — The Actual Problem
+    write_file("docs/01_basics/cyberos_problem.md", """
+# CyberOS — The Actual Problem
 
 ## Why Unidirectional Network Monitoring?
 High-security environments (like Government enclaves) cannot risk an attacker using the security tool itself to send data *back* into the production network.
@@ -223,7 +223,7 @@ flowchart LR
 ```
 *Note: Software passivity (read-only code) and physical one-way enforcement (data diode) are separate concepts. This project implements software passivity, pending physical diode hardware validation.*
 
-## The PS26145 Requirement Matrix
+## The CyberOS Requirement Matrix
 
 | PS Requirement | Implementation | Evidence | Status |
 | :--- | :--- | :--- | :--- |

@@ -23,10 +23,10 @@ def get_zeek_features(pcap_file):
     out_dir = 'zeek_logs_parity'
     os.makedirs(out_dir, exist_ok=True)
     # We copy the pcap to the zeek container, run zeek, and copy the logs back
-    subprocess.run(['docker', 'cp', os.path.abspath(pcap_file), 'sih26145-zeek-prod:/tmp/parity.pcap'], check=True)
-    subprocess.run(['docker', 'exec', 'sih26145-zeek-prod', 'mkdir', '-p', '/tmp/zeek_logs_parity'], check=True)
-    subprocess.run(['docker', 'exec', 'sih26145-zeek-prod', 'sh', '-c', 'cd /tmp/zeek_logs_parity && zeek -r /tmp/parity.pcap local LogAscii::use_json=T'], check=True)
-    subprocess.run(['docker', 'cp', 'sih26145-zeek-prod:/tmp/zeek_logs_parity/conn.log', os.path.join(out_dir, 'conn.log')], check=True)
+    subprocess.run(['docker', 'cp', os.path.abspath(pcap_file), 'cyberos-zeek-prod:/tmp/parity.pcap'], check=True)
+    subprocess.run(['docker', 'exec', 'cyberos-zeek-prod', 'mkdir', '-p', '/tmp/zeek_logs_parity'], check=True)
+    subprocess.run(['docker', 'exec', 'cyberos-zeek-prod', 'sh', '-c', 'cd /tmp/zeek_logs_parity && zeek -r /tmp/parity.pcap local LogAscii::use_json=T'], check=True)
+    subprocess.run(['docker', 'cp', 'cyberos-zeek-prod:/tmp/zeek_logs_parity/conn.log', os.path.join(out_dir, 'conn.log')], check=True)
     
     conn_log = os.path.join(out_dir, 'conn.log')
     from backend.streaming.zeek_adapter import ZeekTailer

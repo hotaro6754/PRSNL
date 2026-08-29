@@ -24,7 +24,7 @@ class WindowManager:
             self.latest_event_time_ms = ts
             
         wid = self._get_window_id(ts)
-        self.windows[(wid, obs.source_ip)].append(obs)
+        self.windows[(wid, obs.source_ip, getattr(obs, "organization_id", "default_org"))].append(obs)
 
     def flush_ready_windows(self, current_wall_time_ms: int, is_live: bool = True) -> List[tuple]:
         """
@@ -33,7 +33,7 @@ class WindowManager:
         ready = []
         keys_to_delete = []
         for key in list(self.windows.keys()):
-            wid, src_ip = key
+            wid, src_ip, org_id = key
             window_end = wid + self.window_size_ms
             
             ready_by_event = self.latest_event_time_ms >= (window_end + self.allowed_lateness_ms)
@@ -43,7 +43,7 @@ class WindowManager:
                 ready_by_wall = current_wall_time_ms >= (window_end + self.allowed_lateness_ms)
                 
             if ready_by_event or ready_by_wall:
-                ready.append((wid, src_ip, self.windows[key]))
+                ready.append((wid, src_ip, org_id, self.windows[key]))
                 keys_to_delete.append(key)
                 
         for k in keys_to_delete:
@@ -56,8 +56,8 @@ class WindowManager:
         """Flushes all remaining windows regardless of time."""
         ready = []
         for key in list(self.windows.keys()):
-            wid, src_ip = key
-            ready.append((wid, src_ip, self.windows[key]))
+            wid, src_ip, org_id = key
+            ready.append((wid, src_ip, org_id, self.windows[key]))
             
         self.windows.clear()
         ready.sort(key=lambda x: x[0])

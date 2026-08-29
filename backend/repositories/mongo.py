@@ -22,7 +22,7 @@ from backend.config import ENVIRONMENT, AppEnv, BUFFER_DIR
 logger = logging.getLogger(__name__)
 
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
-MONGO_DB = os.environ.get("MONGO_DB", "sih26145")
+MONGO_DB = os.environ.get("MONGO_DB", "cyberos")
 
 class MongoRepository:
     def __init__(self, uri=MONGO_URI, db_name=MONGO_DB):

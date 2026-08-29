@@ -241,7 +241,7 @@ export default function ScanPage() {
                   ↓
                 </div>
                 <div className="ml-32 mt-2">
-                  <span className="bg-red-900/40 text-red-400 border border-red-500/30 px-3 py-1 rounded font-bold">PS26145 FLAG</span>
+                  <span className="bg-red-900/40 text-red-400 border border-red-500/30 px-3 py-1 rounded font-bold">CyberOS FLAG</span>
                 </div>
               </div>
             </div>

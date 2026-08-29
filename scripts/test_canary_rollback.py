@@ -2,7 +2,7 @@ import time
 from pymongo import MongoClient
 def main():
     client = MongoClient("mongodb://localhost:27017/")
-    db = client.sih26145_prod
+    db = client.cyberos_prod
     print("1. Promoting V5 to CANARY (5% traffic)...")
     db.models.update_one({"model_id": "xgb_window_v5"}, {"$set": {"stage": "CANARY", "deployment_config": {"canary_percent": 5, "latency_threshold_ms": 10.0}}})
     print("2. Simulating traffic and monitoring...")

@@ -66,7 +66,7 @@ def run_level(level, matrix):
     # Chaos / Kills
     if "WORKER_KILL" in scenarios:
         log("Running BACKEND WORKER FAILURE UNDER LOAD...")
-        subprocess.run(["docker", "compose", "restart", "sih26145-backend"], capture_output=True)
+        subprocess.run(["docker", "compose", "restart", "cyberos-backend"], capture_output=True)
         time.sleep(5)
         if check_health():
             results.append({"scenario": "Backend Restart", "status": "PASS", "notes": "Reconnected to Mongo/Kafka successfully."})
@@ -106,10 +106,10 @@ def main():
     partial = sum(1 for r in results if r["status"] == "PARTIAL")
     failed = sum(1 for r in results if r["status"] == "FAIL")
     
-    report = f"""# PS26145_SEVERE_FUNCTIONAL_ACCEPTANCE_REPORT
+    report = f"""# CyberOS_SEVERE_FUNCTIONAL_ACCEPTANCE_REPORT
 
 ## 1. Executive Summary
-This report details the exact performance of the PS26145 platform under severe load and failure conditions.
+This report details the exact performance of the CyberOS platform under severe load and failure conditions.
 
 ## 2. Test Methodology
 Level executed: **{args.level.upper()}**

@@ -1,7 +1,7 @@
 import os
 import json
 
-base_dir = 'E:/sih26145-prototype/artifacts/elite_final'
+base_dir = 'E:/cyberos-prototype/artifacts/elite_final'
 os.makedirs(base_dir, exist_ok=True)
 os.makedirs(os.path.join(base_dir, 'mermaid'), exist_ok=True)
 os.makedirs(os.path.join(base_dir, 'charts'), exist_ok=True)
@@ -18,17 +18,17 @@ PS#5 asks for an intelligent platform to identify suspicious digital content (UR
 
 ## 03 — ARCHITECTURE & WORKFLOW
 CyberOS unites fragmented tools:
-Input -> Specialized Detector -> Local ML (XGBoost) -> Threat Intelligence (VT) -> Web Sandbox (Playwright) -> Network Sensor (Zeek/PS26145) -> Evidence Fabric -> Entity Graph -> Correlation -> Risk -> Explanation -> Quarkdown Report -> Education.
+Input -> Specialized Detector -> Local ML (XGBoost) -> Threat Intelligence (VT) -> Web Sandbox (Playwright) -> Network Sensor (Zeek/CyberOS) -> Evidence Fabric -> Entity Graph -> Correlation -> Risk -> Explanation -> Quarkdown Report -> Education.
 
 ## 04 — TEST EVIDENCE (RUN-20260828-1640)
 **Total Validated Cases:** 265 [CYBEROS OBSERVED]
 - **URL:** 30 | **Email:** 25 | **SMS:** 25 | **QR:** 20 | **Web:** 25 | **Social:** 20 (User-submitted)
-- **Network (PS26145):** 20 | **Security:** 30 | **Provenance:** 15 | **Graph:** 20 | **ML:** 20 | **Performance:** 15 | **Resilience:** 15 | **E2E:** 15
+- **Network (CyberOS):** 20 | **Security:** 30 | **Provenance:** 15 | **Graph:** 20 | **ML:** 20 | **Performance:** 15 | **Resilience:** 15 | **E2E:** 15
 
 *Limitations/Safe Degradation:* QR-010 (Obscured QR) safely degraded to UNVERIFIED. WEB-SSRF-009 (IPv4-mapped IPv6) successfully blocked by Playwright sandbox policies.
 
 ## 05 — COMPETITIVE DIFFERENTIATION
-CyberOS is not an LLM wrapper like ChatGPT, nor is it merely a threat intel lookup like VirusTotal. It is an end-to-end security fabric. The moat is not the ML model itself; it is the **PS26145 network telemetry integration** and the **cryptographic evidence provenance** that guarantees the integrity of the investigation.
+CyberOS is not an LLM wrapper like ChatGPT, nor is it merely a threat intel lookup like VirusTotal. It is an end-to-end security fabric. The moat is not the ML model itself; it is the **CyberOS network telemetry integration** and the **cryptographic evidence provenance** that guarantees the integrity of the investigation.
 
 ## 06 — BUSINESS & SOCIETAL IMPACT
 For society, it provides CERT-In aligned education at the exact moment of failure. For startups, it eliminates the need for manual SOC triage by providing instant, explainable Quarkdown reports.
@@ -97,7 +97,7 @@ with open(os.path.join(base_dir, 'CYBEROS_HACKSPRINT_FINAL_JURY_QA.md'), 'w', en
 mermaid = \"\"\"graph LR
     A[Message] --> B[URL Engine]
     B --> C[Playwright Sandbox]
-    C --> D[Zeek/PS26145]
+    C --> D[Zeek/CyberOS]
     D --> E[Correlated Case]
 \"\"\"
 with open(os.path.join(base_dir, 'mermaid', 'architecture.mmd'), 'w', encoding='utf-8') as f:

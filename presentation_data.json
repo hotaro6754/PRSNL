@@ -14,7 +14,7 @@
     "report_results": "PASS",
     "education_results": "PASS",
     "model_versions": ["xgb_window_v5_5.0.0.pkl", "url_classifier_1.2", "sms_classifier_1.0", "email_classifier_1.1"],
-    "dataset_versions": ["hf_phishing_v3_dedup", "hf_sms_spam_v2", "ps26145_baseline"],
+    "dataset_versions": ["hf_phishing_v3_dedup", "hf_sms_spam_v2", "cyberos_baseline"],
     "tool_versions": ["vt_integration_1.1", "phishtank_1.0", "misp_scaffold_1.0"],
     "report_artifacts": [
         "artifacts/reports/core_integrity_report.md",

@@ -1,7 +1,7 @@
 # Module 34: Redis State Management
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-Think of your computer's hard drive versus its RAM. The hard drive is slow but permanent. RAM is incredibly fast but temporary. Redis is a database that lives entirely in RAM (memory). Because it is so fast, we use it for "State Management"—keeping track of what is happening *right now*. In the PS26145 architecture, if an IP address fails to log in 5 times in a minute, we need a blazing-fast way to count those failures. Redis stores this temporary count (the "state") so the security system can block the IP instantly.
+Think of your computer's hard drive versus its RAM. The hard drive is slow but permanent. RAM is incredibly fast but temporary. Redis is a database that lives entirely in RAM (memory). Because it is so fast, we use it for "State Management"—keeping track of what is happening *right now*. In the CyberOS architecture, if an IP address fails to log in 5 times in a minute, we need a blazing-fast way to count those failures. Redis stores this temporary count (the "state") so the security system can block the IP instantly.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

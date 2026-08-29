@@ -6,7 +6,7 @@ with open('docker-compose.yml', 'r') as f:
 # Add init-redpanda
 compose['services']['init-redpanda'] = {
     'image': 'docker.redpanda.com/redpandadata/redpanda:v24.1.1',
-    'container_name': 'sih26145-init-redpanda',
+    'container_name': 'cyberos-init-redpanda',
     'depends_on': {'redpanda': {'condition': 'service_healthy'}},
     'command': [
         'sh', '-c', 

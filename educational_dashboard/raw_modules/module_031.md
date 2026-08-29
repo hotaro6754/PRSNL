@@ -1,7 +1,7 @@
 # Module 31: The Unidirectional Network Problem
 
 ## 1. What is it? (Explain from scratch for a complete beginner)
-Imagine a high-security military base that needs to receive weather updates from the outside world but cannot risk letting any secret data leak out. A unidirectional network, often implemented with a "data diode," solves this by allowing data to travel in only one direction. In cybersecurity, the Unidirectional Network Problem refers to the challenge of getting data out of a highly secure system (like the PS26145 architecture) for monitoring or processing without ever allowing inbound connections that hackers could exploit.
+Imagine a high-security military base that needs to receive weather updates from the outside world but cannot risk letting any secret data leak out. A unidirectional network, often implemented with a "data diode," solves this by allowing data to travel in only one direction. In cybersecurity, the Unidirectional Network Problem refers to the challenge of getting data out of a highly secure system (like the CyberOS architecture) for monitoring or processing without ever allowing inbound connections that hackers could exploit.
 
 ## 2. Architecture / Flow (MUST include a Mermaid flowchart/diagram)
 ```mermaid

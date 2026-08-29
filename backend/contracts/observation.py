@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 
 class NetworkObservation(BaseModel):
+    organization_id: str = "default_org"
     """
     The canonical data contract for passive network telemetry.
     Detectors consume this regardless of ingestion source (Scapy, Zeek, etc.).

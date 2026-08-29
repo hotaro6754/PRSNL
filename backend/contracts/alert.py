@@ -5,6 +5,7 @@ from datetime import datetime
 from backend.contracts.evidence import DetectionEvidence
 
 class Alert(BaseModel):
+    organization_id: str = "default_org"
     """
     Normalized Alert schema for deterministic detections.
     """

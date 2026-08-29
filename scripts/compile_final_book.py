@@ -2,25 +2,25 @@ import os
 import time
 from playwright.sync_api import sync_playwright
 
-BASE_DIR = r"E:\sih26145-prototype"
-DOCS_DIR = os.path.join(BASE_DIR, r"ps26145-docs\docs\handbook")
-OUT_MD = os.path.join(BASE_DIR, "PS26145_Technical_Handbook.md")
-OUT_HTML = os.path.join(BASE_DIR, "PS26145_Technical_Handbook.html")
-OUT_PDF = os.path.join(BASE_DIR, "PS26145_Technical_Handbook.pdf")
+BASE_DIR = r"E:\cyberos-prototype"
+DOCS_DIR = os.path.join(BASE_DIR, r"cyberos-docs\docs\handbook")
+OUT_MD = os.path.join(BASE_DIR, "CyberOS_Technical_Handbook.md")
+OUT_HTML = os.path.join(BASE_DIR, "CyberOS_Technical_Handbook.html")
+OUT_PDF = os.path.join(BASE_DIR, "CyberOS_Technical_Handbook.pdf")
 
 def build():
     # 1. Combine Markdown
     print("Combining Markdown Volumes...")
     files = sorted([f for f in os.listdir(DOCS_DIR) if f.endswith('.md')])
     
-    combined_md = "# PS26145 Technical Handbook\n\n"
+    combined_md = "# CyberOS Technical Handbook\n\n"
     combined_md += "*A fully detailed, 50-chapter technical publication built from scratch.*\n\n---\n\n"
     
     for filename in files:
         with open(os.path.join(DOCS_DIR, filename), "r", encoding="utf-8") as f:
             content = f.read()
             # Fix image paths if necessary
-            content = content.replace("../../assets/screenshots", "./ps26145-docs/docs/assets/screenshots")
+            content = content.replace("../../assets/screenshots", "./cyberos-docs/docs/assets/screenshots")
             combined_md += content + "\n\n---\n\n"
 
     with open(OUT_MD, "w", encoding="utf-8") as f:
@@ -33,7 +33,7 @@ def build():
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PS26145 Technical Handbook</title>
+    <title>CyberOS Technical Handbook</title>
     <!-- Marked.js for Markdown parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Mermaid.js for Diagrams -->
@@ -112,7 +112,7 @@ def build():
             margin={"top": "20mm", "bottom": "20mm", "left": "20mm", "right": "20mm"},
             print_background=True,
             display_header_footer=True,
-            header_template="<div style='font-size: 10px; width: 100%; text-align: center; color: #888;'>PS26145 Technical Handbook</div>",
+            header_template="<div style='font-size: 10px; width: 100%; text-align: center; color: #888;'>CyberOS Technical Handbook</div>",
             footer_template="<div style='font-size: 10px; width: 100%; text-align: center; color: #888;'><span class='pageNumber'></span> / <span class='totalPages'></span></div>"
         )
         browser.close()

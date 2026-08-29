@@ -1,7 +1,7 @@
 import os
 
 def write_module(mod_id, content):
-    filepath = rf"E:\sih26145-prototype\educational_dashboard\raw_modules\module_{mod_id}.md"
+    filepath = rf"E:\cyberos-prototype\educational_dashboard\raw_modules\module_{mod_id}.md"
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(content)

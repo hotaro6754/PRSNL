@@ -1,33 +1,38 @@
-import os
-import hashlib
-from datetime import datetime, timezone
-from pymongo import MongoClient
+import httpx
+import asyncio
+import json
+from datetime import datetime
 
-model_path = 'models/xgb_window_v5.pkl'
-with open(model_path, 'rb') as f:
-    sha256 = hashlib.sha256(f.read()).hexdigest()
+async def main():
+    with open("models/url_xgb_v1_metadata.json", "r") as f:
+        meta = json.load(f)
 
-client = MongoClient('mongodb://localhost:27017/')
-db = client['ndr_database']
+    import hashlib
+    with open("models/url_xgb_v1.pkl", "rb") as f:
+        file_hash = hashlib.sha256(f.read()).hexdigest()
 
-doc = {
-    'model_id': 'xgb_window_v5',
-    'model_version': '5.0.0',
-    'model_type': 'xgb_supervised',
-    'stage': 'PRODUCTION',
-    'feature_schema_version': '1.0',
-    'extractor_version': '1.0',
-    'artifact_uri': 'file:///app/backend/../models/xgb_window_v5.pkl',
-    'artifact_sha256': sha256,
-    'created_at': datetime.now(timezone.utc),
-    'metrics': {},
-    'owner': 'system',
-    'deployment_config': {}
-}
+    payload = {
+        "model_id": "xgb_supervised",
+        "model_version": "1.0.0",
+        "model_type": "xgboost",
+        "stage": "VALIDATING",
+        "extractor_version": "1.0",
+        "artifact_uri": "models/url_xgb_v1.pkl",
+        "artifact_sha256": file_hash,
+        "feature_schema_version": "1.0",
+        "metrics": meta.get("metrics", {}),
+        "created_by": "automation",
+        "created_at": datetime.utcnow().isoformat() + "Z"
+    }
 
-db.model_registry.update_one(
-    {'model_id': 'xgb_window_v5', 'model_version': '5.0.0'},
-    {'$set': doc},
-    upsert=True
-)
-print('Model registered successfully!')
+    async with httpx.AsyncClient() as client:
+        print("Registering...")
+        res = await client.post("http://localhost:8000/api/models/register", json=payload)
+        print(res.status_code, res.text)
+        
+        print("Promoting...")
+        res = await client.post("http://localhost:8000/api/models/xgb_supervised/versions/1.0.0/promote?stage=PRODUCTION")
+        print(res.status_code, res.text)
+
+if __name__ == "__main__":
+    asyncio.run(main())

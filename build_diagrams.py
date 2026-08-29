@@ -1,6 +1,6 @@
 import os
 
-OUTPUT_DIR = r"E:\sih26145-prototype\presentation\diagrams"
+OUTPUT_DIR = r"E:\cyberos-prototype\presentation\diagrams"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 TEMPLATE = """<!DOCTYPE html>
@@ -270,7 +270,7 @@ diagrams.append({
 diagrams.append({
     "filename": "06_threat_matrix.html",
     "title": "Threat Coverage Matrix",
-    "subtitle": "Detecting the six required PS26145 threat families + Slow HTTP entirely passively",
+    "subtitle": "Detecting the six required CyberOS threat families + Slow HTTP entirely passively",
     "content": """
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px;">
         """ + "".join([f"""
@@ -431,7 +431,7 @@ diagrams.append({
         
         <!-- Center -->
         <div style="position:absolute; top:250px; left:480px; width:240px; height:150px; background:var(--navy); color:var(--white); border-radius:75px; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:2; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
-            <div style="font-weight:bold; font-size:32px;">PS26145</div>
+            <div style="font-weight:bold; font-size:32px;">CyberOS</div>
             <div style="font-size:20px; font-weight:normal; color:#EAF4FB; margin-top:5px;">PASSIVE NDR</div>
         </div>
         
@@ -492,14 +492,14 @@ for d in diagrams:
 
 # Index
 index_html = """<!DOCTYPE html>
-<html><head><title>PS26145 Diagrams</title>
+<html><head><title>CyberOS Diagrams</title>
 <style>
     body { font-family: sans-serif; background: #f0f2f5; padding: 40px; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
     .card { background: white; padding: 20px; border-radius: 8px; text-decoration: none; color: #0B1F3A; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: block; border: 1px solid #e0e0e0; }
     .card:hover { border-color: #0066B3; }
 </style></head>
-<body><h1>PS26145 - SIH Internal Round Visual System</h1>
+<body><h1>CyberOS - SIH Internal Round Visual System</h1>
 <div class="grid">
 """ + "".join([f'<a class="card" href="{d["filename"]}"><strong>{d["filename"][:2]}</strong> {d["title"]}</a>' for d in diagrams]) + """
 </div></body></html>"""

@@ -1,6 +1,6 @@
 import os
 
-OUTPUT_DIR = r"E:\sih26145-prototype\ps26145-docs\docs\handbook"
+OUTPUT_DIR = r"E:\cyberos-prototype\cyberos-docs\docs\handbook"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def write_file(filename, content):
@@ -14,7 +14,7 @@ VOL1_CONTENT = """
 # Volume 1: The Foundations of Cyberspace
 
 ## Chapter 1: The Anatomy of a Network
-To understand how PS26145 defends a network, we must first understand what a network is from absolute zero. A network is a collection of computers, servers, mainframes, network devices, or other devices connected to one another to allow the sharing of data.
+To understand how CyberOS defends a network, we must first understand what a network is from absolute zero. A network is a collection of computers, servers, mainframes, network devices, or other devices connected to one another to allow the sharing of data.
 
 ```mermaid
 flowchart LR
@@ -40,7 +40,7 @@ block-beta
   L2["Layer 2: Data Link (MAC, Ethernet)"]
   L1["Layer 1: Physical (Cables, Radio)"]
 ```
-PS26145 primarily extracts metadata from Layers 3, 4, and 7.
+CyberOS primarily extracts metadata from Layers 3, 4, and 7.
 
 ## Chapter 3: IP Addressing & Subnets
 Every device on a network needs a logical address. In IPv4, this is a 32-bit number, usually represented in dotted-decimal format (e.g., `192.168.1.10`). A subnet mask (e.g., `255.255.255.0`) divides the IP address into a network portion and a host portion, dictating how packets are routed locally versus globally.
@@ -98,11 +98,11 @@ sequenceDiagram
     Client->>Server: Key Exchange
     Note over Client,Server: Encrypted Channel Established
 ```
-PS26145 operates under a strict "No Decryption" mandate. We use the unencrypted `ClientHello` metadata (like SNI and JA3 fingerprints) to classify threats.
+CyberOS operates under a strict "No Decryption" mandate. We use the unencrypted `ClientHello` metadata (like SNI and JA3 fingerprints) to classify threats.
 
 ## Chapter 10: Packets vs. Flows
 A **Packet** is a single unit of data. A **Flow** is a sequence of packets between two sockets (Source IP/Port to Dest IP/Port) over a period of time.
-Network Detection and Response (NDR) systems like PS26145 analyze flows, not packets. Threats manifest over time; a single packet is rarely malicious on its own, but a sequence of packets reveals intent.
+Network Detection and Response (NDR) systems like CyberOS analyze flows, not packets. Threats manifest over time; a single packet is rarely malicious on its own, but a sequence of packets reveals intent.
 """
 
 # ==========================================
@@ -126,7 +126,7 @@ flowchart TD
     A -->|SYN Port 23| T
     T -->|RST| A
 ```
-*Detection*: PS26145 flags high fan-out (one source to many unique destination ports) over tumbling time windows.
+*Detection*: CyberOS flags high fan-out (one source to many unique destination ports) over tumbling time windows.
 
 ## Chapter 13: Botnets & The Zombie Army
 A botnet is a network of compromised computers (zombies) controlled by a single attacker (the Botmaster). They are used to execute coordinated tasks, primarily DDoS attacks.
@@ -153,7 +153,7 @@ Volumetric attacks overwhelm bandwidth. In an **Amplification Attack**, an attac
 ## Chapter 16: TCP State Exhaustion (SYN Floods)
 As introduced in Chapter 4, the TCP handshake requires memory. By sending millions of SYN packets but never replying with the final ACK, an attacker fills the server's connection table until it crashes. 
 ![DDoS Evidence](../../assets/screenshots/dashboard_full.png)
-*(PS26145 detecting a massive Volumetric Flood in real-time)*
+*(CyberOS detecting a massive Volumetric Flood in real-time)*
 
 ## Chapter 17: Application Layer Exhaustion (Slowloris)
 Unlike a volumetric attack, a Slowloris attack requires virtually no bandwidth. The attacker opens hundreds of valid HTTP connections but sends data at an excruciatingly slow rate (1 byte every 10 seconds). The server keeps the sockets open, eventually exhausting its connection pool.
@@ -177,7 +177,7 @@ sequenceDiagram
 ```
 
 ## Chapter 20: IP Spoofing
-IP Spoofing is the creation of IP packets with a false source IP address, used to hide the identity of the sender or to impersonate another computing system. This breaks standard rate-limiting firewalls. PS26145 calculates the Shannon Entropy of source IPs to detect randomized spoofing mathematically.
+IP Spoofing is the creation of IP packets with a false source IP address, used to hide the identity of the sender or to impersonate another computing system. This breaks standard rate-limiting firewalls. CyberOS calculates the Shannon Entropy of source IPs to detect randomized spoofing mathematically.
 """
 
 def generate():

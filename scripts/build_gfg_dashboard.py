@@ -1,7 +1,7 @@
 import os
 import json
 
-BASE_DIR = r"E:\sih26145-prototype\educational_dashboard"
+BASE_DIR = r"E:\cyberos-prototype\educational_dashboard"
 os.makedirs(BASE_DIR, exist_ok=True)
 
 # ---------------------------------------------------------
@@ -13,23 +13,23 @@ def get_module_ddos():
 
 ## 1. What is Volumetric DDoS?
 A **Distributed Denial of Service (DDoS)** attack is a malicious attempt to disrupt the normal traffic of a targeted server by overwhelming it with a flood of Internet traffic. 
-In PS26145, we focus specifically on **TCP State Exhaustion** (SYN Floods). The attacker sends millions of connection requests (SYN packets) with spoofed (fake) source IPs, forcing the server to allocate memory for connections that will never complete.
+In CyberOS, we focus specifically on **TCP State Exhaustion** (SYN Floods). The attacker sends millions of connection requests (SYN packets) with spoofed (fake) source IPs, forcing the server to allocate memory for connections that will never complete.
 
 ## 2. System Architecture
-The PS26145 detection engine (`ddos_stat_v1`) operates unidirectionally. It cannot send a TCP RST packet to kill the connection. Instead, it must passively observe the flood and alert the SOC.
+The CyberOS detection engine (`ddos_stat_v1`) operates unidirectionally. It cannot send a TCP RST packet to kill the connection. Instead, it must passively observe the flood and alert the SOC.
 
 ```mermaid
 sequenceDiagram
     participant Attacker (Spoofed IPs)
-    participant PS26145 Sensor
+    participant CyberOS Sensor
     participant Victim Server
     
     Attacker (Spoofed IPs)->>Victim Server: SYN Packet (IP 1)
-    PS26145 Sensor-->>PS26145 Sensor: Log S0 State (Half-Open)
+    CyberOS Sensor-->>CyberOS Sensor: Log S0 State (Half-Open)
     Attacker (Spoofed IPs)->>Victim Server: SYN Packet (IP 2)
-    PS26145 Sensor-->>PS26145 Sensor: Log S0 State (Half-Open)
-    Note over PS26145 Sensor: Tumbling Window flushes<br/>calculates Rate & Entropy
-    PS26145 Sensor->>SOC Dashboard: Alert: High Confidence DDoS
+    CyberOS Sensor-->>CyberOS Sensor: Log S0 State (Half-Open)
+    Note over CyberOS Sensor: Tumbling Window flushes<br/>calculates Rate & Entropy
+    CyberOS Sensor->>SOC Dashboard: Alert: High Confidence DDoS
 ```
 
 ## 3. Implementation (Python Backend)
@@ -82,7 +82,7 @@ def get_module_canonical():
 # Module 36: The Canonical Observation Layer
 
 ## 1. What is the Canonical Observation Layer?
-A machine learning model is only as intelligent as the data you feed it. In PS26145, we encountered a catastrophic failure during Phase 3: our XGBoost model achieved 99% accuracy offline, but 0% accuracy in production.
+A machine learning model is only as intelligent as the data you feed it. In CyberOS, we encountered a catastrophic failure during Phase 3: our XGBoost model achieved 99% accuracy offline, but 0% accuracy in production.
 The **Canonical Observation Layer** is a strict, typed data schema (built with Pydantic) that sits between the network sensor and the ML engine. It forces all data—whether from training PCAPs or live production streams—into the exact same semantic format.
 
 ## 2. Why is it needed? (The L2 vs L3 Bug)
@@ -172,7 +172,7 @@ def build_dashboard():
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PS26145 Educational Dashboard</title>
+    <title>CyberOS Educational Dashboard</title>
     <!-- Marked.js for Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Highlight.js for GfG-style code highlighting -->
@@ -261,13 +261,13 @@ def build_dashboard():
 <body>
 
     <div id="sidebar">
-        <div class="sidebar-header">PS26145 Tutorials</div>
+        <div class="sidebar-header">CyberOS Tutorials</div>
         <div id="module-list"></div>
     </div>
 
     <div id="main-content">
         <div class="content-container" id="content">
-            <h1>Welcome to the PS26145 Educational Dashboard</h1>
+            <h1>Welcome to the CyberOS Educational Dashboard</h1>
             <p>Select a module from the sidebar to begin learning.</p>
             <p><strong>Recommended:</strong> Start with <span style="color:#27ae60; font-weight:bold;">Module 15: Volumetric DDoS</span> or <span style="color:#27ae60; font-weight:bold;">Module 36: Canonical Layer</span> to see the deep GeeksforGeeks-style tutorials with interactive code explanations and Playwright E2E evidence.</p>
         </div>

@@ -1,7 +1,7 @@
 import os
 import re
 
-d = r'E:\sih26145-prototype\educational_dashboard\raw_modules'
+d = r'E:\cyberos-prototype\educational_dashboard\raw_modules'
 
 def fix_block(block_match):
     lines = block_match.group(1).split('\n')

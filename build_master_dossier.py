@@ -1,20 +1,20 @@
 import os
 import json
 
-OUTPUT_DIR = r"E:\sih26145-prototype\presentation"
+OUTPUT_DIR = r"E:\cyberos-prototype\presentation"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-md_content = """# PS26145 — MASTER ENGINEERING, VALIDATION & EVIDENCE DOSSIER
+md_content = """# CyberOS — MASTER ENGINEERING, VALIDATION & EVIDENCE DOSSIER
 
 ## 1. Executive Summary
 
-| PS26145 | TEST SCENARIOS | FINAL REGRESSION | F1 SCORE | THROUGHPUT |
+| CyberOS | TEST SCENARIOS | FINAL REGRESSION | F1 SCORE | THROUGHPUT |
 | :--- | :--- | :--- | :--- | :--- |
 | **FUNCTIONALLY VERIFIED** | **15** | **11 TP / 3 TN / 0 FP / 1 FN** | **95.6%** | **~3,120 FLOWS/s** |
 
 ```mermaid
 flowchart LR
-    A[PS26145 Problem] --> B[Passive Observation]
+    A[CyberOS Problem] --> B[Passive Observation]
     B --> C[Streaming Telemetry]
     C --> D[Behavioral Intelligence]
     D --> E[Deterministic + XGBoost V5]
@@ -23,7 +23,7 @@ flowchart LR
     G --> H[SOC Dashboard]
 ```
 
-## 2. PS26145 Problem
+## 2. CyberOS Problem
 **Core Objective:** Detect, classify, and score cyber threats in a one-directional IP traffic stream using purely passive metadata.
 **Constraint:** No return path, no active probing, no payload decryption.
 
@@ -34,7 +34,7 @@ A distributed, dual-engine (Deterministic + ML) network detection and response (
 
 ```mermaid
 timeline
-    title PS26145 Engineering Evolution
+    title CyberOS Engineering Evolution
     Initial Prototype : Deterministic pipeline
     ML Integration : First supervised model
     Window Architecture : Stateful streaming
@@ -178,7 +178,7 @@ xychart-beta
 
 ```mermaid
 mindmap
-  root((PS26145))
+  root((CyberOS))
     DDoS
       ddos_stat_v1
     C2 Beaconing
@@ -307,7 +307,7 @@ flowchart LR
 *   **Software Passivity:** Validated via PCAP/Container tests that the platform emits NO packets to the monitored interface.
 *   **Physical Enforcement:** NOT VALIDATED (Pending Hardware Data Diode).
 
-## 23. PS26145 Compliance Matrix
+## 23. CyberOS Compliance Matrix
 
 | Requirement | Code | Validation Level | Status |
 | :--- | :--- | :--- | :--- |
@@ -333,7 +333,7 @@ flowchart LR
 
 ```mermaid
 mindmap
-  root((PS26145))
+  root((CyberOS))
     Passive NDR
       Zeek
       Flow telemetry
@@ -360,18 +360,18 @@ mindmap
 ```mermaid
 graph TD
     A[PS Requirement] --> B[Regression Harness]
-    B --> C[PS26145_FINAL_REGRESSION.json]
+    B --> C[CyberOS_FINAL_REGRESSION.json]
     C --> D[11 TP / 3 TN / 1 FN]
     D --> E[Final Claim]
 ```
 
 ## 28. Independent Build Verification
-The integrity of this engineering record is supported by the actual repository artifacts, Python source files, Docker configuration, training scripts (`train_v5.py`), model artifacts (`xgboost_v5.bin`), evaluation JSONs, and streaming workers located in the `sih26145-prototype` directory.
+The integrity of this engineering record is supported by the actual repository artifacts, Python source files, Docker configuration, training scripts (`train_v5.py`), model artifacts (`xgboost_v5.bin`), evaluation JSONs, and streaming workers located in the `cyberos-prototype` directory.
 
 ## 29. Final Verdict
 
 ┌──────────────────────────────────────────────┐
-│ PS26145 FUNCTIONAL PROTOTYPE VERIFIED        │
+│ CyberOS FUNCTIONAL PROTOTYPE VERIFIED        │
 └──────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────┐
@@ -388,7 +388,7 @@ html_wrapper = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PS26145 Master Dossier</title>
+    <title>CyberOS Master Dossier</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -459,7 +459,7 @@ html_wrapper = """<!DOCTYPE html>
 </head>
 <body>
     <div class="sidebar">
-        <h3>PS26145 DOSSIER</h3>
+        <h3>CyberOS DOSSIER</h3>
         <a href="#1-executive-summary">Executive Summary</a>
         <a href="#4-project-evolution">Evolution</a>
         <a href="#6-production-architecture">Architecture</a>
@@ -482,8 +482,8 @@ html_wrapper = """<!DOCTYPE html>
 </body>
 </html>"""
 
-md_path = os.path.join(OUTPUT_DIR, "PS26145_MASTER_ENGINEERING_VALIDATION_DOSSIER.md")
-html_path = os.path.join(OUTPUT_DIR, "PS26145_MASTER_DOSSIER.html")
+md_path = os.path.join(OUTPUT_DIR, "CyberOS_MASTER_ENGINEERING_VALIDATION_DOSSIER.md")
+html_path = os.path.join(OUTPUT_DIR, "CyberOS_MASTER_DOSSIER.html")
 
 with open(md_path, "w", encoding="utf-8") as f:
     f.write(md_content)

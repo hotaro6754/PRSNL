@@ -1,6 +1,6 @@
 import os
 
-OUTPUT_DIR = r"E:\sih26145-prototype\ps26145-docs\docs\handbook"
+OUTPUT_DIR = r"E:\cyberos-prototype\cyberos-docs\docs\handbook"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def write_file(filename, content):
@@ -15,7 +15,7 @@ VOL5_CONTENT = """
 
 ## Chapter 41: Deterministic vs Probabilistic Defense
 A deterministic rule says: `IF ports_scanned > 500 THEN alert`. It is 100% accurate but easily evaded (the attacker simply scans 499 ports). 
-A probabilistic (ML) model says: `This behavior looks 94% similar to a botnet`. It catches unknown attacks but suffers from False Positives. PS26145 uses both.
+A probabilistic (ML) model says: `This behavior looks 94% similar to a botnet`. It catches unknown attacks but suffers from False Positives. CyberOS uses both.
 
 ## Chapter 42: Machine Learning Basics
 Machine learning algorithmically derives patterns from historical data. 
@@ -36,7 +36,7 @@ To detect DGA (Domain Generation Algorithms) and IP spoofing, we calculate Shann
 $$ H(X) = -\\sum_{i=1}^{n} P(x_i) \\log_2 P(x_i) $$
 High entropy means high chaos. Benign networks have low entropy.
 
-## Chapter 46: XGBoost in PS26145
+## Chapter 46: XGBoost in CyberOS
 We chose **eXtreme Gradient Boosting (XGBoost)** for V5.
 * **Speed**: C++ core, processes inferences in 1.40ms.
 * **Accuracy**: 99.34% F1 Score.
@@ -53,7 +53,7 @@ VOL6_CONTENT = """
 # Volume 6: Validation, Deployment & Future
 
 ## Chapter 48: The T1-T15 Requirements Matrix
-PS26145 was rigorously tested against 15 specific network conditions (T1 to T15). 
+CyberOS was rigorously tested against 15 specific network conditions (T1 to T15). 
 These ranged from simple ping sweeps (T10) to encrypted C2 tunneling (T9) and volumetric spoofing (T15).
 
 ## Chapter 49: True Positives (11/12)
@@ -73,7 +73,7 @@ How do we update the ML model without breaking production?
 4. **Production**: 100% rollout.
 
 ## Chapter 53: The Final Verdict
-PS26145 demonstrates that a purely passive, metadata-driven NDR system can achieve 99.3% accuracy without decrypting payloads. The integration of deterministic rules with XGBoost streaming analytics provides a robust, scalable defense mechanism for critical infrastructure.
+CyberOS demonstrates that a purely passive, metadata-driven NDR system can achieve 99.3% accuracy without decrypting payloads. The integration of deterministic rules with XGBoost streaming analytics provides a robust, scalable defense mechanism for critical infrastructure.
 """
 
 def generate():

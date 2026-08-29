@@ -2,23 +2,23 @@
 
 ## 1. What is Volumetric DDoS?
 A **Distributed Denial of Service (DDoS)** attack is a malicious attempt to disrupt the normal traffic of a targeted server by overwhelming it with a flood of Internet traffic. 
-In PS26145, we focus specifically on **TCP State Exhaustion** (SYN Floods). The attacker sends millions of connection requests (SYN packets) with spoofed (fake) source IPs, forcing the server to allocate memory for connections that will never complete.
+In CyberOS, we focus specifically on **TCP State Exhaustion** (SYN Floods). The attacker sends millions of connection requests (SYN packets) with spoofed (fake) source IPs, forcing the server to allocate memory for connections that will never complete.
 
 ## 2. System Architecture
-The PS26145 detection engine (`ddos_stat_v1`) operates unidirectionally. It cannot send a TCP RST packet to kill the connection. Instead, it must passively observe the flood and alert the SOC.
+The CyberOS detection engine (`ddos_stat_v1`) operates unidirectionally. It cannot send a TCP RST packet to kill the connection. Instead, it must passively observe the flood and alert the SOC.
 
 ```mermaid
 sequenceDiagram
     participant Attacker (Spoofed IPs)
-    participant PS26145 Sensor
+    participant CyberOS Sensor
     participant Victim Server
     
     Attacker (Spoofed IPs)->>Victim Server: SYN Packet (IP 1)
-    PS26145 Sensor-->>PS26145 Sensor: Log S0 State (Half-Open)
+    CyberOS Sensor-->>CyberOS Sensor: Log S0 State (Half-Open)
     Attacker (Spoofed IPs)->>Victim Server: SYN Packet (IP 2)
-    PS26145 Sensor-->>PS26145 Sensor: Log S0 State (Half-Open)
-    Note over PS26145 Sensor: Tumbling Window flushes<br/>calculates Rate & Entropy
-    PS26145 Sensor->>SOC Dashboard: Alert: High Confidence DDoS
+    CyberOS Sensor-->>CyberOS Sensor: Log S0 State (Half-Open)
+    Note over CyberOS Sensor: Tumbling Window flushes<br/>calculates Rate & Entropy
+    CyberOS Sensor->>SOC Dashboard: Alert: High Confidence DDoS
 ```
 
 ## 3. Implementation (Python Backend)
