@@ -1,0 +1,40 @@
+{
+  "topic": "network-observations",
+  "key": "172.18.0.7",
+  "value": "{\"observation_id\":\"7c1c1e38-9fa2-4148-9e20-11834f5437c8\",\"timestamp\":1787431222342,\"sensor_id\":\"default_sensor\",\"capture_id\":null,\"source_ip\":\"172.18.0.7\",\"destination_ip\":\"172.66.147.243\",\"source_port\":33250,\"destination_port\":80,\"protocol\":6,\"direction\":null,\"flow_id\":\"C5vUoy4IO0i0E4nDG\",\"first_seen\":1787431222342,\"last_seen\":1787431222605,\"duration\":0.263995885848999,\"packets\":11,\"bytes\":351,\"tcp_flags\":null,\"src2dst_bytes\":76,\"dst2src_bytes\":275,\"bidirectional_first_seen_ms\":1787431222342,\"bidirectional_last_seen_ms\":1787431222605,\"bidirectional_packets\":11,\"bidirectional_bytes\":351,\"dns_query\":null,\"dns_qtype\":null,\"dns_response_code\":null,\"tls_version\":null,\"tls_sni\":null,\"tls_ja3\":null,\"tls_ja4\":null}",
+  "timestamp": 1787431228505,
+  "partition": 0,
+  "offset": 0
+}
+{
+  "topic": "network-observations",
+  "key": "172.18.0.7",
+  "value": "{\"observation_id\":\"e1e955e7-280b-4fd5-a848-382950c873bc\",\"timestamp\":1787431252002,\"sensor_id\":\"default_sensor\",\"capture_id\":null,\"source_ip\":\"172.18.0.7\",\"destination_ip\":\"142.250.66.14\",\"source_port\":37602,\"destination_port\":80,\"protocol\":6,\"direction\":null,\"flow_id\":\"CeOF013cN5KGmfJLK7\",\"first_seen\":1787431252002,\"last_seen\":1787431252264,\"duration\":0.2625908851623535,\"packets\":11,\"bytes\":847,\"tcp_flags\":null,\"src2dst_bytes\":74,\"dst2src_bytes\":773,\"bidirectional_first_seen_ms\":1787431252002,\"bidirectional_last_seen_ms\":1787431252264,\"bidirectional_packets\":11,\"bidirectional_bytes\":847,\"dns_query\":null,\"dns_qtype\":null,\"dns_response_code\":null,\"tls_version\":null,\"tls_sni\":null,\"tls_ja3\":null,\"tls_ja4\":null}",
+  "timestamp": 1787431257537,
+  "partition": 0,
+  "offset": 1
+}
+{
+  "topic": "network-observations",
+  "key": "172.18.0.7",
+  "value": "{\"observation_id\":\"20c0f5c9-eb04-476b-b8fa-873a06d7d294\",\"timestamp\":1787431252215,\"sensor_id\":\"default_sensor\",\"capture_id\":null,\"source_ip\":\"172.18.0.7\",\"destination_ip\":\"172.66.147.243\",\"source_port\":59672,\"destination_port\":80,\"protocol\":6,\"direction\":null,\"flow_id\":\"CY20kO3VabiWn2G556\",\"first_seen\":1787431252215,\"last_seen\":1787431252406,\"duration\":0.1917250156402588,\"packets\":13,\"bytes\":949,\"tcp_flags\":null,\"src2dst_bytes\":75,\"dst2src_bytes\":874,\"bidirectional_first_seen_ms\":1787431252215,\"bidirectional_last_seen_ms\":1787431252406,\"bidirectional_packets\":13,\"bidirectional_bytes\":949,\"dns_query\":null,\"dns_qtype\":null,\"dns_response_code\":null,\"tls_version\":null,\"tls_sni\":null,\"tls_ja3\":null,\"tls_ja4\":null}",
+  "timestamp": 1787431257538,
+  "partition": 0,
+  "offset": 2
+}
+{
+  "topic": "network-observations",
+  "key": "172.18.0.7",
+  "value": "{\"observation_id\":\"a66a7c22-24eb-4a37-9add-a7eddeb99bd9\",\"timestamp\":1787431223038,\"sensor_id\":\"default_sensor\",\"capture_id\":null,\"source_ip\":\"172.18.0.7\",\"destination_ip\":\"8.8.8.8\",\"source_port\":8,\"destination_port\":0,\"protocol\":1,\"direction\":null,\"flow_id\":\"C9DMWk3aHvMAzN5akb\",\"first_seen\":1787431223038,\"last_seen\":1787431227081,\"duration\":4.043792963027954,\"packets\":10,\"bytes\":560,\"tcp_flags\":null,\"src2dst_bytes\":280,\"dst2src_bytes\":280,\"bidirectional_first_seen_ms\":1787431223038,\"bidirectional_last_seen_ms\":1787431227081,\"bidirectional_packets\":10,\"bidirectional_bytes\":560,\"dns_query\":null,\"dns_qtype\":null,\"dns_response_code\":null,\"tls_version\":null,\"tls_sni\":null,\"tls_ja3\":null,\"tls_ja4\":null}",
+  "timestamp": 1787431287564,
+  "partition": 0,
+  "offset": 3
+}
+{
+  "topic": "network-observations",
+  "key": "172.18.0.7",
+  "value": "{\"observation_id\":\"86eeb59f-6ab1-4079-b6cf-d5244680127f\",\"timestamp\":1787431307314,\"sensor_id\":\"default_sensor\",\"capture_id\":null,\"source_ip\":\"172.18.0.7\",\"destination_ip\":\"142.250.66.14\",\"source_port\":36038,\"destination_port\":80,\"protocol\":6,\"direction\":null,\"flow_id\":\"C4x6aw4qPV3XNgmDLc\",\"first_seen\":1787431307314,\"last_seen\":1787431307538,\"duration\":0.224639892578125,\"packets\":11,\"bytes\":847,\"tcp_flags\":null,\"src2dst_bytes\":74,\"dst2src_bytes\":773,\"bidirectional_first_seen_ms\":1787431307314,\"bidirectional_last_seen_ms\":1787431307538,\"bidirectional_packets\":11,\"bidirectional_bytes\":847,\"dns_query\":null,\"dns_qtype\":null,\"dns_response_code\":null,\"tls_version\":null,\"tls_sni\":null,\"tls_ja3\":null,\"tls_ja4\":null}",
+  "timestamp": 1787431313566,
+  "partition": 0,
+  "offset": 4
+}
