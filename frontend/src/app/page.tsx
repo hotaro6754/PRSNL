@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, YAxis, CartesianGrid, AreaChart, Area } from 'recharts'
-import { Activity, ShieldAlert, Zap, Server, Shield } from 'lucide-react'
+import { Activity, ShieldAlert, Zap, Server, Shield, Database } from 'lucide-react'
 
 const COLORS = {
   CRITICAL: '#ef4444',
@@ -59,12 +59,13 @@ export default function Overview() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         {[
-          { label: "Active Cases", value: (stats?.active_cases || 0).toLocaleString(), icon: <ShieldAlert className="w-4 h-4 text-orange-400"/>, sub: `${stats?.critical_cases || 0} critical` },
-          { label: "Alerts / Min", value: (stats?.alerts_per_min || 0).toFixed(1), icon: <Activity className="w-4 h-4 text-red-400"/>, sub: "Last 60s avg" },
-          { label: "Throughput", value: `${(stats?.throughput_fps || 0).toFixed(1)} fps`, icon: <Zap className="w-4 h-4 text-blue-400"/>, sub: "Network flows/sec" },
-          { label: "ML Inferences", value: (stats?.ml_inferences || 0).toLocaleString(), icon: <Shield className="w-4 h-4 text-purple-400"/>, sub: "Evaluated by XGBoost" },
+          { label: "Active Threats", value: (stats?.active_cases || 0).toLocaleString(), icon: <ShieldAlert className="w-4 h-4 text-orange-400"/>, sub: `${stats?.critical_cases || 0} critical` },
+          { label: "Detection Latency", value: `${stats?.detection_latency_ms || 0} ms`, icon: <Activity className="w-4 h-4 text-red-400"/>, sub: "End-to-end streaming" },
+          { label: "Offered EPS", value: `${(stats?.offered_eps || 0).toFixed(1)} fps`, icon: <Zap className="w-4 h-4 text-slate-400"/>, sub: "Network ingestion" },
+          { label: "Processed EPS", value: `${(stats?.throughput_fps || 0).toFixed(1)} fps`, icon: <Zap className="w-4 h-4 text-blue-400"/>, sub: "Worker throughput" },
+          { label: "Consumer Lag", value: (stats?.consumer_lag || 0).toLocaleString(), icon: <Database className="w-4 h-4 text-yellow-400"/>, sub: "Redpanda queue depth" },
           { label: "System Health", value: isHealthy ? "HEALTHY" : "DEGRADED", icon: <Server className={`w-4 h-4 ${isHealthy ? 'text-green-400' : 'text-red-400'}`}/>, sub: isHealthy ? "All sensors active" : (health?.error || "Check diagnostics") },
         ].map((stat, i) => (
           <div key={i} className="rounded-xl border border-slate-800 bg-[#0c0f17] p-5 shadow-sm">
@@ -78,7 +79,22 @@ export default function Overview() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
+        <div className="lg:col-span-2 rounded-xl border border-slate-800 bg-[#0c0f17] p-5">
+          <h3 className="text-lg font-semibold text-white mb-4">Infrastructure Services</h3>
+          <div className="space-y-3">
+            {Object.entries(health?.components || {}).map(([key, val]: any) => (
+              <div key={key} className="flex justify-between items-center p-3 rounded-lg bg-slate-800/20 border border-slate-800">
+                <span className="text-sm font-medium text-slate-300 capitalize">{key.replace('_', ' ')}</span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${val === 'HEALTHY' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
+                  {val}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="lg:col-span-5 grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Network Throughput Chart */}
         <div className="rounded-xl border border-slate-800 bg-[#0c0f17] p-5">
           <div className="mb-4">
