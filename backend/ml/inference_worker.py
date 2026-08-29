@@ -78,11 +78,17 @@ class InferenceWorker:
                     
                 # The router actually requires NetworkObservation for context
                 # For the worker, we can just pass the raw dict or reconstruct it
-                from backend.schemas import NetworkObservation
+                from backend.schemas import NetworkObservation, FeatureVector
                 obs = NetworkObservation(**context)
                 
+                try:
+                    fv = FeatureVector(**features)
+                except Exception as e:
+                    logger.error(f"Failed to parse FeatureVector: {e}")
+                    continue
+                
                 # Execute inference
-                prediction = self.router.evaluate(features, obs)
+                prediction = self.router.evaluate(fv, obs)
                 
                 latency_ms = (time.perf_counter() - start_time) * 1000
                 
