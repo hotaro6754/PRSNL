@@ -1,11 +1,11 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Activity, ShieldAlert, Zap, Terminal, Target, Skull, Radar, BarChart3, Database, Server, Settings, FileText } from 'lucide-react'
+import { Activity, ShieldAlert, Zap, Terminal, Target, Skull, Radar, BarChart3, Database, Server, Settings, FileText, Search } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'SIH26145 - Enterprise SOC',
-  description: 'AI-Driven Network Detection & Response',
+  title: 'CyberOS — Intelligent Cybersecurity Platform',
+  description: 'AI-Driven Phishing, Scam & Cyber-Fraud Detection',
 }
 
 const NAV_ITEMS = [
@@ -17,6 +17,7 @@ const NAV_ITEMS = [
   { name: 'System Health', href: '/health', icon: <Server className="w-4 h-4" /> },
   { name: 'Logs & Audit', href: '/logs', icon: <Terminal className="w-4 h-4" /> },
   { name: 'Simulator', href: '/simulator', icon: <Skull className="w-4 h-4" /> },
+  { name: 'Scan Content', href: '/scan', icon: <Search className="w-4 h-4" /> },
 ]
 
 export default function RootLayout({
@@ -31,11 +32,9 @@ export default function RootLayout({
           {/* Sidebar */}
           <aside className="w-64 border-r border-slate-800 bg-[#0c0f17] flex-shrink-0 flex flex-col">
             <div className="h-16 flex items-center px-6 border-b border-slate-800">
-              <div className="flex items-center gap-2 font-bold text-lg tracking-tight">
-                <div className="h-6 w-6 rounded-md bg-blue-600 flex items-center justify-center text-white text-xs">
-                  <ShieldAlert className="w-4 h-4 text-white" />
-                </div>
-                SIH26145<span className="text-blue-500">NDR</span>
+              <div className="flex items-center gap-3 font-bold text-lg tracking-tight">
+                <img src="/cyberos-logo.jpeg" alt="CyberOS" className="h-8 w-8 rounded-md object-cover" />
+                Cyber<span className="text-blue-500">OS</span>
               </div>
             </div>
             <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
@@ -63,7 +62,7 @@ export default function RootLayout({
           <main className="flex-1 flex flex-col min-w-0 overflow-hidden bg-black relative">
             {/* Topbar */}
             <header className="h-16 flex items-center justify-between px-8 border-b border-slate-800/60 shrink-0 sticky top-0 z-10 bg-black/50 backdrop-blur-md">
-              <h1 className="text-lg font-semibold tracking-tight">Security Command Center</h1>
+              <h1 className="text-lg font-semibold tracking-tight">CyberOS Command Center</h1>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-slate-400 bg-slate-800/40 px-3 py-1.5 rounded-full border border-slate-700/50">
                   <Activity className="w-4 h-4" />

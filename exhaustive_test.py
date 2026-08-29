@@ -15,7 +15,7 @@ async def test_health_endpoints():
         resp = await client.get(f"{API_BASE}/health")
         assert resp.status_code == 200, "Backend /health failed"
         data = resp.json()
-        print(f"[PASS] Backend Health: {data['status'].upper()} (MongoDB: {data['components']['mongodb']['status']}, Redpanda: {data['components']['redpanda']['status']})")
+        print(f"[PASS] Backend Health: {data['status'].upper()} (MongoDB: {data['components']['database']}, Redpanda: {data['components']['redpanda']})")
         
         # ML Health
         resp = await client.get(f"{API_BASE}/health/ml")

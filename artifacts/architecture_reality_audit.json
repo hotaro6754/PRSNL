@@ -1,0 +1,11 @@
+{
+  "frontend": "React/HTML (Presentation layer built)",
+  "backend": "Python FastAPI (Mocked/Partial)",
+  "workers": "Celery/Python (Simulated)",
+  "databases": "MongoDB (Simulated)",
+  "Redpanda": "NOT IMPLEMENTED IN CURRENT DEPLOYMENT",
+  "Zeek": "NOT IMPLEMENTED IN CURRENT DEPLOYMENT",
+  "Playwright": "PARTIAL (Sandboxing tested via script)",
+  "Threat_Intel": "VirusTotal (Configured but requires API Key)",
+  "Quarkdown": "IMPLEMENTING NOW"
+}

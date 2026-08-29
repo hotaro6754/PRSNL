@@ -1,39 +1,49 @@
-'use client'
-import { useEffect, useState } from 'react'
-import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, YAxis, CartesianGrid, AreaChart, Area } from 'recharts'
-import { Activity, ShieldAlert, Zap, Server, Shield, Database } from 'lucide-react'
+"use client"
 
-const COLORS = {
-  CRITICAL: '#ef4444',
-  HIGH: '#f97316',
-  MEDIUM: '#eab308',
-  LOW: '#3b82f6',
+import { useEffect, useState } from 'react'
+import { AlertTriangle, ShieldCheck, Activity, Search, Shield, Zap, FileText, Database, ArrowRight, Link, MessageSquare, QrCode, Mail, Radar, BarChart3 } from 'lucide-react'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, CartesianGrid } from 'recharts'
+
+interface LiveThreat {
+  time: string;
+  source: string;
+  entity: string;
+  type: string;
+  severity: string;
+  score: number;
+  case_id: string;
 }
 
-export default function Overview() {
-  const [stats, setStats] = useState<any>({
-    flows_processed: 0,
-    ml_inferences: 0,
-    alerts_per_min: 0,
-    throughput_fps: 0,
-    active_cases: 0,
-    critical_cases: 0
-  })
-  
+const COLORS = ['#3b82f6', '#22c55e', '#a855f7', '#f97316', '#ef4444', '#eab308']
+
+export default function CyberOSDashboard() {
+  const [stats, setStats] = useState<any>({ active_cases: 0, critical_cases: 0 })
   const [health, setHealth] = useState<any>(null)
-  const [metricsHistory, setMetricsHistory] = useState<any[]>([])
+  const [threats, setThreats] = useState<LiveThreat[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, healthRes, metricsRes] = await Promise.all([
-          fetch('http://localhost:8000/api/stats'),
-          fetch('http://localhost:8000/health'),
-          fetch('http://localhost:8000/api/metrics/history')
+        const [statsRes, healthRes, casesRes] = await Promise.all([
+          fetch('http://localhost:8000/api/stats').catch(() => null),
+          fetch('http://localhost:8000/health').catch(() => null),
+          fetch('http://localhost:8000/api/cases').catch(() => null),
         ])
-        if (statsRes.ok) setStats(await statsRes.json())
-        if (healthRes.ok) setHealth(await healthRes.json())
-        if (metricsRes.ok) setMetricsHistory(await metricsRes.json())
+        if (statsRes?.ok) setStats(await statsRes.json())
+        if (healthRes?.ok) setHealth(await healthRes.json())
+        if (casesRes?.ok) {
+          const cases = await casesRes.json()
+          const mapped = cases.slice(0, 100).map((c: any) => ({
+            time: new Date(c.created_at || c.first_seen || Date.now()).toLocaleTimeString('en-IN', {hour: '2-digit', minute: '2-digit', second: '2-digit'}),
+            source: (c.primary_entity_type || 'url').toUpperCase(),
+            entity: (c.primary_entity || c.source_ip || 'unknown').substring(0, 40),
+            type: (c.attack_chain && c.attack_chain[0]) || 'ANOMALY',
+            severity: c.severity || 'LOW',
+            score: Math.round((c.risk_score || 0) * 100),
+            case_id: (c.case_id || '').substring(0, 8),
+          }))
+          setThreats(mapped)
+        }
       } catch (err) {}
     }
     fetchData()
@@ -41,124 +51,229 @@ export default function Overview() {
     return () => clearInterval(interval)
   }, [])
 
-  // Time formatting for charts
-  const formatTime = (isoString: string) => {
-    if (!isoString) return ''
-    const d = new Date(isoString)
-    return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}:${d.getSeconds().toString().padStart(2, '0')}`
-  }
-
   const isHealthy = health?.status === "ok"
+  const securityPosture = stats.critical_cases > 0 ? "CRITICAL" : (stats.active_cases > 0 ? "ELEVATED" : "SAFE")
+
+  const urlCount = threats.filter(t => t.source === 'URL').length
+  const smsCount = threats.filter(t => t.source === 'SMS').length
+  const emailCount = threats.filter(t => t.source === 'EMAIL').length
+  const qrCount = threats.filter(t => t.source === 'QR').length
+  const critCount = threats.filter(t => t.severity === 'CRITICAL' || t.severity === 'HIGH').length
+
+  // Chart data
+  const vectorData = [
+    { name: 'URL', count: urlCount, fill: '#3b82f6' },
+    { name: 'SMS', count: smsCount, fill: '#22c55e' },
+    { name: 'Email', count: emailCount, fill: '#a855f7' },
+    { name: 'QR', count: qrCount, fill: '#f97316' },
+  ]
+
+  const severityData = [
+    { name: 'CRITICAL', value: threats.filter(t => t.severity === 'CRITICAL').length, fill: '#ef4444' },
+    { name: 'HIGH', value: threats.filter(t => t.severity === 'HIGH').length, fill: '#f97316' },
+    { name: 'MEDIUM', value: threats.filter(t => t.severity === 'MEDIUM').length, fill: '#eab308' },
+    { name: 'LOW', value: threats.filter(t => t.severity === 'LOW').length, fill: '#22c55e' },
+  ].filter(d => d.value > 0)
+
+  const scoreTimeline = threats.map((t, i) => ({
+    name: t.source + '-' + (i + 1),
+    score: t.score,
+  }))
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 max-w-[1600px]">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">SOC Overview</h2>
-          <p className="text-sm text-slate-400">Live operational awareness from all sensors.</p>
+    <div className="min-h-screen bg-[#0a0a0a] text-slate-300 font-mono flex flex-col">
+      {/* TOP BAR */}
+      <header className="border-b border-slate-800 bg-[#111] py-3 px-6 flex justify-between items-center z-10">
+        <div className="flex items-center space-x-4">
+          <img src="/cyberos-logo.jpeg" alt="CyberOS" className="h-7 w-7 rounded-md object-cover" />
+          <h1 className="text-lg font-bold tracking-widest text-white">CYBEROS <span className="text-slate-500 font-normal">| THREAT COMMAND</span></h1>
         </div>
-      </div>
+        <div className="flex items-center space-x-6 text-sm">
+          <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span> HACKSPRINT 2.0</span>
+          <span className="flex items-center"><span className={`w-2 h-2 rounded-full ${isHealthy ? 'bg-green-500' : 'bg-red-500'} mr-2`}></span> {isHealthy ? 'ALL ENGINES ONLINE' : 'DEGRADED'}</span>
+        </div>
+      </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-        {[
-          { label: "Active Threats", value: (stats?.active_cases || 0).toLocaleString(), icon: <ShieldAlert className="w-4 h-4 text-orange-400"/>, sub: `${stats?.critical_cases || 0} critical` },
-          { label: "Detection Latency", value: `${stats?.detection_latency_ms || 0} ms`, icon: <Activity className="w-4 h-4 text-red-400"/>, sub: "End-to-end streaming" },
-          { label: "Offered EPS", value: `${(stats?.offered_eps || 0).toFixed(1)} fps`, icon: <Zap className="w-4 h-4 text-slate-400"/>, sub: "Network ingestion" },
-          { label: "Processed EPS", value: `${(stats?.throughput_fps || 0).toFixed(1)} fps`, icon: <Zap className="w-4 h-4 text-blue-400"/>, sub: "Worker throughput" },
-          { label: "Consumer Lag", value: (stats?.consumer_lag || 0).toLocaleString(), icon: <Database className="w-4 h-4 text-yellow-400"/>, sub: "Redpanda queue depth" },
-          { label: "System Health", value: isHealthy ? "HEALTHY" : "DEGRADED", icon: <Server className={`w-4 h-4 ${isHealthy ? 'text-green-400' : 'text-red-400'}`}/>, sub: isHealthy ? "All sensors active" : (health?.error || "Check diagnostics") },
-        ].map((stat, i) => (
-          <div key={i} className="rounded-xl border border-slate-800 bg-[#0c0f17] p-5 shadow-sm">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-sm font-medium text-slate-400 tracking-tight">{stat.label}</h3>
-              {stat.icon}
-            </div>
-            <div className="text-2xl font-semibold text-white tracking-tight">{stat.value}</div>
-            <div className="text-xs text-slate-500 mt-1">{stat.sub}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
-        <div className="lg:col-span-2 rounded-xl border border-slate-800 bg-[#0c0f17] p-5">
-          <h3 className="text-lg font-semibold text-white mb-4">Infrastructure Services</h3>
-          <div className="space-y-3">
-            {Object.entries(health?.components || {}).map(([key, val]: any) => (
-              <div key={key} className="flex justify-between items-center p-3 rounded-lg bg-slate-800/20 border border-slate-800">
-                <span className="text-sm font-medium text-slate-300 capitalize">{key.replace('_', ' ')}</span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${val === 'HEALTHY' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
-                  {typeof val === 'string' ? val : (val?.status ? String(val.status).toUpperCase() : 'UNKNOWN')}
-                </span>
+      <main className="flex-1 p-6 max-w-7xl mx-auto w-full space-y-6">
+        
+        {/* HERO STATUS */}
+        <div className={`border-l-4 p-6 bg-[#111] rounded-r-xl ${securityPosture === 'CRITICAL' ? 'border-red-500' : securityPosture === 'ELEVATED' ? 'border-orange-500' : 'border-green-500'}`}>
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="text-xs text-slate-500 mb-1 tracking-widest uppercase">Current Security Posture</h2>
+              <div className={`text-4xl font-bold tracking-tight mb-2 ${securityPosture === 'CRITICAL' ? 'text-red-500' : securityPosture === 'ELEVATED' ? 'text-orange-500' : 'text-green-500'}`}>
+                {securityPosture}
               </div>
-            ))}
+              <p className="text-sm text-slate-400 max-w-2xl">
+                {securityPosture === 'CRITICAL' 
+                  ? "Active phishing, smishing, and quishing campaigns detected across URL, SMS, Email, and QR vectors."
+                  : securityPosture === 'ELEVATED'
+                  ? "Suspicious content detected across monitored channels. Investigation recommended."
+                  : "All monitored streams are operating within expected behavioral boundaries."}
+              </p>
+            </div>
+            <div className="flex space-x-6">
+              <div className="text-right">
+                <div className="text-3xl font-bold text-white">{threats.length}</div>
+                <div className="text-xs text-slate-500">TOTAL CASES</div>
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-red-500">{critCount}</div>
+                <div className="text-xs text-slate-500">HIGH RISK</div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="lg:col-span-5 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Network Throughput Chart */}
-        <div className="rounded-xl border border-slate-800 bg-[#0c0f17] p-5">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-white">Network Flow Rate (fps)</h3>
-            <p className="text-xs text-slate-500">Real-time throughput processed by Zeek Adapter</p>
+        {/* GRAPHS ROW */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Threat Vector Bar Chart */}
+          <div className="bg-[#111] border border-slate-800 p-5 rounded-lg">
+            <h3 className="text-xs font-bold tracking-widest text-slate-500 mb-4 uppercase">Threats by Vector</h3>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={vectorData}>
+                <XAxis dataKey="name" tick={{fill: '#94a3b8', fontSize: 11}} axisLine={false} tickLine={false} />
+                <YAxis tick={{fill: '#94a3b8', fontSize: 11}} axisLine={false} tickLine={false} allowDecimals={false} />
+                <Tooltip contentStyle={{background: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 12, color: '#f8fafc'}} />
+                <Bar dataKey="count" radius={[6, 6, 0, 0]}>
+                  {vectorData.map((entry, idx) => (
+                    <Cell key={idx} fill={entry.fill} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </div>
-          <div className="h-64">
-            {metricsHistory.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-slate-500">Awaiting telemetry...</div>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={metricsHistory} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorFps" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="timestamp" tickFormatter={formatTime} stroke="#64748b" fontSize={12} tickMargin={10} minTickGap={30} />
-                  <YAxis stroke="#64748b" fontSize={12} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', color: '#fff' }} 
-                    labelFormatter={(l) => formatTime(l as string)}
-                  />
-                  <Area type="monotone" dataKey="flows_per_sec" stroke="#3b82f6" fillOpacity={1} fill="url(#colorFps)" isAnimationActive={false} />
-                </AreaChart>
-              </ResponsiveContainer>
-            )}
+
+          {/* Severity Pie Chart */}
+          <div className="bg-[#111] border border-slate-800 p-5 rounded-lg">
+            <h3 className="text-xs font-bold tracking-widest text-slate-500 mb-4 uppercase">Severity Distribution</h3>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={severityData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={4} dataKey="value" label={({name, value}) => name + ': ' + value}>
+                  {severityData.map((entry, idx) => (
+                    <Cell key={idx} fill={entry.fill} stroke="transparent" />
+                  ))}
+                </Pie>
+                <Tooltip contentStyle={{background: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 12, color: '#f8fafc'}} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Risk Score Area Chart */}
+          <div className="bg-[#111] border border-slate-800 p-5 rounded-lg">
+            <h3 className="text-xs font-bold tracking-widest text-slate-500 mb-4 uppercase">Risk Score Timeline</h3>
+            <ResponsiveContainer width="100%" height={200}>
+              <AreaChart data={scoreTimeline}>
+                <defs>
+                  <linearGradient id="riskGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                <XAxis dataKey="name" tick={{fill: '#94a3b8', fontSize: 9}} axisLine={false} tickLine={false} />
+                <YAxis domain={[0, 100]} tick={{fill: '#94a3b8', fontSize: 11}} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={{background: '#1e293b', border: '1px solid #334155', borderRadius: 8, fontSize: 12, color: '#f8fafc'}} />
+                <Area type="monotone" dataKey="score" stroke="#ef4444" fill="url(#riskGrad)" strokeWidth={2} dot={{fill: '#ef4444', r: 3}} />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Alerts per minute chart */}
-        <div className="rounded-xl border border-slate-800 bg-[#0c0f17] p-5">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-white">Threat Activity (alerts/min)</h3>
-            <p className="text-xs text-slate-500">Aggregated alert volume from detection engines</p>
+        {/* VECTOR BREAKDOWN CARDS */}
+        <div className="grid grid-cols-4 gap-4">
+          <div className="bg-[#111] border border-slate-800 p-4 rounded-lg">
+            <div className="flex items-center gap-2 mb-2"><Link className="w-4 h-4 text-blue-400" /><span className="text-xs text-slate-500 tracking-widest">URL SCANS</span></div>
+            <div className="text-2xl font-bold text-white">{urlCount}</div>
           </div>
-          <div className="h-64">
-            {metricsHistory.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-slate-500">Awaiting telemetry...</div>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={metricsHistory} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorAlerts" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="timestamp" tickFormatter={formatTime} stroke="#64748b" fontSize={12} tickMargin={10} minTickGap={30} />
-                  <YAxis stroke="#64748b" fontSize={12} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', color: '#fff' }} 
-                    labelFormatter={(l) => formatTime(l as string)}
-                  />
-                  <Area type="monotone" dataKey="alerts_per_min" stroke="#ef4444" fillOpacity={1} fill="url(#colorAlerts)" isAnimationActive={false} />
-                </AreaChart>
-              </ResponsiveContainer>
-            )}
+          <div className="bg-[#111] border border-slate-800 p-4 rounded-lg">
+            <div className="flex items-center gap-2 mb-2"><MessageSquare className="w-4 h-4 text-green-400" /><span className="text-xs text-slate-500 tracking-widest">SMS SCANS</span></div>
+            <div className="text-2xl font-bold text-white">{smsCount}</div>
           </div>
+          <div className="bg-[#111] border border-slate-800 p-4 rounded-lg">
+            <div className="flex items-center gap-2 mb-2"><Mail className="w-4 h-4 text-purple-400" /><span className="text-xs text-slate-500 tracking-widest">EMAIL SCANS</span></div>
+            <div className="text-2xl font-bold text-white">{emailCount}</div>
+          </div>
+          <div className="bg-[#111] border border-slate-800 p-4 rounded-lg">
+            <div className="flex items-center gap-2 mb-2"><QrCode className="w-4 h-4 text-orange-400" /><span className="text-xs text-slate-500 tracking-widest">QR SCANS</span></div>
+            <div className="text-2xl font-bold text-white">{qrCount}</div>
           </div>
         </div>
-      </div>
-      
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* LIVE THREAT STREAM */}
+          <div className="lg:col-span-2 space-y-4">
+            <h3 className="text-sm font-bold tracking-widest text-white border-b border-slate-800 pb-2">LIVE THREAT INVESTIGATIONS</h3>
+            <div className="bg-[#111] border border-slate-800 rounded-lg overflow-hidden">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-900 text-slate-500 border-b border-slate-800">
+                  <tr>
+                    <th className="py-3 px-4 font-normal">TIME</th>
+                    <th className="py-3 px-4 font-normal">TYPE</th>
+                    <th className="py-3 px-4 font-normal">ENTITY</th>
+                    <th className="py-3 px-4 font-normal">THREAT</th>
+                    <th className="py-3 px-4 font-normal">SEVERITY</th>
+                    <th className="py-3 px-4 font-normal">SCORE</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/50">
+                  {threats.map((t, i) => (
+                    <tr key={i} className="hover:bg-slate-800/20 cursor-pointer transition-colors group">
+                      <td className="py-3 px-4 text-slate-400">{t.time}</td>
+                      <td className="py-3 px-4 text-blue-400">{t.source}</td>
+                      <td className="py-3 px-4 text-white font-medium truncate max-w-[200px]">{t.entity}</td>
+                      <td className="py-3 px-4">{t.type}</td>
+                      <td className="py-3 px-4">
+                        <span className={`px-2 py-0.5 border text-xs ${t.severity === 'CRITICAL' ? 'bg-red-500/10 border-red-500/20 text-red-500' : t.severity === 'HIGH' ? 'bg-orange-500/10 border-orange-500/20 text-orange-500' : t.severity === 'MEDIUM' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500' : 'bg-green-500/10 border-green-500/20 text-green-500'}`}>
+                          {t.severity}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-white font-bold">{t.score}%</td>
+                    </tr>
+                  ))}
+                  {threats.length === 0 && (
+                    <tr><td colSpan={6} className="py-8 text-center text-slate-500">No threats detected yet. Run the Content Scanner to populate.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* DETECTION FABRIC */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold tracking-widest text-white border-b border-slate-800 pb-2">DETECTION ENGINES</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                {name: 'URL Analyzer', status: true},
+                {name: 'Email Parser', status: true},
+                {name: 'SMS Detector', status: true},
+                {name: 'QR Decoder', status: true},
+                {name: 'Playwright', status: true},
+                {name: 'Zeek Sensor', status: isHealthy},
+                {name: 'URLHaus/MISP', status: true},
+                {name: 'Agent Reach', status: true},
+              ].map((module, i) => (
+                <div key={i} className="bg-[#111] border border-slate-800 p-3 flex justify-between items-center rounded-md">
+                  <span className="text-xs text-slate-300">{module.name}</span>
+                  <div className={"w-1.5 h-1.5 rounded-full " + (module.status ? "bg-green-500" : "bg-red-500")}></div>
+                </div>
+              ))}
+            </div>
+
+            <h3 className="text-sm font-bold tracking-widest text-white border-b border-slate-800 pb-2 mt-6">SYSTEM HEALTH</h3>
+            <div className="bg-[#111] border border-slate-800 p-4 rounded-lg space-y-3">
+              {health?.components && Object.entries(health.components).map(([key, val]: [string, any]) => (
+                <div key={key} className="flex justify-between items-center text-xs">
+                  <span className="text-slate-400 uppercase">{key}</span>
+                  <span className={"font-bold " + (val === 'HEALTHY' ? 'text-green-500' : 'text-yellow-500')}>{val as string}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+      </main>
     </div>
   )
 }

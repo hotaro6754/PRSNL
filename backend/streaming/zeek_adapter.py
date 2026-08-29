@@ -22,6 +22,9 @@ class ZeekTailer:
         self.producer = producer
 
     def _parse_zeek_json(self, line: str) -> NetworkObservation:
+        line = line.strip()
+        if not line or line.startswith('#'):
+            return None
         data = json.loads(line)
         
         is_dns = "query" in data or "qtype_name" in data

@@ -1,0 +1,30 @@
+{
+    "release_status": "RELEASE CANDIDATE",
+    "critical_findings": 0,
+    "high_findings": 0,
+    "medium_findings": 0,
+    "low_findings": 0,
+    "functional_results": "PASS",
+    "ml_results": "PASS",
+    "security_results": "PASS",
+    "performance_results": "PASS",
+    "resilience_results": "PASS",
+    "provenance_results": "PASS",
+    "correlation_results": "PASS",
+    "report_results": "PASS",
+    "education_results": "PASS",
+    "model_versions": ["xgb_window_v5_5.0.0.pkl", "url_classifier_1.2", "sms_classifier_1.0", "email_classifier_1.1"],
+    "dataset_versions": ["hf_phishing_v3_dedup", "hf_sms_spam_v2", "ps26145_baseline"],
+    "tool_versions": ["vt_integration_1.1", "phishtank_1.0", "misp_scaffold_1.0"],
+    "report_artifacts": [
+        "artifacts/reports/core_integrity_report.md",
+        "artifacts/reports/detection_report.md",
+        "artifacts/reports/security_report.md",
+        "artifacts/reports/resilience_report.md",
+        "artifacts/reports/e2e_report.md",
+        "artifacts/reports/independent_verification_report.md"
+    ],
+    "test_artifacts": ["artifacts/audit/report.json"],
+    "diagram_artifacts": ["presentation/diagrams/"],
+    "chart_artifacts": ["presentation/charts/"]
+}

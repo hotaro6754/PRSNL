@@ -1,0 +1,27 @@
+====================================================================================================
+PS26145 FULL REGRESSION TEST
+====================================================================================================
+  T1 Benign Web                  | PASS                 | —               | conf=— | det=—
+  T2 Benign High Volume          | PASS                 | —               | conf=— | det=—
+  T3 SYN Flood                   | PASS                 | DDoS            | conf=0.475 | det=ddos_stat_v1
+  T4 UDP Flood                   | PASS                 | DDoS            | conf=0.45 | det=ddos_stat_v1
+  T5 Rigid Beacon                | PASS                 | Beaconing       | conf=0.9 | det=beacon_stateful_v2
+  T6 Jittered Beacon             | PASS                 | Beaconing       | conf=0.9 | det=beacon_stateful_v2
+  T7 DGA                         | PASS                 | DGA             | conf=0.8 | det=dga_lexical_v1
+  T8 DNS Tunnel                  | PASS                 | Tunneling       | conf=0.9 | det=dns_tunnel_stateful_v1
+  T9 Encrypted Session           | PASS                 | Beaconing       | conf=0.9 | det=beacon_stateful_v2
+  T10 Port Scan                  | PASS                 | PortScan        | conf=0.45 | det=scan_v2
+  T11 Slow Scan                  | PASS                 | —               | conf=— | det=—
+  T12 Data Exfiltration          | PASS                 | Exfiltration    | conf=0.85 | det=exfil_v1
+  T13 Slowloris                  | PASS                 | SlowHTTP        | conf=1.0 | det=slow_http_v1
+  T14 High Fanout Benign         | PASS                 | —               | conf=— | det=—
+  T15 Spoofed-source SYN Flood   | PASS                 | DDoS            | conf=0.475 | det=ddos_stat_v1
+
+====================================================================================================
+REGRESSION SUMMARY
+====================================================================================================
+
+  PASSED: 15/15
+  FAILED: 0/15
+
+  Regression JSON saved to scripts/final_threat_regression.json

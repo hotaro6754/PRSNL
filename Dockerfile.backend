@@ -3,9 +3,9 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends libpcap-dev curl && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN playwright install --with-deps chromium
 COPY backend/ ./backend/
 COPY models/ ./models/
-RUN ls -la models/
 COPY data/ ./data/
 RUN pip install prometheus_client aiofiles
 EXPOSE 8000

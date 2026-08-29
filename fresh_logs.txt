@@ -1,0 +1,88 @@
+=== CYBEROS HACKSPRINT EXHAUSTIVE 15-CASE TEST LOG ===
+
+CASE: 1. Standard Safe URL
+TYPE: URL
+SCORE: 0.40 / 1.0
+SUMMARY: URL Scan Result: https://www.google.com/...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 2. Obvious Phishing DGA
+TYPE: URL
+SCORE: 1.00 / 1.0
+SUMMARY: URL Scan Result: http://secure-login-update-pay...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 3. SSRF AWS Metadata
+TYPE: URL
+SCORE: 0.70 / 1.0
+SUMMARY: URL Scan Result: http://169.254.169.254/latest/...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 4. Typosquatting Brand
+TYPE: URL
+SCORE: 0.40 / 1.0
+SUMMARY: URL Scan Result: https://www.micros0ft.com/logi...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 5. Standard Safe SMS
+TYPE: URL
+SCORE: 0.30 / 1.0
+SUMMARY: URL Scan Result: Hey mom, I will be home by 5 P...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 6. Urgent Smishing Bank
+TYPE: SMS
+SCORE: 0.61 / 1.0
+SUMMARY: SMS Scan Result: URGENT: Your HDFC bank account...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 7. Fake Package Delivery
+TYPE: SMS
+SCORE: 0.12 / 1.0
+SUMMARY: SMS Scan Result: FedEx: Your package delivery f...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 8. Standard Safe Email
+TYPE: EMAIL
+SCORE: 0.30 / 1.0
+SUMMARY: Email Scan Result: Hi team, please find attached ...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 9. CEO Fraud / BEC
+TYPE: EMAIL
+SCORE: 0.38 / 1.0
+SUMMARY: Email Scan Result: From: CEO <ceo.company.externa...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 10. Fake Invoice Email
+TYPE: EMAIL
+SCORE: 0.54 / 1.0
+SUMMARY: Email Scan Result: Please review the attached inv...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 11. Standard Safe QR (Text)
+TYPE: QR
+SCORE: 0.00 / 1.0
+SUMMARY: QR Scan Result: Welcome to the conference! WiF...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 12. Rogue WiFi QR
+TYPE: QR
+SCORE: 0.20 / 1.0
+SUMMARY: QR Scan Result: WIFI:T:WPA;S:Free Airport WiFi...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 13. Quishing URL QR
+TYPE: QR
+SCORE: 1.00 / 1.0
+SUMMARY: QR Scan Result: https://secure-login-update-pa...
+EVIDENCE: []
+--------------------------------------------------
+CASE: 14. Zeek Port Scan (Internal Sensor)
+TYPE: ZEEK SENSOR
+STATUS: SIMULATION LAUNCHED (Check Dashboard for Network Correlator Logs)
+--------------------------------------------------
+CASE: 15. Zeek SSH Brute Force (Internal Sensor)
+TYPE: ZEEK SENSOR
+STATUS: SIMULATION LAUNCHED (Check Dashboard for Network Correlator Logs)
+--------------------------------------------------

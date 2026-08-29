@@ -49,7 +49,7 @@ from pydantic import BaseModel
 import prometheus_client
 from prometheus_client import Counter, Gauge, Histogram
 
-from .schemas import Alert, SecurityCase
+from .schemas import Alert, CyberCase
 from .config import ENVIRONMENT, AppEnv
 from .ingestion.scapy_adapter import ScapyAdapter
 from .correlation import CorrelationEngine
@@ -61,6 +61,7 @@ from .ml.resolver import ModelResolver
 from .contracts.ml_model import ModelRegistryEntry, ModelStage
 from .repositories.mongo import MongoRepository
 from .mcp_gateway import MCPOrchestrator
+from .reporting.api import router as report_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -69,6 +70,11 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="SIH 26145 — Passive NDR Backend")
 
 # Security & CORS
+from pydantic import BaseModel
+from backend.content.url_analyzer import analyze_url
+import uuid
+from backend.contracts.evidence import DetectionEvidence
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "*"],
@@ -347,6 +353,8 @@ async def startup_event():
         True,
         "checking"
     )
+    
+app.include_router(report_router)
 
 # ── API Routes ─────────────────────────────────────────────────────────
 @app.get("/api/cases")
@@ -412,6 +420,92 @@ async def get_case_by_id(case_id: str):
     except Exception:
         pass
     raise HTTPException(status_code=404, detail="Case not found")
+
+@app.get("/api/cases/{case_id}/graph")
+async def get_case_graph(case_id: str):
+    case = await get_case_by_id(case_id)
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+        
+    case_dict = case.model_dump() if hasattr(case, "model_dump") else case
+    
+    nodes = {}
+    edges = set()
+    
+    def add_node(n_id, n_type):
+        if not n_id or not isinstance(n_id, str): return
+        n_type = n_type.upper()
+        if n_id not in nodes:
+            nodes[n_id] = {"id": n_id, "type": n_type, "label": n_id}
+            
+    def add_edge(src, tgt, rel):
+        if not src or not tgt or not isinstance(src, str) or not isinstance(tgt, str): return
+        edges.add((src, tgt, rel))
+        
+    p_id = case_dict.get("primary_entity")
+    p_type = case_dict.get("primary_entity_type")
+    if p_id and p_type:
+        add_node(p_id, p_type)
+        
+    src_ip = case_dict.get("source_ip")
+    if src_ip:
+        add_node(src_ip, "IP")
+        if p_id:
+            add_edge(src_ip, p_id, "observed_by")
+            
+    for alert in case_dict.get("alerts", []):
+        alert_src = alert.get("source_ip")
+        alert_dst = alert.get("dest_ip")
+        if alert_src: add_node(alert_src, "IP")
+        if alert_dst: add_node(alert_dst, "IP")
+        if alert_src and alert_dst:
+            add_edge(alert_src, alert_dst, "communicates_with")
+            
+        domain = alert.get("domain")
+        if domain:
+            add_node(domain, "DOMAIN")
+            if alert_src: add_edge(alert_src, domain, "communicates_with")
+            if alert_dst: add_edge(domain, alert_dst, "resolves_to")
+            
+    for ev in case_dict.get("evidence", []):
+        if not isinstance(ev, dict):
+            continue
+            
+        url = ev.get("url")
+        ev_type = ev.get("evidence_type", "").upper()
+        cat = ev.get("category", "").upper()
+        val = ev.get("value")
+        
+        if url:
+            add_node(url, "URL")
+            if ev_type == "QR":
+                qr_node = f"QR_{url[-10:]}"
+                add_node(qr_node, "QR")
+                add_edge(qr_node, url, "contains")
+                
+        if val and isinstance(val, str) and cat in ["URL", "DOMAIN", "IP", "EMAIL", "PHONE", "HASH", "USER", "HOST", "MESSAGE", "QR"]:
+            add_node(val, cat)
+            if p_id:
+                add_edge(p_id, val, "contains")
+                
+        details = ev.get("details", {})
+        if isinstance(details, dict):
+            for k, v in details.items():
+                if k in ["resolves_to", "redirects_to", "downloads", "hosts", "extracts", "contains", "sent_by", "sent_to", "communicates_with", "related_to", "observed_by"]:
+                    src = url or p_id
+                    if isinstance(v, str) and src:
+                        add_node(v, "UNKNOWN")
+                        add_edge(src, v, k)
+                    elif isinstance(v, list) and src:
+                        for item in v:
+                            if isinstance(item, str):
+                                add_node(item, "UNKNOWN")
+                                add_edge(src, item, k)
+                                
+    return {
+        "nodes": list(nodes.values()),
+        "edges": [{"source": s, "target": t, "type": r} for s, t, r in edges]
+    }
 
 @app.get("/api/alerts")
 async def get_recent_alerts(limit: int = 100):
@@ -558,6 +652,124 @@ if __name__ == "__main__":
     uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)
 
 
+class ScanRequest(BaseModel):
+    type: str
+    content: str
+
+@app.post("/api/scan")
+async def scan_content(request: ScanRequest):
+    if request.type not in ("url", "email", "sms", "qr"):
+        raise HTTPException(status_code=400, detail="Only url, email, and sms types are supported")
+        
+    if request.type == "url":
+        from backend.content.url_analyzer import analyze_url
+        score, explanation, features = analyze_url(request.content)
+        category = "url_analysis"
+        source = "url_analyzer"
+        title_prefix = "URL"
+        attack_chain = ["PhishingURL"]
+    elif request.type == "email":
+        from backend.content.email_analyzer import analyze_email
+        score, explanation, features = analyze_email(request.content)
+        category = "email_analysis"
+        source = "email_analyzer"
+        title_prefix = "Email"
+        attack_chain = ["PhishingEmail"]
+    elif request.type == "qr":
+        from backend.content.qr_analyzer import analyze_qr_code
+        score, explanation, features = analyze_qr_code(request.content)
+        category = "qr_analysis"
+        source = "qr_analyzer"
+        title_prefix = "QR"
+        attack_chain = ["Quishing"]
+    elif request.type == "sms":
+        from backend.content.sms_analyzer import analyze_sms
+        score, explanation, features = analyze_sms(request.content)
+        category = "sms_analysis"
+        source = "sms_analyzer"
+        title_prefix = "SMS"
+        attack_chain = ["Smishing"]
+    
+    evidence = []
+    
+    from backend.content.threat_intel import check_misp_urlhaus, check_playwright, check_agent_reach
+
+    if isinstance(features, list):
+        evidence = features
+    else:
+        for k, v in features.items():
+            if v > 0:
+                evidence.append(
+                    DetectionEvidence(
+                        feature=k,
+                        value=v,
+                        contribution=score if type(v) in (int, float) else 0.0,
+                        explanation=f"{title_prefix} feature: {k}",
+                        category=category,
+                        source=source
+                    )
+                )
+                
+    # Add external integrations for demo purposes
+    if request.type == "url" or request.type == "qr":
+        intel_ev = await check_misp_urlhaus(request.content, score)
+        intel_ev += await check_playwright(request.content, score)
+        for ie in intel_ev:
+            evidence.append(
+                DetectionEvidence(
+                    feature=ie["evidence_type"],
+                    value=1.0,
+                    contribution=score,
+                    explanation=str(ie["details"]),
+                    category="threat_intel",
+                    source="external_api"
+                )
+            )
+            
+    if request.type in ("sms", "email", "qr"):
+        agent_ev = await check_agent_reach(request.content, score)
+        for ae in agent_ev:
+            evidence.append(
+                DetectionEvidence(
+                    feature=ae["evidence_type"],
+                    value=1.0,
+                    contribution=score,
+                    explanation=str(ae["details"]),
+                    category="nlp_engine",
+                    source="agent_reach"
+                )
+            )
+        
+    case = CyberCase(
+        case_id=uuid.uuid4(),
+        source_ip="0.0.0.0",
+        status="OPEN",
+        severity="HIGH" if score > 0.7 else "MEDIUM" if score > 0.4 else "LOW",
+        risk_score=score,
+        title=f"{title_prefix} Scan Result: {request.content[:30]}...",
+        threat_summary=f"High Risk Indicators: {explanation}",
+        alerts=[],
+        evidence=evidence,
+        first_seen=datetime.now(timezone.utc),
+        last_seen=datetime.now(timezone.utc),
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+        detection_sources=[source],
+        primary_entity=request.content[:100],
+        primary_entity_type=request.type,
+        attack_chain=attack_chain
+    )
+    
+    
+    case_dump = case.model_dump(mode="json")
+    try:
+        await mongo.upsert_case(case_dump)
+    except Exception as e:
+        logger.error(f"Failed to save scan case to mongo: {e}")
+        
+    return case_dump
+
+
 # --- Model Registry APIs ---
 
 @app.post("/api/models/register")
@@ -601,3 +813,15 @@ async def get_ml_health():
             "canary": model_resolver.caches["iforest_anomaly"].canary_metadata,
         }
     }
+
+@app.get("/api/ml/metrics")
+async def get_ml_metrics():
+    import json
+    import os
+    metadata_path = os.path.join(os.path.dirname(__file__), '../models/url_xgb_v1_metadata.json')
+    try:
+        with open(metadata_path, 'r') as f:
+            meta = json.load(f)
+        return meta
+    except Exception as e:
+        return {"error": str(e)}
