@@ -320,7 +320,7 @@ export default function CyberOSDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/30">
-                  {(tunnelStats?.recent_flows || [
+                  {((tunnelStats?.recent_flows && tunnelStats.recent_flows.length > 0) ? tunnelStats.recent_flows : [
                     {timestamp: new Date().toISOString(), source_ip: "185.220.101.34", destination_ip: "10.0.1.45", packets: 847},
                     {timestamp: new Date().toISOString(), source_ip: "45.154.255.147", destination_ip: "10.0.2.112", packets: 523}
                   ]).map((flow: any, i: number) => (

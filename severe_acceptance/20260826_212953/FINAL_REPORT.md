@@ -1,7 +1,7 @@
-# PS26145_SEVERE_FUNCTIONAL_ACCEPTANCE_REPORT
+# CyberOS_SEVERE_FUNCTIONAL_ACCEPTANCE_REPORT
 
 ## 1. Executive Summary
-This report details the exact performance of the PS26145 platform under severe load and failure conditions.
+This report details the exact performance of the CyberOS platform under severe load and failure conditions.
 
 ## 2. Test Methodology
 Level executed: **EXTREME**

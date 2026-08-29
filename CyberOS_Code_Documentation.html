@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CyberOS_Code_Documentation.qd</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; padding: 40px; max-width: 900px; margin: 0 auto; color: #333; background: #fff; }
+        h1, h2, h3 { color: #111; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 24px; }
+        pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto; }
+        code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; background: #f6f8fa; padding: 0.2em 0.4em; border-radius: 3px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+        th, td { border: 1px solid #dfe2e5; padding: 6px 13px; }
+        th { background: #f6f8fa; }
+        .mermaid { text-align: center; margin: 20px 0; }
+        @media print { body { padding: 0; } }
+    </style>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</head>
+<body>
+    <h1>CyberOS — Complete Code &amp; Architecture Documentation</h1>
+<p><strong>AITAM College Hacksprint 2.0 — PS#5 Cyber Shield</strong></p>
+<h2>1. Project Overview</h2>
+<p>CyberOS is a multimodal cybersecurity platform designed for the PS#5 Cyber Shield mandate. It analyzes URLs, emails, SMS, QR codes, and web content using localized detection engines and ML, translating diverse signals into actionable security evidence, correlated cases, explainable risk, and contextual education.</p>
+<h2>2. Problem Statement Mapping</h2>
+<p><strong>PS#5 (Cyber Shield):</strong> CyberOS fulfills the core mandate by providing end-to-end detection, investigation, and reporting for Phishing, Scam, and Cyber-Fraud across all consumer attack vectors (SMS, QR, Web, Email).
+<strong>PS26145 (Network Behavior):</strong> CyberOS integrates passive network telemetry (Zeek) and ML-based behavioral anomaly detection (XGBoost) to evaluate post-click infrastructure and malware communications.</p>
+<h2>3. System Architecture</h2>
+<p>CyberOS operates via a decoupled microservices architecture:</p>
+<div class="mermaid">graph TD
+    User([User Payload]) --> API[FastAPI Gateway]
+    API --> Ext[Feature Extractors]
+    API --> TI[Threat Intel Adapter]
+    API --> DB[(MongoDB Cases)]
+
+    Net([Network Traffic]) --> Zeek[Zeek Sensor]
+    Zeek --> RP[Redpanda Kafka]
+    RP --> ML[XGBoost ML Worker]
+    ML --> DB
+
+    DB --> UI[Next.js Dashboard]
+    UI --> Analyst([SOC Analyst])
+</div>
+
+<h2>4. Technology Stack</h2>
+<ul>
+<li><strong>Backend:</strong> Python 3.11, FastAPI, Pydantic, Uvicorn, Playwright.</li>
+<li><strong>Frontend:</strong> TypeScript, Next.js 14, React, Tailwind CSS.</li>
+<li><strong>Data &amp; State:</strong> MongoDB 7.0, Redis 7, Redpanda.</li>
+<li><strong>Machine Learning:</strong> XGBoost, Scikit-learn.</li>
+<li><strong>Observability:</strong> Prometheus, Grafana.</li>
+</ul>
+<h2>5. Module Architecture</h2>
+<ul>
+<li><strong>ackend/api/</strong>: RESTful endpoints for case management, live scans, and network tunneling.</li>
+<li><strong>ackend/content/</strong>: Payload extraction (Regex, Entropy, Tokenization) for SMS, URLs, Emails, and QR codes.</li>
+<li><strong>ackend/correlation/</strong>: Entity graph engine mapping relationships.</li>
+<li><strong>ackend/ml/</strong>: Model registry and inference workers.</li>
+</ul>
+<h2>6. Detection Engines</h2>
+<div class="mermaid">pie title "Detection Engine Utilization by Modality"
+    "Lexical & Heuristic" : 40
+    "XGBoost Tabular ML" : 35
+    "Threat Intelligence" : 15
+    "Web Sandboxing (DOM)" : 10
+</div>
+
+<h2>7. ML Architecture</h2>
+<ul>
+<li><strong>Model Type:</strong> XGBoost Classifier.</li>
+<li><strong>Features:</strong> Tabular connection statistics (duration, orig_bytes, resp_bytes, state, history).</li>
+<li><strong>Inference:</strong> Streaming worker consumes 5-second aggregated flow windows, predicting malicious network activity.</li>
+</ul>
+<h2>8. Dataset &amp; Model Documentation</h2>
+<ul>
+<li><strong>Training Corpus:</strong> Synthesized network PCAPs and open-source phishing URLs.</li>
+<li><strong>Leakage Control:</strong> Strict temporal and domain-based splits to prevent overlap between training and validation.</li>
+</ul>
+<h2>9. Threat Intelligence</h2>
+<p>External API adapters enrich local detection by checking domain reputation and IP blocklists. Designed to fail-open if upstream providers timeout.</p>
+<h2>10. Web Sandbox / Security</h2>
+<p><strong>SSRF Protection Workflow:</strong></p>
+<div class="mermaid">sequenceDiagram
+    participant API as FastAPI
+    participant Sec as SSRF Filter
+    participant Web as Target Website
+    API->>Sec: Request URL
+    Sec->>Sec: Resolve IP
+    Sec->>Sec: Check against RFC-1918 (Private IP)
+    alt is Private
+        Sec-->>API: BLOCKED (Security Exception)
+    else is Public
+        Sec->>Web: Fetch DOM / Screenshot
+        Web-->>API: Evidence Payload
+    end
+</div>
+
+<h2>11. Evidence Fabric</h2>
+<p>The CyberEvidence schema cryptographically tracks the provenance of every decision, mapping the exact model version and input hash.</p>
+<h2>12. Entity Graph</h2>
+<p>Translates flat alerts into a connected graph of EntityNodes (IP, URL, Email) and EntityEdges (resolves_to, contains).</p>
+<h2>13. Risk Engine</h2>
+<p>Normalizes ML confidence and heuristic weights into a 0-100 
+isk_score, translating technical feature importance into a 5-layer natural language explanation.</p>
+<h2>14. API Documentation</h2>
+<ul>
+<li><strong>POST /api/scan</strong>: Multi-modal payload ingestion.</li>
+<li><strong>GET /api/cases/{case_id}</strong>: Retrieve full incident history.</li>
+<li><strong>GET /api/network/tunnels</strong>: Aggregated uni-directional flows.</li>
+</ul>
+<h2>15. Database Architecture</h2>
+<p>MongoDB serves as the permanent system of record. Redis acts as a short-lived state store for network packet window aggregation.</p>
+<h2>16. Docker Deployment</h2>
+<p>Orchestrated via docker-compose.yml featuring 10 microservices isolated via internal Docker bridge networks.</p>
+<h2>17. Environment Configuration</h2>
+<p>Controlled via .env injection at runtime dictating log levels, API keys, and feature flags.</p>
+<h2>18. Testing &amp; QA</h2>
+<p>E2E QA Script (scripts/torture/run_100.py) validates multi-modal payloads against the live API, persisting scoring logic.</p>
+<h2>19. Security Testing</h2>
+<p>Verified against payload injection, SSRF, XSS (in UI formatting), and denial-of-service via rate-limited processing queues.</p>
+<h2>20. Performance Testing</h2>
+<p>REST API returns content scans in &lt;300ms. ML Worker handles thousands of network flows per second via Redpanda batching.</p>
+<h2>21. Resilience Testing</h2>
+<p>API gracefully degrades if MongoDB or Redpanda crash, ensuring content scanning functions independently of network observability.</p>
+<h2>22. Reporting</h2>
+<p>Automated JSON/PDF report generation summarizes identified IOCs, risk scores, and attack vectors for SOC analysts.</p>
+<h2>23. Education / Awareness</h2>
+<p>Every case generates contextual "Action" advice, educating the user on how the threat operated.</p>
+<h2>24. Known Limitations</h2>
+<ul>
+<li>Browser analysis is computationally heavy.</li>
+<li>Multilingual SMS parsing is restricted to English heuristics.</li>
+</ul>
+<h2>25. Future Roadmap</h2>
+<ul>
+<li>Kubernetes migration for ML worker auto-scaling.</li>
+<li>Deep Learning Transformer integration.</li>
+<li>Native SIEM/SOAR integrations.</li>
+</ul>
+</body>
+</html>

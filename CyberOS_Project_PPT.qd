@@ -1,0 +1,53 @@
+# CyberOS — Final Jury Presentation (PPT Content)
+
+## Slide 1: Title Slide
+**CyberOS: The Multimodal Cyber Shield**
+*Problem Statement:* PS#5 (Cyber Shield) + PS26145
+*Core Value:* Connecting the dots between content, context, and network behavior.
+
+## Slide 2: The Problem
+*   **Fragmented Tooling:** Users receive phishing via SMS, Email, QR, and Web.
+*   **Lack of Context:** Traditional scanners say "Bad" but don't explain "Why" or "How".
+*   **Missing Network Truth:** An email might look safe, but post-click behavior reveals beaconing.
+*   **The PS#5 Mandate:** Protect digital nagriks from cyber-fraud with intelligent detection.
+
+## Slide 3: The CyberOS Solution
+*   **Multimodal Ingestion:** Unified API for SMS, URL, Email, QR, and PCAPs.
+*   **Layered Detection:** Lexical rules + Threat Intel + XGBoost ML + Isolated Web Sandboxing.
+*   **Explainable Risk:** Generates 0-100 scores backed by natural language explanations.
+*   **Education First:** Doesn't just block; teaches the user what happened.
+
+## Slide 4: System Architecture
+`mermaid
+graph LR
+    Payload --> FastAPI
+    Zeek --> Redpanda --> XGBoost
+    FastAPI --> MongoDB
+    XGBoost --> MongoDB
+    MongoDB --> NextJS
+`
+
+## Slide 5: The Core Differentiator
+*   **Not just an LLM Wrapper:** We don't rely on a chatbot API for security decisions.
+*   **The Evidence Fabric:** Every detection is cryptographically tied to its source event.
+*   **Entity Graph Correlation:** We visually connect SMS -> URL -> IP instead of throwing isolated alerts.
+*   **Local ML:** XGBoost provides fast, private, explainable tabular inference.
+
+## Slide 6: Security & Resilience
+*   **SSRF Protection:** Web sandboxing explicitly blocks internal private IPs (RFC-1918).
+*   **Graceful Degradation:** If the ML worker or Threat Intel fails, the API gracefully marks it as DEGRADED and completes the scan using local heuristics.
+*   **Release-Gate Tested:** Subjected to 100-case automated torture tests and adversarial PCAPs.
+
+## Slide 7: Live Demo Walkthrough
+1.  **Inject SMS Phishing:** Watch the API parse the link.
+2.  **Network Replay:** Zeek catches the C2 beaconing.
+3.  **Entity Graph:** See the SMS link mapped directly to the malicious IP.
+4.  **Risk Explanation:** The dashboard clearly explains the attack vector.
+
+## Slide 8: Future Roadmap
+*   **Scale:** Kubernetes autoscaling for the browser-analysis worker.
+*   **Intelligence:** Cross-tenant federated learning for zero-day threat patterns.
+*   **Integration:** Native SOAR/SIEM webhook exports.
+
+## Slide 9: Q&A
+*   "We are ready to answer your technical, ML, and architectural questions."

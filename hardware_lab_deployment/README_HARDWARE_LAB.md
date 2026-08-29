@@ -1,4 +1,4 @@
-# PS26145 PHYSICAL HARDWARE-LAB VALIDATION GUIDE
+# CyberOS PHYSICAL HARDWARE-LAB VALIDATION GUIDE
 
 This bundle is for use ONLY on an authorized Linux hardware host equipped with a physical monitoring NIC, and optionally an enterprise SPAN/TAP/Hardware Data Diode.
 
@@ -47,5 +47,5 @@ Run these to validate downstream health:
 docker exec redpanda-1 rpk group describe inference_group
 
 # MongoDB Case inspection
-docker exec mongodb mongosh sih26145_prod --eval 'db.cases.countDocuments({})'
+docker exec mongodb mongosh cyberos_prod --eval 'db.cases.countDocuments({})'
 ```

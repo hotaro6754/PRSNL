@@ -6,8 +6,7 @@ services:
     command:
     - bash
     - -c
-    - pip install PyJWT prometheus_client aiofiles websockets httpx playwright &&
-      uvicorn backend.main:app --host 0.0.0.0 --port 8000
+    - uvicorn backend.main:app --host 0.0.0.0 --port 8000
     container_name: cyberos-backend
     depends_on:
       mongodb:
@@ -80,13 +79,16 @@ services:
     - grafana_data:/var/lib/grafana
     - ./grafana/provisioning:/etc/grafana/provisioning
   init-redpanda:
-    entrypoint: ["sh", "-c"]
     command:
-    - rpk topic create ml-feature-vectors network-observations --brokers=redpanda:9092 || true
+    - rpk topic create ml-feature-vectors network-observations --brokers=redpanda:9092
+      || true
     container_name: cyberos-init-redpanda
     depends_on:
       redpanda:
         condition: service_healthy
+    entrypoint:
+    - sh
+    - -c
     image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
     restart: on-failure
   lab_dns:

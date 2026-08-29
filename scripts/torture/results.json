@@ -1,0 +1,4514 @@
+[
+  {
+    "test_id": "URL-001",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.6517677307128906,
+    "response": {
+      "case_id": "CYB-2364850A",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-2364850A",
+        "generated_at": "2026-08-29T03:26:09.517387Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-002",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.376551628112793,
+    "response": {
+      "case_id": "CYB-DD162873",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-DD162873",
+        "generated_at": "2026-08-29T03:26:10.931691Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-003",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.3798162937164307,
+    "response": {
+      "case_id": "CYB-1D75AC56",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_OBFUSCATION",
+      "decision_summary": "URL_OBFUSCATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "VERY_LONG_URL",
+          "description": "URL is unusually long (200+ characters)",
+          "category": "url_obfuscation",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-1D75AC56-001",
+          "source": "Pattern Matching",
+          "observation": "URL is unusually long (200+ characters)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_OBFUSCATION threat.",
+        "evidence_summary": [
+          "URL is unusually long (200+ characters)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit URLs that appear to be deliberately obscured.",
+        "Check the actual destination before clicking shortened URLs.",
+        "Use a URL preview service to inspect shortened links.",
+        "Report obfuscated URLs to your security team."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-1D75AC56",
+        "generated_at": "2026-08-29T03:26:12.309920Z",
+        "threat_category": "URL_OBFUSCATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_OBFU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-004",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.4915788173675537,
+    "response": {
+      "case_id": "CYB-90E90179",
+      "classification": "LOW",
+      "risk_score": 15.0,
+      "confidence": 0.65,
+      "threat_type": "URL_OBFUSCATION",
+      "decision_summary": "URL_OBFUSCATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "SHORTENED_URL",
+          "description": "URL uses a URL shortening service to hide the destination",
+          "category": "url_obfuscation",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-90E90179-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses a URL shortening service to hide the destination"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_OBFUSCATION threat.",
+        "evidence_summary": [
+          "URL uses a URL shortening service to hide the destination"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit URLs that appear to be deliberately obscured.",
+        "Check the actual destination before clicking shortened URLs.",
+        "Use a URL preview service to inspect shortened links.",
+        "Report obfuscated URLs to your security team."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-90E90179",
+        "generated_at": "2026-08-29T03:26:13.812058Z",
+        "threat_category": "URL_OBFUSCATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_OBFU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-005",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.5020833015441895,
+    "response": {
+      "case_id": "CYB-536E2B88",
+      "classification": "LOW",
+      "risk_score": 21.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        },
+        {
+          "name": "IP_ADDRESS_HOST",
+          "description": "URL uses a raw IP address instead of a domain name",
+          "category": "url_obfuscation",
+          "severity": 0.7
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-536E2B88-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        },
+        {
+          "evidence_id": "EV-CYB-536E2B88-002",
+          "source": "Pattern Matching",
+          "observation": "URL uses a raw IP address instead of a domain name"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)",
+          "URL uses a raw IP address instead of a domain name"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-536E2B88",
+        "generated_at": "2026-08-29T03:26:15.310940Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-006",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.396345615386963,
+    "response": {
+      "case_id": "CYB-227FFEA8",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-227FFEA8-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-227FFEA8",
+        "generated_at": "2026-08-29T03:26:16.709717Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-007",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.3025152683258057,
+    "response": {
+      "case_id": "CYB-489500AF",
+      "classification": "LOW",
+      "risk_score": 18.0,
+      "confidence": 0.65,
+      "threat_type": "BRAND_ABUSE",
+      "decision_summary": "BRAND_ABUSE activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "BRAND_IMPERSONATION",
+          "description": "URL references a major brand name (potential impersonation)",
+          "category": "brand_abuse",
+          "severity": 0.6
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-489500AF-001",
+          "source": "Pattern Matching",
+          "observation": "URL references a major brand name (potential impersonation)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a BRAND_ABUSE threat.",
+        "evidence_summary": [
+          "URL references a major brand name (potential impersonation)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Verify the URL domain matches the official brand website.",
+        "Look for subtle misspellings in the domain name.",
+        "Report brand impersonation to the legitimate company."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-489500AF",
+        "generated_at": "2026-08-29T03:26:17.996474Z",
+        "threat_category": "BRAND_ABUSE",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-BRAND_AB",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-008",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.3248281478881836,
+    "response": {
+      "case_id": "CYB-81AD31F8",
+      "classification": "LOW",
+      "risk_score": 19.5,
+      "confidence": 0.65,
+      "threat_type": "URL_OBFUSCATION",
+      "decision_summary": "URL_OBFUSCATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "EXCESSIVE_SUBDOMAINS",
+          "description": "URL has an excessive number of subdomains (4+)",
+          "category": "url_obfuscation",
+          "severity": 0.6
+        },
+        {
+          "name": "LOGIN_PATH",
+          "description": "URL contains credential/authentication-related path keywords",
+          "category": "credential_harvesting",
+          "severity": 0.65
+        },
+        {
+          "name": "SHORTENED_URL",
+          "description": "URL uses a URL shortening service to hide the destination",
+          "category": "url_obfuscation",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-81AD31F8-001",
+          "source": "Pattern Matching",
+          "observation": "URL has an excessive number of subdomains (4+)"
+        },
+        {
+          "evidence_id": "EV-CYB-81AD31F8-002",
+          "source": "Pattern Matching",
+          "observation": "URL contains credential/authentication-related path keywords"
+        },
+        {
+          "evidence_id": "EV-CYB-81AD31F8-003",
+          "source": "Pattern Matching",
+          "observation": "URL uses a URL shortening service to hide the destination"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_OBFUSCATION threat.",
+        "evidence_summary": [
+          "URL has an excessive number of subdomains (4+)",
+          "URL contains credential/authentication-related path keywords",
+          "URL uses a URL shortening service to hide the destination"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit URLs that appear to be deliberately obscured.",
+        "Check the actual destination before clicking shortened URLs.",
+        "Use a URL preview service to inspect shortened links.",
+        "Report obfuscated URLs to your security team."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-81AD31F8",
+        "generated_at": "2026-08-29T03:26:19.341125Z",
+        "threat_category": "URL_OBFUSCATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_OBFU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-009",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.3196539878845215,
+    "response": {
+      "case_id": "CYB-DF89DA6E",
+      "classification": "LOW",
+      "risk_score": 19.5,
+      "confidence": 0.65,
+      "threat_type": "CREDENTIAL_HARVESTING",
+      "decision_summary": "CREDENTIAL_HARVESTING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "LOGIN_PATH",
+          "description": "URL contains credential/authentication-related path keywords",
+          "category": "credential_harvesting",
+          "severity": 0.65
+        },
+        {
+          "name": "SHORTENED_URL",
+          "description": "URL uses a URL shortening service to hide the destination",
+          "category": "url_obfuscation",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-DF89DA6E-001",
+          "source": "Pattern Matching",
+          "observation": "URL contains credential/authentication-related path keywords"
+        },
+        {
+          "evidence_id": "EV-CYB-DF89DA6E-002",
+          "source": "Pattern Matching",
+          "observation": "URL uses a URL shortening service to hide the destination"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a CREDENTIAL_HARVESTING threat.",
+        "evidence_summary": [
+          "URL contains credential/authentication-related path keywords",
+          "URL uses a URL shortening service to hide the destination"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not enter your password or any login credentials on this page.",
+        "Close the page immediately and do not interact further.",
+        "Navigate manually to the official website by typing the URL yourself.",
+        "If you already entered credentials, change your password immediately through the official service.",
+        "Enable two-factor authentication on all important accounts.",
+        "Report this page to the service being impersonated."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-DF89DA6E",
+        "generated_at": "2026-08-29T03:26:20.654130Z",
+        "threat_category": "CREDENTIAL_HARVESTING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-CREDENTI",
+        "title": "How Credential Harvesting Works",
+        "why_it_works": "Attackers set up fake login pages that look identical to real ones. When you enter your credentials, they capture them instantly and gain access to your real account.",
+        "how_to_spot": [
+          "The URL domain does not match the service you expect",
+          "The page asks for more information than usual (e.g., SSN, bank details)",
+          "The SSL certificate does not match the organization",
+          "After submitting, you are redirected to the real site (to avoid suspicion)"
+        ],
+        "quiz": {
+          "question": "A website asks for your bank login AND your ATM PIN. Is this normal?",
+          "options": [
+            "Yes, banks always need both for verification",
+            "No, legitimate banks never ask for your ATM PIN online",
+            "Only if the URL starts with HTTPS",
+            "Yes, if the email looks official"
+          ],
+          "correct_answer": 1,
+          "explanation": "Banks never ask for ATM PINs online. This is a clear sign of credential harvesting."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-010",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.4059076309204102,
+    "response": {
+      "case_id": "CYB-572D553C",
+      "classification": "LOW",
+      "risk_score": 16.5,
+      "confidence": 0.65,
+      "threat_type": "URL_OBFUSCATION",
+      "decision_summary": "URL_OBFUSCATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "URL_ENCODING",
+          "description": "URL contains multiple encoded characters (potential obfuscation)",
+          "category": "url_obfuscation",
+          "severity": 0.55
+        },
+        {
+          "name": "SHORTENED_URL",
+          "description": "URL uses a URL shortening service to hide the destination",
+          "category": "url_obfuscation",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-572D553C-001",
+          "source": "Pattern Matching",
+          "observation": "URL contains multiple encoded characters (potential obfuscation)"
+        },
+        {
+          "evidence_id": "EV-CYB-572D553C-002",
+          "source": "Pattern Matching",
+          "observation": "URL uses a URL shortening service to hide the destination"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_OBFUSCATION threat.",
+        "evidence_summary": [
+          "URL contains multiple encoded characters (potential obfuscation)",
+          "URL uses a URL shortening service to hide the destination"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit URLs that appear to be deliberately obscured.",
+        "Check the actual destination before clicking shortened URLs.",
+        "Use a URL preview service to inspect shortened links.",
+        "Report obfuscated URLs to your security team."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-572D553C",
+        "generated_at": "2026-08-29T03:26:22.064194Z",
+        "threat_category": "URL_OBFUSCATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_OBFU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-011",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.473092794418335,
+    "response": {
+      "case_id": "CYB-8F45FD5E",
+      "classification": "LOW",
+      "risk_score": 15.0,
+      "confidence": 0.65,
+      "threat_type": "URL_OBFUSCATION",
+      "decision_summary": "URL_OBFUSCATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "SHORTENED_URL",
+          "description": "URL uses a URL shortening service to hide the destination",
+          "category": "url_obfuscation",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-8F45FD5E-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses a URL shortening service to hide the destination"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_OBFUSCATION threat.",
+        "evidence_summary": [
+          "URL uses a URL shortening service to hide the destination"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit URLs that appear to be deliberately obscured.",
+        "Check the actual destination before clicking shortened URLs.",
+        "Use a URL preview service to inspect shortened links.",
+        "Report obfuscated URLs to your security team."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-8F45FD5E",
+        "generated_at": "2026-08-29T03:26:23.536265Z",
+        "threat_category": "URL_OBFUSCATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_OBFU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-012",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.3043098449707031,
+    "response": {
+      "case_id": "CYB-10A9C3D4",
+      "classification": "LOW",
+      "risk_score": 15.0,
+      "confidence": 0.65,
+      "threat_type": "URL_OBFUSCATION",
+      "decision_summary": "URL_OBFUSCATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "SHORTENED_URL",
+          "description": "URL uses a URL shortening service to hide the destination",
+          "category": "url_obfuscation",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-10A9C3D4-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses a URL shortening service to hide the destination"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_OBFUSCATION threat.",
+        "evidence_summary": [
+          "URL uses a URL shortening service to hide the destination"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit URLs that appear to be deliberately obscured.",
+        "Check the actual destination before clicking shortened URLs.",
+        "Use a URL preview service to inspect shortened links.",
+        "Report obfuscated URLs to your security team."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-10A9C3D4",
+        "generated_at": "2026-08-29T03:26:24.838680Z",
+        "threat_category": "URL_OBFUSCATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_OBFU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-013",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.2668414115905762,
+    "response": {
+      "case_id": "CYB-0183DDD9",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-0183DDD9",
+        "generated_at": "2026-08-29T03:26:26.109630Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-014",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.3636531829833984,
+    "response": {
+      "case_id": "CYB-11DBF965",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-11DBF965",
+        "generated_at": "2026-08-29T03:26:27.466146Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "URL-015",
+    "category": "URL",
+    "status": "PASS",
+    "latency": 1.3615264892578125,
+    "response": {
+      "case_id": "CYB-23CB277D",
+      "classification": "LOW",
+      "risk_score": 21.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        },
+        {
+          "name": "IP_ADDRESS_HOST",
+          "description": "URL uses a raw IP address instead of a domain name",
+          "category": "url_obfuscation",
+          "severity": 0.7
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-23CB277D-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        },
+        {
+          "evidence_id": "EV-CYB-23CB277D-002",
+          "source": "Pattern Matching",
+          "observation": "URL uses a raw IP address instead of a domain name"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)",
+          "URL uses a raw IP address instead of a domain name"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-23CB277D",
+        "generated_at": "2026-08-29T03:26:28.837914Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-016",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.222883701324463,
+    "response": {
+      "case_id": "CYB-C21133AE",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-C21133AE",
+        "generated_at": "2026-08-29T03:26:30.065482Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-017",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.1947109699249268,
+    "response": {
+      "case_id": "CYB-8F5FE967",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_PHISHING",
+      "decision_summary": "URL_PHISHING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "SUSPICIOUS_LINK",
+          "description": "Email contains embedded links",
+          "category": "url_phishing",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-8F5FE967-001",
+          "source": "Pattern Matching",
+          "observation": "Email contains embedded links"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_PHISHING threat.",
+        "evidence_summary": [
+          "Email contains embedded links"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit this URL or enter any data.",
+        "The URL may be designed to steal your information.",
+        "Verify the intended service through its official domain.",
+        "Report this URL to your browser's safe browsing service."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-8F5FE967",
+        "generated_at": "2026-08-29T03:26:31.259966Z",
+        "threat_category": "URL_PHISHING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_PHIS",
+        "title": "Recognizing Malicious URLs",
+        "why_it_works": "Attackers use deceptive URLs that mimic legitimate websites. They exploit the fact that most people don't carefully examine URLs before clicking.",
+        "how_to_spot": [
+          "Look for misspelled brand names (e.g., 'paypa1.com' instead of 'paypal.com')",
+          "Be wary of URLs with IP addresses instead of domain names",
+          "Check for suspicious top-level domains (.xyz, .tk, .click)",
+          "Watch for excessive subdomains (e.g., 'login.verify.account.evil.com')"
+        ],
+        "quiz": {
+          "question": "Which URL is most likely a phishing attempt?",
+          "options": [
+            "https://www.paypal.com/login",
+            "http://paypal-verify.account-security.xyz/login",
+            "https://www.paypal.com/us/signin",
+            "https://paypal.com"
+          ],
+          "correct_answer": 1,
+          "explanation": "The URL 'paypal-verify.account-security.xyz' uses a suspicious domain (.xyz) and mimics PayPal's branding. Always check the actual domain name."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-018",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.2060883045196533,
+    "response": {
+      "case_id": "CYB-95DCEF41",
+      "classification": "LOW",
+      "risk_score": 19.5,
+      "confidence": 0.65,
+      "threat_type": "IMPERSONATION",
+      "decision_summary": "IMPERSONATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "IMPERSONATION",
+          "description": "Email impersonates authority figure or IT support",
+          "category": "impersonation",
+          "severity": 0.65
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-95DCEF41-001",
+          "source": "Pattern Matching",
+          "observation": "Email impersonates authority figure or IT support"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a IMPERSONATION threat.",
+        "evidence_summary": [
+          "Email impersonates authority figure or IT support"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Verify the sender's identity through official channels.",
+        "Do not trust sender IDs in SMS - they can be spoofed.",
+        "Check email headers for domain mismatches.",
+        "Contact the organization being impersonated to report the attempt."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-95DCEF41",
+        "generated_at": "2026-08-29T03:26:32.465720Z",
+        "threat_category": "IMPERSONATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-IMPERSON",
+        "title": "Brand & Authority Impersonation",
+        "why_it_works": "Attackers impersonate trusted brands, government agencies, or authority figures to exploit the trust you have in these entities.",
+        "how_to_spot": [
+          "Check sender email domains carefully (e.g., 'support@amaz0n-help.com' vs 'support@amazon.com')",
+          "Official organizations rarely contact you via SMS with links",
+          "Government agencies don't request personal info via email",
+          "Look for poor grammar or generic templates"
+        ],
+        "quiz": {
+          "question": "An SMS from 'HDFC Bank' asks you to update KYC via a link. The sender ID shows 'HDFCBNK'. Is it safe?",
+          "options": [
+            "Yes, the sender ID matches HDFC",
+            "No, sender IDs can be spoofed. Visit the bank branch or official app instead",
+            "Safe if the link starts with HTTPS",
+            "Safe if I don't enter my password"
+          ],
+          "correct_answer": 1,
+          "explanation": "SMS sender IDs can be easily spoofed. Always use official bank apps or visit a branch for KYC updates."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-019",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.9221465587615967,
+    "response": {
+      "case_id": "CYB-46907B2F",
+      "classification": "LOW",
+      "risk_score": 19.5,
+      "confidence": 0.65,
+      "threat_type": "IMPERSONATION",
+      "decision_summary": "IMPERSONATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "IMPERSONATION",
+          "description": "Email impersonates authority figure or IT support",
+          "category": "impersonation",
+          "severity": 0.65
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-46907B2F-001",
+          "source": "Pattern Matching",
+          "observation": "Email impersonates authority figure or IT support"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a IMPERSONATION threat.",
+        "evidence_summary": [
+          "Email impersonates authority figure or IT support"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Verify the sender's identity through official channels.",
+        "Do not trust sender IDs in SMS - they can be spoofed.",
+        "Check email headers for domain mismatches.",
+        "Contact the organization being impersonated to report the attempt."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-46907B2F",
+        "generated_at": "2026-08-29T03:26:34.366729Z",
+        "threat_category": "IMPERSONATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-IMPERSON",
+        "title": "Brand & Authority Impersonation",
+        "why_it_works": "Attackers impersonate trusted brands, government agencies, or authority figures to exploit the trust you have in these entities.",
+        "how_to_spot": [
+          "Check sender email domains carefully (e.g., 'support@amaz0n-help.com' vs 'support@amazon.com')",
+          "Official organizations rarely contact you via SMS with links",
+          "Government agencies don't request personal info via email",
+          "Look for poor grammar or generic templates"
+        ],
+        "quiz": {
+          "question": "An SMS from 'HDFC Bank' asks you to update KYC via a link. The sender ID shows 'HDFCBNK'. Is it safe?",
+          "options": [
+            "Yes, the sender ID matches HDFC",
+            "No, sender IDs can be spoofed. Visit the bank branch or official app instead",
+            "Safe if the link starts with HTTPS",
+            "Safe if I don't enter my password"
+          ],
+          "correct_answer": 1,
+          "explanation": "SMS sender IDs can be easily spoofed. Always use official bank apps or visit a branch for KYC updates."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-020",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 2.118086576461792,
+    "response": {
+      "case_id": "CYB-586AD1F7",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-586AD1F7",
+        "generated_at": "2026-08-29T03:26:36.438767Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-021",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.6894912719726562,
+    "response": {
+      "case_id": "CYB-6CEB4E12",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-6CEB4E12",
+        "generated_at": "2026-08-29T03:26:38.175433Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-022",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.5070223808288574,
+    "response": {
+      "case_id": "CYB-4828E455",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-4828E455",
+        "generated_at": "2026-08-29T03:26:39.688560Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-023",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.4539930820465088,
+    "response": {
+      "case_id": "CYB-F5C19C35",
+      "classification": "LOW",
+      "risk_score": 25.5,
+      "confidence": 0.65,
+      "threat_type": "CREDENTIAL_HARVESTING",
+      "decision_summary": "CREDENTIAL_HARVESTING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "CREDENTIAL_REQUEST",
+          "description": "Email requests passwords or login credentials",
+          "category": "credential_harvesting",
+          "severity": 0.85
+        },
+        {
+          "name": "SUSPICIOUS_LINK",
+          "description": "Email contains embedded links",
+          "category": "url_phishing",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-F5C19C35-001",
+          "source": "Pattern Matching",
+          "observation": "Email requests passwords or login credentials"
+        },
+        {
+          "evidence_id": "EV-CYB-F5C19C35-002",
+          "source": "Pattern Matching",
+          "observation": "Email contains embedded links"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a CREDENTIAL_HARVESTING threat.",
+        "evidence_summary": [
+          "Email requests passwords or login credentials",
+          "Email contains embedded links"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not enter your password or any login credentials on this page.",
+        "Close the page immediately and do not interact further.",
+        "Navigate manually to the official website by typing the URL yourself.",
+        "If you already entered credentials, change your password immediately through the official service.",
+        "Enable two-factor authentication on all important accounts.",
+        "Report this page to the service being impersonated."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-F5C19C35",
+        "generated_at": "2026-08-29T03:26:41.131678Z",
+        "threat_category": "CREDENTIAL_HARVESTING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-CREDENTI",
+        "title": "How Credential Harvesting Works",
+        "why_it_works": "Attackers set up fake login pages that look identical to real ones. When you enter your credentials, they capture them instantly and gain access to your real account.",
+        "how_to_spot": [
+          "The URL domain does not match the service you expect",
+          "The page asks for more information than usual (e.g., SSN, bank details)",
+          "The SSL certificate does not match the organization",
+          "After submitting, you are redirected to the real site (to avoid suspicion)"
+        ],
+        "quiz": {
+          "question": "A website asks for your bank login AND your ATM PIN. Is this normal?",
+          "options": [
+            "Yes, banks always need both for verification",
+            "No, legitimate banks never ask for your ATM PIN online",
+            "Only if the URL starts with HTTPS",
+            "Yes, if the email looks official"
+          ],
+          "correct_answer": 1,
+          "explanation": "Banks never ask for ATM PINs online. This is a clear sign of credential harvesting."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-024",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.6586518287658691,
+    "response": {
+      "case_id": "CYB-4794570A",
+      "classification": "LOW",
+      "risk_score": 27.0,
+      "confidence": 0.65,
+      "threat_type": "MALWARE",
+      "decision_summary": "MALWARE activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "ATTACHMENT_EXE",
+          "description": "Email references executable file attachment",
+          "category": "malware",
+          "severity": 0.9
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-4794570A-001",
+          "source": "Pattern Matching",
+          "observation": "Email references executable file attachment"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a MALWARE threat.",
+        "evidence_summary": [
+          "Email references executable file attachment"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not download or execute any attachments from this source.",
+        "Do not enable macros or allow unknown scripts to run.",
+        "Run a full system antivirus scan if you opened anything.",
+        "Report the incident to your IT security team immediately.",
+        "Disconnect from the network if you suspect infection."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-4794570A",
+        "generated_at": "2026-08-29T03:26:42.782155Z",
+        "threat_category": "MALWARE",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-MALWARE",
+        "title": "Malware & Malicious Attachments",
+        "why_it_works": "Malware disguises itself as legitimate files or software. Once executed, it can steal data, encrypt files for ransom, or give attackers remote access to your system.",
+        "how_to_spot": [
+          "Unexpected email attachments, especially .exe, .bat, .js, .vbs files",
+          "Documents requesting you to 'enable macros' or 'enable content'",
+          "Files from unknown senders or unexpected sources",
+          "Double file extensions (e.g., 'document.pdf.exe')"
+        ],
+        "quiz": {
+          "question": "You receive a Word document that asks you to 'Enable Macros' to view content. What should you do?",
+          "options": [
+            "Enable macros - it's just a Word document",
+            "Do NOT enable macros - this is a common malware delivery technique",
+            "Save the file and scan it later",
+            "Forward it to a colleague to check"
+          ],
+          "correct_answer": 1,
+          "explanation": "Macro-enabled documents are one of the most common malware delivery methods. Never enable macros in documents from untrusted sources."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-025",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.2660644054412842,
+    "response": {
+      "case_id": "CYB-6C864046",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_PHISHING",
+      "decision_summary": "URL_PHISHING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "SUSPICIOUS_LINK",
+          "description": "Email contains embedded links",
+          "category": "url_phishing",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-6C864046-001",
+          "source": "Pattern Matching",
+          "observation": "Email contains embedded links"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_PHISHING threat.",
+        "evidence_summary": [
+          "Email contains embedded links"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit this URL or enter any data.",
+        "The URL may be designed to steal your information.",
+        "Verify the intended service through its official domain.",
+        "Report this URL to your browser's safe browsing service."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-6C864046",
+        "generated_at": "2026-08-29T03:26:44.076978Z",
+        "threat_category": "URL_PHISHING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_PHIS",
+        "title": "Recognizing Malicious URLs",
+        "why_it_works": "Attackers use deceptive URLs that mimic legitimate websites. They exploit the fact that most people don't carefully examine URLs before clicking.",
+        "how_to_spot": [
+          "Look for misspelled brand names (e.g., 'paypa1.com' instead of 'paypal.com')",
+          "Be wary of URLs with IP addresses instead of domain names",
+          "Check for suspicious top-level domains (.xyz, .tk, .click)",
+          "Watch for excessive subdomains (e.g., 'login.verify.account.evil.com')"
+        ],
+        "quiz": {
+          "question": "Which URL is most likely a phishing attempt?",
+          "options": [
+            "https://www.paypal.com/login",
+            "http://paypal-verify.account-security.xyz/login",
+            "https://www.paypal.com/us/signin",
+            "https://paypal.com"
+          ],
+          "correct_answer": 1,
+          "explanation": "The URL 'paypal-verify.account-security.xyz' uses a suspicious domain (.xyz) and mimics PayPal's branding. Always check the actual domain name."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-026",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.2273609638214111,
+    "response": {
+      "case_id": "CYB-3700FDEE",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-3700FDEE",
+        "generated_at": "2026-08-29T03:26:45.303606Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "EMAIL-027",
+    "category": "EMAIL",
+    "status": "PASS",
+    "latency": 1.5074763298034668,
+    "response": {
+      "case_id": "CYB-183E3EB6",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-183E3EB6",
+        "generated_at": "2026-08-29T03:26:46.791595Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-028",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.219771385192871,
+    "response": {
+      "case_id": "CYB-1B1E44D3",
+      "classification": "LOW",
+      "risk_score": 25.5,
+      "confidence": 0.65,
+      "threat_type": "CREDENTIAL_HARVESTING",
+      "decision_summary": "CREDENTIAL_HARVESTING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "OTP_REQUEST",
+          "description": "Message requests sharing of OTP or verification codes",
+          "category": "credential_harvesting",
+          "severity": 0.85
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-1B1E44D3-001",
+          "source": "Pattern Matching",
+          "observation": "Message requests sharing of OTP or verification codes"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a CREDENTIAL_HARVESTING threat.",
+        "evidence_summary": [
+          "Message requests sharing of OTP or verification codes"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not enter your password or any login credentials on this page.",
+        "Close the page immediately and do not interact further.",
+        "Navigate manually to the official website by typing the URL yourself.",
+        "If you already entered credentials, change your password immediately through the official service.",
+        "Enable two-factor authentication on all important accounts.",
+        "Report this page to the service being impersonated."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-1B1E44D3",
+        "generated_at": "2026-08-29T03:26:48.031910Z",
+        "threat_category": "CREDENTIAL_HARVESTING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-CREDENTI",
+        "title": "How Credential Harvesting Works",
+        "why_it_works": "Attackers set up fake login pages that look identical to real ones. When you enter your credentials, they capture them instantly and gain access to your real account.",
+        "how_to_spot": [
+          "The URL domain does not match the service you expect",
+          "The page asks for more information than usual (e.g., SSN, bank details)",
+          "The SSL certificate does not match the organization",
+          "After submitting, you are redirected to the real site (to avoid suspicion)"
+        ],
+        "quiz": {
+          "question": "A website asks for your bank login AND your ATM PIN. Is this normal?",
+          "options": [
+            "Yes, banks always need both for verification",
+            "No, legitimate banks never ask for your ATM PIN online",
+            "Only if the URL starts with HTTPS",
+            "Yes, if the email looks official"
+          ],
+          "correct_answer": 1,
+          "explanation": "Banks never ask for ATM PINs online. This is a clear sign of credential harvesting."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-029",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.5595102310180664,
+    "response": {
+      "case_id": "CYB-FC176356",
+      "classification": "LOW",
+      "risk_score": 18.0,
+      "confidence": 0.65,
+      "threat_type": "IMPERSONATION",
+      "decision_summary": "IMPERSONATION activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "FAKE_DELIVERY",
+          "description": "Message impersonates delivery/logistics notification",
+          "category": "impersonation",
+          "severity": 0.6
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-FC176356-001",
+          "source": "Pattern Matching",
+          "observation": "Message impersonates delivery/logistics notification"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a IMPERSONATION threat.",
+        "evidence_summary": [
+          "Message impersonates delivery/logistics notification"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Verify the sender's identity through official channels.",
+        "Do not trust sender IDs in SMS - they can be spoofed.",
+        "Check email headers for domain mismatches.",
+        "Contact the organization being impersonated to report the attempt."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-FC176356",
+        "generated_at": "2026-08-29T03:26:49.363498Z",
+        "threat_category": "IMPERSONATION",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-IMPERSON",
+        "title": "Brand & Authority Impersonation",
+        "why_it_works": "Attackers impersonate trusted brands, government agencies, or authority figures to exploit the trust you have in these entities.",
+        "how_to_spot": [
+          "Check sender email domains carefully (e.g., 'support@amaz0n-help.com' vs 'support@amazon.com')",
+          "Official organizations rarely contact you via SMS with links",
+          "Government agencies don't request personal info via email",
+          "Look for poor grammar or generic templates"
+        ],
+        "quiz": {
+          "question": "An SMS from 'HDFC Bank' asks you to update KYC via a link. The sender ID shows 'HDFCBNK'. Is it safe?",
+          "options": [
+            "Yes, the sender ID matches HDFC",
+            "No, sender IDs can be spoofed. Visit the bank branch or official app instead",
+            "Safe if the link starts with HTTPS",
+            "Safe if I don't enter my password"
+          ],
+          "correct_answer": 1,
+          "explanation": "SMS sender IDs can be easily spoofed. Always use official bank apps or visit a branch for KYC updates."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-030",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.369337797164917,
+    "response": {
+      "case_id": "CYB-647A0B6E",
+      "classification": "LOW",
+      "risk_score": 24.0,
+      "confidence": 0.65,
+      "threat_type": "FINANCIAL_FRAUD",
+      "decision_summary": "FINANCIAL_FRAUD activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "FINANCIAL_REQUEST",
+          "description": "Message contains financial or monetary solicitation",
+          "category": "financial_fraud",
+          "severity": 0.8
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-647A0B6E-001",
+          "source": "Pattern Matching",
+          "observation": "Message contains financial or monetary solicitation"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a FINANCIAL_FRAUD threat.",
+        "evidence_summary": [
+          "Message contains financial or monetary solicitation"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not transfer money or approve any payment requests.",
+        "Do not share banking credentials, UPI PINs, or OTPs.",
+        "Do not approve unknown payment requests on your banking app.",
+        "Contact your financial institution through its official channel.",
+        "File a fraud complaint with your bank if you already transacted."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-647A0B6E",
+        "generated_at": "2026-08-29T03:26:50.961725Z",
+        "threat_category": "FINANCIAL_FRAUD",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-FINANCIA",
+        "title": "Financial Fraud & Payment Scams",
+        "why_it_works": "Scammers create urgency around financial transactions, claiming refunds, prizes, or payment failures to trick you into transferring money or sharing banking credentials.",
+        "how_to_spot": [
+          "Unexpected refund or prize notifications",
+          "Requests to share UPI PIN, OTP, or banking passwords",
+          "Pressure to act immediately on financial matters",
+          "Unknown payment requests from unfamiliar sources"
+        ],
+        "quiz": {
+          "question": "A caller from 'your bank' asks for your OTP to process a refund. What should you do?",
+          "options": [
+            "Share the OTP since they are from the bank",
+            "Ask them to call back later",
+            "Hang up and call the bank's official number to verify",
+            "Share only part of the OTP"
+          ],
+          "correct_answer": 2,
+          "explanation": "Banks never ask for OTPs over the phone. Hang up and call the official bank number to verify any claims."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-031",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.3437962532043457,
+    "response": {
+      "case_id": "CYB-ECC8CFEE",
+      "classification": "LOW",
+      "risk_score": 22.5,
+      "confidence": 0.65,
+      "threat_type": "SOCIAL_ENGINEERING",
+      "decision_summary": "SOCIAL_ENGINEERING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "URGENCY",
+          "description": "Message uses urgency language to pressure immediate action",
+          "category": "social_engineering",
+          "severity": 0.7
+        },
+        {
+          "name": "ACCOUNT_SUSPENSION",
+          "description": "Message claims account suspension or restriction",
+          "category": "social_engineering",
+          "severity": 0.75
+        },
+        {
+          "name": "SUSPICIOUS_LINK",
+          "description": "SMS contains a clickable link (common in smishing)",
+          "category": "url_phishing",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-ECC8CFEE-001",
+          "source": "Pattern Matching",
+          "observation": "Message uses urgency language to pressure immediate action"
+        },
+        {
+          "evidence_id": "EV-CYB-ECC8CFEE-002",
+          "source": "Pattern Matching",
+          "observation": "Message claims account suspension or restriction"
+        },
+        {
+          "evidence_id": "EV-CYB-ECC8CFEE-003",
+          "source": "Pattern Matching",
+          "observation": "SMS contains a clickable link (common in smishing)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a SOCIAL_ENGINEERING threat.",
+        "evidence_summary": [
+          "Message uses urgency language to pressure immediate action",
+          "Message claims account suspension or restriction",
+          "SMS contains a clickable link (common in smishing)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Take a moment to think before responding to urgent requests.",
+        "Verify the identity of the sender through a separate channel.",
+        "Do not bypass standard procedures regardless of claimed authority.",
+        "Consult with a colleague or supervisor before taking action."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-ECC8CFEE",
+        "generated_at": "2026-08-29T03:26:52.296638Z",
+        "threat_category": "SOCIAL_ENGINEERING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-SOCIAL_E",
+        "title": "Social Engineering Tactics",
+        "why_it_works": "Attackers manipulate human psychology using urgency, authority, fear, and curiosity to bypass your rational thinking and make you act impulsively.",
+        "how_to_spot": [
+          "Messages creating extreme urgency ('Your account will be deleted in 24 hours')",
+          "Claims of authority ('This is from the CEO', 'IT Department requires...')",
+          "Emotional manipulation through fear or excitement",
+          "Requests that bypass normal procedures"
+        ],
+        "quiz": {
+          "question": "An email from 'the CEO' urgently requests a wire transfer before end of day. What's the best action?",
+          "options": [
+            "Process it immediately since it's from the CEO",
+            "Verify the request through a separate channel (phone call, in-person)",
+            "Reply to the email asking for confirmation",
+            "Forward it to your team to handle"
+          ],
+          "correct_answer": 1,
+          "explanation": "Always verify urgent financial requests through a separate channel. CEO fraud (BEC) is one of the costliest cyber attacks."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-032",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.377631664276123,
+    "response": {
+      "case_id": "CYB-2EC25BB2",
+      "classification": "LOW",
+      "risk_score": 24.0,
+      "confidence": 0.65,
+      "threat_type": "SOCIAL_ENGINEERING",
+      "decision_summary": "SOCIAL_ENGINEERING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "URGENCY",
+          "description": "Message uses urgency language to pressure immediate action",
+          "category": "social_engineering",
+          "severity": 0.7
+        },
+        {
+          "name": "SUSPICIOUS_LINK",
+          "description": "SMS contains a clickable link (common in smishing)",
+          "category": "url_phishing",
+          "severity": 0.5
+        },
+        {
+          "name": "KYC_SCAM",
+          "description": "Message requests KYC or identity document submission",
+          "category": "credential_harvesting",
+          "severity": 0.8
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-2EC25BB2-001",
+          "source": "Pattern Matching",
+          "observation": "Message uses urgency language to pressure immediate action"
+        },
+        {
+          "evidence_id": "EV-CYB-2EC25BB2-002",
+          "source": "Pattern Matching",
+          "observation": "SMS contains a clickable link (common in smishing)"
+        },
+        {
+          "evidence_id": "EV-CYB-2EC25BB2-003",
+          "source": "Pattern Matching",
+          "observation": "Message requests KYC or identity document submission"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a SOCIAL_ENGINEERING threat.",
+        "evidence_summary": [
+          "Message uses urgency language to pressure immediate action",
+          "SMS contains a clickable link (common in smishing)",
+          "Message requests KYC or identity document submission"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Take a moment to think before responding to urgent requests.",
+        "Verify the identity of the sender through a separate channel.",
+        "Do not bypass standard procedures regardless of claimed authority.",
+        "Consult with a colleague or supervisor before taking action."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-2EC25BB2",
+        "generated_at": "2026-08-29T03:26:53.682234Z",
+        "threat_category": "SOCIAL_ENGINEERING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-SOCIAL_E",
+        "title": "Social Engineering Tactics",
+        "why_it_works": "Attackers manipulate human psychology using urgency, authority, fear, and curiosity to bypass your rational thinking and make you act impulsively.",
+        "how_to_spot": [
+          "Messages creating extreme urgency ('Your account will be deleted in 24 hours')",
+          "Claims of authority ('This is from the CEO', 'IT Department requires...')",
+          "Emotional manipulation through fear or excitement",
+          "Requests that bypass normal procedures"
+        ],
+        "quiz": {
+          "question": "An email from 'the CEO' urgently requests a wire transfer before end of day. What's the best action?",
+          "options": [
+            "Process it immediately since it's from the CEO",
+            "Verify the request through a separate channel (phone call, in-person)",
+            "Reply to the email asking for confirmation",
+            "Forward it to your team to handle"
+          ],
+          "correct_answer": 1,
+          "explanation": "Always verify urgent financial requests through a separate channel. CEO fraud (BEC) is one of the costliest cyber attacks."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-033",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.424638032913208,
+    "response": {
+      "case_id": "CYB-D078F5C7",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-D078F5C7",
+        "generated_at": "2026-08-29T03:26:55.080283Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-034",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.3161752223968506,
+    "response": {
+      "case_id": "CYB-DF77EF99",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-DF77EF99",
+        "generated_at": "2026-08-29T03:26:56.412150Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-035",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.4139125347137451,
+    "response": {
+      "case_id": "CYB-31077071",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-31077071",
+        "generated_at": "2026-08-29T03:26:57.836506Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-036",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.3070662021636963,
+    "response": {
+      "case_id": "CYB-98EDA3FF",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-98EDA3FF",
+        "generated_at": "2026-08-29T03:26:59.120786Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-037",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.3981623649597168,
+    "response": {
+      "case_id": "CYB-496BFDB7",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-496BFDB7",
+        "generated_at": "2026-08-29T03:27:00.538188Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-038",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.3131170272827148,
+    "response": {
+      "case_id": "CYB-4C1E8FBD",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-4C1E8FBD",
+        "generated_at": "2026-08-29T03:27:01.858385Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SMS-039",
+    "category": "SMS",
+    "status": "PASS",
+    "latency": 1.4072749614715576,
+    "response": {
+      "case_id": "CYB-92E585C7",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-92E585C7",
+        "generated_at": "2026-08-29T03:27:03.257259Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-040",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.3599262237548828,
+    "response": {
+      "case_id": "CYB-CE2D9007",
+      "classification": "LOW",
+      "risk_score": 15.0,
+      "confidence": 0.65,
+      "threat_type": "URL_PHISHING",
+      "decision_summary": "URL_PHISHING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "SUSPICIOUS_URL",
+          "description": "QR code decodes to a URL",
+          "category": "url_phishing",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-CE2D9007-001",
+          "source": "Pattern Matching",
+          "observation": "QR code decodes to a URL"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_PHISHING threat.",
+        "evidence_summary": [
+          "QR code decodes to a URL"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit this URL or enter any data.",
+        "The URL may be designed to steal your information.",
+        "Verify the intended service through its official domain.",
+        "Report this URL to your browser's safe browsing service."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-CE2D9007",
+        "generated_at": "2026-08-29T03:27:04.587333Z",
+        "threat_category": "URL_PHISHING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_PHIS",
+        "title": "Recognizing Malicious URLs",
+        "why_it_works": "Attackers use deceptive URLs that mimic legitimate websites. They exploit the fact that most people don't carefully examine URLs before clicking.",
+        "how_to_spot": [
+          "Look for misspelled brand names (e.g., 'paypa1.com' instead of 'paypal.com')",
+          "Be wary of URLs with IP addresses instead of domain names",
+          "Check for suspicious top-level domains (.xyz, .tk, .click)",
+          "Watch for excessive subdomains (e.g., 'login.verify.account.evil.com')"
+        ],
+        "quiz": {
+          "question": "Which URL is most likely a phishing attempt?",
+          "options": [
+            "https://www.paypal.com/login",
+            "http://paypal-verify.account-security.xyz/login",
+            "https://www.paypal.com/us/signin",
+            "https://paypal.com"
+          ],
+          "correct_answer": 1,
+          "explanation": "The URL 'paypal-verify.account-security.xyz' uses a suspicious domain (.xyz) and mimics PayPal's branding. Always check the actual domain name."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-041",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.3123867511749268,
+    "response": {
+      "case_id": "CYB-60FF8DC9",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-60FF8DC9",
+        "generated_at": "2026-08-29T03:27:05.924999Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-042",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.5723915100097656,
+    "response": {
+      "case_id": "CYB-F029C25F",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-F029C25F",
+        "generated_at": "2026-08-29T03:27:07.492357Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-043",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.2002599239349365,
+    "response": {
+      "case_id": "CYB-2164652A",
+      "classification": "LOW",
+      "risk_score": 22.5,
+      "confidence": 0.65,
+      "threat_type": "FINANCIAL_FRAUD",
+      "decision_summary": "FINANCIAL_FRAUD activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "PAYMENT_DEST",
+          "description": "QR code contains payment-related destination",
+          "category": "financial_fraud",
+          "severity": 0.75
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-2164652A-001",
+          "source": "Pattern Matching",
+          "observation": "QR code contains payment-related destination"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a FINANCIAL_FRAUD threat.",
+        "evidence_summary": [
+          "QR code contains payment-related destination"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not transfer money or approve any payment requests.",
+        "Do not share banking credentials, UPI PINs, or OTPs.",
+        "Do not approve unknown payment requests on your banking app.",
+        "Contact your financial institution through its official channel.",
+        "File a fraud complaint with your bank if you already transacted."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-2164652A",
+        "generated_at": "2026-08-29T03:27:08.700403Z",
+        "threat_category": "FINANCIAL_FRAUD",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-FINANCIA",
+        "title": "Financial Fraud & Payment Scams",
+        "why_it_works": "Scammers create urgency around financial transactions, claiming refunds, prizes, or payment failures to trick you into transferring money or sharing banking credentials.",
+        "how_to_spot": [
+          "Unexpected refund or prize notifications",
+          "Requests to share UPI PIN, OTP, or banking passwords",
+          "Pressure to act immediately on financial matters",
+          "Unknown payment requests from unfamiliar sources"
+        ],
+        "quiz": {
+          "question": "A caller from 'your bank' asks for your OTP to process a refund. What should you do?",
+          "options": [
+            "Share the OTP since they are from the bank",
+            "Ask them to call back later",
+            "Hang up and call the bank's official number to verify",
+            "Share only part of the OTP"
+          ],
+          "correct_answer": 2,
+          "explanation": "Banks never ask for OTPs over the phone. Hang up and call the official bank number to verify any claims."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-044",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.2459540367126465,
+    "response": {
+      "case_id": "CYB-F96E26B7",
+      "classification": "LOW",
+      "risk_score": 24.0,
+      "confidence": 0.65,
+      "threat_type": "URL_PHISHING",
+      "decision_summary": "URL_PHISHING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "SUSPICIOUS_URL",
+          "description": "QR code decodes to a URL",
+          "category": "url_phishing",
+          "severity": 0.5
+        },
+        {
+          "name": "CREDENTIAL_PAGE",
+          "description": "QR code points to a credential harvesting page",
+          "category": "credential_harvesting",
+          "severity": 0.8
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-F96E26B7-001",
+          "source": "Pattern Matching",
+          "observation": "QR code decodes to a URL"
+        },
+        {
+          "evidence_id": "EV-CYB-F96E26B7-002",
+          "source": "Pattern Matching",
+          "observation": "QR code points to a credential harvesting page"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_PHISHING threat.",
+        "evidence_summary": [
+          "QR code decodes to a URL",
+          "QR code points to a credential harvesting page"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit this URL or enter any data.",
+        "The URL may be designed to steal your information.",
+        "Verify the intended service through its official domain.",
+        "Report this URL to your browser's safe browsing service."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-F96E26B7",
+        "generated_at": "2026-08-29T03:27:09.931805Z",
+        "threat_category": "URL_PHISHING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_PHIS",
+        "title": "Recognizing Malicious URLs",
+        "why_it_works": "Attackers use deceptive URLs that mimic legitimate websites. They exploit the fact that most people don't carefully examine URLs before clicking.",
+        "how_to_spot": [
+          "Look for misspelled brand names (e.g., 'paypa1.com' instead of 'paypal.com')",
+          "Be wary of URLs with IP addresses instead of domain names",
+          "Check for suspicious top-level domains (.xyz, .tk, .click)",
+          "Watch for excessive subdomains (e.g., 'login.verify.account.evil.com')"
+        ],
+        "quiz": {
+          "question": "Which URL is most likely a phishing attempt?",
+          "options": [
+            "https://www.paypal.com/login",
+            "http://paypal-verify.account-security.xyz/login",
+            "https://www.paypal.com/us/signin",
+            "https://paypal.com"
+          ],
+          "correct_answer": 1,
+          "explanation": "The URL 'paypal-verify.account-security.xyz' uses a suspicious domain (.xyz) and mimics PayPal's branding. Always check the actual domain name."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-045",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.220339298248291,
+    "response": {
+      "case_id": "CYB-77DDA6B3",
+      "classification": "LOW",
+      "risk_score": 22.5,
+      "confidence": 0.65,
+      "threat_type": "FINANCIAL_FRAUD",
+      "decision_summary": "FINANCIAL_FRAUD activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "PAYMENT_DEST",
+          "description": "QR code contains payment-related destination",
+          "category": "financial_fraud",
+          "severity": 0.75
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-77DDA6B3-001",
+          "source": "Pattern Matching",
+          "observation": "QR code contains payment-related destination"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a FINANCIAL_FRAUD threat.",
+        "evidence_summary": [
+          "QR code contains payment-related destination"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not transfer money or approve any payment requests.",
+        "Do not share banking credentials, UPI PINs, or OTPs.",
+        "Do not approve unknown payment requests on your banking app.",
+        "Contact your financial institution through its official channel.",
+        "File a fraud complaint with your bank if you already transacted."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-77DDA6B3",
+        "generated_at": "2026-08-29T03:27:11.171742Z",
+        "threat_category": "FINANCIAL_FRAUD",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-FINANCIA",
+        "title": "Financial Fraud & Payment Scams",
+        "why_it_works": "Scammers create urgency around financial transactions, claiming refunds, prizes, or payment failures to trick you into transferring money or sharing banking credentials.",
+        "how_to_spot": [
+          "Unexpected refund or prize notifications",
+          "Requests to share UPI PIN, OTP, or banking passwords",
+          "Pressure to act immediately on financial matters",
+          "Unknown payment requests from unfamiliar sources"
+        ],
+        "quiz": {
+          "question": "A caller from 'your bank' asks for your OTP to process a refund. What should you do?",
+          "options": [
+            "Share the OTP since they are from the bank",
+            "Ask them to call back later",
+            "Hang up and call the bank's official number to verify",
+            "Share only part of the OTP"
+          ],
+          "correct_answer": 2,
+          "explanation": "Banks never ask for OTPs over the phone. Hang up and call the official bank number to verify any claims."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-046",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.207160472869873,
+    "response": {
+      "case_id": "CYB-3C266DE0",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-3C266DE0",
+        "generated_at": "2026-08-29T03:27:12.371264Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-047",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.249363899230957,
+    "response": {
+      "case_id": "CYB-8A094354",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-8A094354",
+        "generated_at": "2026-08-29T03:27:13.633950Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-048",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.3400075435638428,
+    "response": {
+      "case_id": "CYB-ADE5A31F",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-ADE5A31F",
+        "generated_at": "2026-08-29T03:27:14.916707Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "QR-049",
+    "category": "QR",
+    "status": "PASS",
+    "latency": 1.2688655853271484,
+    "response": {
+      "case_id": "CYB-87CC9139",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-87CC9139",
+        "generated_at": "2026-08-29T03:27:16.236425Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-050",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.2921662330627441,
+    "response": {
+      "case_id": "CYB-CA2E6817",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-CA2E6817",
+        "generated_at": "2026-08-29T03:27:17.531241Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-051",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.1197259426116943,
+    "response": {
+      "case_id": "CYB-67AAFB41",
+      "classification": "LOW",
+      "risk_score": 19.5,
+      "confidence": 0.65,
+      "threat_type": "CREDENTIAL_HARVESTING",
+      "decision_summary": "CREDENTIAL_HARVESTING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "LOGIN_PATH",
+          "description": "URL contains credential/authentication-related path keywords",
+          "category": "credential_harvesting",
+          "severity": 0.65
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-67AAFB41-001",
+          "source": "Pattern Matching",
+          "observation": "URL contains credential/authentication-related path keywords"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a CREDENTIAL_HARVESTING threat.",
+        "evidence_summary": [
+          "URL contains credential/authentication-related path keywords"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not enter your password or any login credentials on this page.",
+        "Close the page immediately and do not interact further.",
+        "Navigate manually to the official website by typing the URL yourself.",
+        "If you already entered credentials, change your password immediately through the official service.",
+        "Enable two-factor authentication on all important accounts.",
+        "Report this page to the service being impersonated."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-67AAFB41",
+        "generated_at": "2026-08-29T03:27:18.660338Z",
+        "threat_category": "CREDENTIAL_HARVESTING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-CREDENTI",
+        "title": "How Credential Harvesting Works",
+        "why_it_works": "Attackers set up fake login pages that look identical to real ones. When you enter your credentials, they capture them instantly and gain access to your real account.",
+        "how_to_spot": [
+          "The URL domain does not match the service you expect",
+          "The page asks for more information than usual (e.g., SSN, bank details)",
+          "The SSL certificate does not match the organization",
+          "After submitting, you are redirected to the real site (to avoid suspicion)"
+        ],
+        "quiz": {
+          "question": "A website asks for your bank login AND your ATM PIN. Is this normal?",
+          "options": [
+            "Yes, banks always need both for verification",
+            "No, legitimate banks never ask for your ATM PIN online",
+            "Only if the URL starts with HTTPS",
+            "Yes, if the email looks official"
+          ],
+          "correct_answer": 1,
+          "explanation": "Banks never ask for ATM PINs online. This is a clear sign of credential harvesting."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-052",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.1829910278320312,
+    "response": {
+      "case_id": "CYB-B626F90B",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-B626F90B-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-B626F90B",
+        "generated_at": "2026-08-29T03:27:19.827363Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-053",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.3633406162261963,
+    "response": {
+      "case_id": "CYB-C1279AAC",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-C1279AAC-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-C1279AAC",
+        "generated_at": "2026-08-29T03:27:21.194703Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-054",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.3567495346069336,
+    "response": {
+      "case_id": "CYB-9D1C59D8",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-9D1C59D8-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-9D1C59D8",
+        "generated_at": "2026-08-29T03:27:22.552521Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-055",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.2515068054199219,
+    "response": {
+      "case_id": "CYB-68E9A477",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-68E9A477-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-68E9A477",
+        "generated_at": "2026-08-29T03:27:23.809634Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-056",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.1962556838989258,
+    "response": {
+      "case_id": "CYB-A52077DA",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-A52077DA-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-A52077DA",
+        "generated_at": "2026-08-29T03:27:24.990684Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-057",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.4992945194244385,
+    "response": {
+      "case_id": "CYB-0723FA9D",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-0723FA9D-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-0723FA9D",
+        "generated_at": "2026-08-29T03:27:26.491997Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-058",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.222158670425415,
+    "response": {
+      "case_id": "CYB-3AD3E344",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-3AD3E344-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-3AD3E344",
+        "generated_at": "2026-08-29T03:27:27.723861Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "WEB-059",
+    "category": "WEB",
+    "status": "PASS",
+    "latency": 1.2472996711730957,
+    "response": {
+      "case_id": "CYB-FA482211",
+      "classification": "LOW",
+      "risk_score": 12.0,
+      "confidence": 0.65,
+      "threat_type": "URL_SECURITY",
+      "decision_summary": "URL_SECURITY activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "HTTP_NO_TLS",
+          "description": "URL uses HTTP instead of HTTPS (unencrypted)",
+          "category": "url_security",
+          "severity": 0.4
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-FA482211-001",
+          "source": "Pattern Matching",
+          "observation": "URL uses HTTP instead of HTTPS (unencrypted)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_SECURITY threat.",
+        "evidence_summary": [
+          "URL uses HTTP instead of HTTPS (unencrypted)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Avoid entering sensitive data on HTTP (non-HTTPS) pages.",
+        "Verify the site's SSL certificate before submitting information.",
+        "Use a VPN when accessing sensitive sites on public networks."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-FA482211",
+        "generated_at": "2026-08-29T03:27:28.955058Z",
+        "threat_category": "URL_SECURITY",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_SECU",
+        "title": "Basic Security Hygiene",
+        "why_it_works": "Many attacks succeed because of poor security habits. Strong fundamentals protect against the majority of common threats.",
+        "how_to_spot": [
+          "Keep all software and operating systems updated",
+          "Use unique, strong passwords for every account",
+          "Enable two-factor authentication wherever possible",
+          "Be skeptical of unsolicited communications"
+        ],
+        "quiz": {
+          "question": "Why is reusing passwords across multiple accounts dangerous?",
+          "options": [
+            "It makes passwords harder to remember",
+            "If one account is breached, all accounts using that password are compromised",
+            "It slows down your computer",
+            "It violates terms of service"
+          ],
+          "correct_answer": 1,
+          "explanation": "Password reuse means one breach can cascade across all your accounts. Always use unique passwords."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SOCIAL-060",
+    "category": "SOCIAL",
+    "status": "PASS",
+    "latency": 1.2339704036712646,
+    "response": {
+      "case_id": "CYB-D1553D89",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-D1553D89",
+        "generated_at": "2026-08-29T03:27:30.201007Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SOCIAL-061",
+    "category": "SOCIAL",
+    "status": "PASS",
+    "latency": 1.1839332580566406,
+    "response": {
+      "case_id": "CYB-5960F933",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-5960F933",
+        "generated_at": "2026-08-29T03:27:31.392042Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SOCIAL-062",
+    "category": "SOCIAL",
+    "status": "PASS",
+    "latency": 1.3446965217590332,
+    "response": {
+      "case_id": "CYB-91CBE0E6",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-91CBE0E6",
+        "generated_at": "2026-08-29T03:27:32.691100Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SOCIAL-063",
+    "category": "SOCIAL",
+    "status": "PASS",
+    "latency": 1.458801507949829,
+    "response": {
+      "case_id": "CYB-52FAA220",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-52FAA220",
+        "generated_at": "2026-08-29T03:27:34.172259Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SOCIAL-064",
+    "category": "SOCIAL",
+    "status": "PASS",
+    "latency": 1.1667189598083496,
+    "response": {
+      "case_id": "CYB-04E28FA8",
+      "classification": "LOW",
+      "risk_score": 15.0,
+      "confidence": 0.65,
+      "threat_type": "URL_PHISHING",
+      "decision_summary": "URL_PHISHING activity detected.",
+      "suspicious_patterns": [
+        {
+          "name": "SUSPICIOUS_LINK",
+          "description": "SMS contains a clickable link (common in smishing)",
+          "category": "url_phishing",
+          "severity": 0.5
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "EV-CYB-04E28FA8-001",
+          "source": "Pattern Matching",
+          "observation": "SMS contains a clickable link (common in smishing)"
+        }
+      ],
+      "explanation": {
+        "what": "The content has been classified as LOW.",
+        "why": "This classification is based on indicators pointing to a URL_PHISHING threat.",
+        "evidence_summary": [
+          "SMS contains a clickable link (common in smishing)"
+        ],
+        "confidence": "System confidence is MEDIUM.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "Do not visit this URL or enter any data.",
+        "The URL may be designed to steal your information.",
+        "Verify the intended service through its official domain.",
+        "Report this URL to your browser's safe browsing service."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-04E28FA8",
+        "generated_at": "2026-08-29T03:27:35.358294Z",
+        "threat_category": "URL_PHISHING",
+        "severity_level": "LOW",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-URL_PHIS",
+        "title": "Recognizing Malicious URLs",
+        "why_it_works": "Attackers use deceptive URLs that mimic legitimate websites. They exploit the fact that most people don't carefully examine URLs before clicking.",
+        "how_to_spot": [
+          "Look for misspelled brand names (e.g., 'paypa1.com' instead of 'paypal.com')",
+          "Be wary of URLs with IP addresses instead of domain names",
+          "Check for suspicious top-level domains (.xyz, .tk, .click)",
+          "Watch for excessive subdomains (e.g., 'login.verify.account.evil.com')"
+        ],
+        "quiz": {
+          "question": "Which URL is most likely a phishing attempt?",
+          "options": [
+            "https://www.paypal.com/login",
+            "http://paypal-verify.account-security.xyz/login",
+            "https://www.paypal.com/us/signin",
+            "https://paypal.com"
+          ],
+          "correct_answer": 1,
+          "explanation": "The URL 'paypal-verify.account-security.xyz' uses a suspicious domain (.xyz) and mimics PayPal's branding. Always check the actual domain name."
+        }
+      }
+    }
+  },
+  {
+    "test_id": "SOCIAL-065",
+    "category": "SOCIAL",
+    "status": "PASS",
+    "latency": 1.221022129058838,
+    "response": {
+      "case_id": "CYB-3EB7132C",
+      "classification": "UNVERIFIED",
+      "risk_score": 0.0,
+      "confidence": 0.35,
+      "threat_type": "UNKNOWN",
+      "decision_summary": "No significant threats detected in the provided content.",
+      "suspicious_patterns": [],
+      "evidence": [],
+      "explanation": {
+        "what": "The content has been classified as UNVERIFIED.",
+        "why": "No significant malicious indicators were found.",
+        "evidence_summary": [
+          "No concrete evidence found."
+        ],
+        "confidence": "System confidence is LOW.",
+        "uncertainty": "Analysis may lack complete certainty due to limited data."
+      },
+      "recommendations": [
+        "The system could not confidently analyze this content.",
+        "Do not interact with the content until it can be verified.",
+        "Try submitting the content again or use an alternative analysis tool.",
+        "Report the content if you believe it may be suspicious."
+      ],
+      "report_metadata": {
+        "report_id": "REP-CYB-3EB7132C",
+        "generated_at": "2026-08-29T03:27:36.583179Z",
+        "threat_category": "UNKNOWN",
+        "severity_level": "UNVERIFIED",
+        "status": "DRAFT"
+      },
+      "education": {
+        "module_id": "MOD-UNKNOWN",
+        "title": "General Cybersecurity Awareness",
+        "why_it_works": "Cyber threats constantly evolve. Understanding basic security principles helps you recognize and avoid new attack types as they emerge.",
+        "how_to_spot": [
+          "Any unsolicited communication requesting personal information",
+          "Offers that seem too good to be true",
+          "Pressure to act quickly without time to think",
+          "Requests to bypass standard security procedures"
+        ],
+        "quiz": {
+          "question": "What is the single most important thing you can do to protect your online accounts?",
+          "options": [
+            "Use the same strong password everywhere",
+            "Use unique passwords and enable two-factor authentication",
+            "Only use websites that look professional",
+            "Never use public WiFi"
+          ],
+          "correct_answer": 1,
+          "explanation": "Using unique passwords with two-factor authentication is the most effective protection against account compromise."
+        }
+      }
+    }
+  }
+]

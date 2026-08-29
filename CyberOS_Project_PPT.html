@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CyberOS_Project_PPT.qd</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; padding: 40px; max-width: 900px; margin: 0 auto; color: #333; background: #fff; }
+        h1, h2, h3 { color: #111; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; margin-top: 24px; }
+        pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow: auto; }
+        code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; background: #f6f8fa; padding: 0.2em 0.4em; border-radius: 3px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+        th, td { border: 1px solid #dfe2e5; padding: 6px 13px; }
+        th { background: #f6f8fa; }
+        .mermaid { text-align: center; margin: 20px 0; }
+        @media print { body { padding: 0; } }
+    </style>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</head>
+<body>
+    <h1>CyberOS — Final Jury Presentation (PPT Content)</h1>
+<h2>Slide 1: Title Slide</h2>
+<p><strong>CyberOS: The Multimodal Cyber Shield</strong>
+<em>Problem Statement:</em> PS#5 (Cyber Shield) + PS26145
+<em>Core Value:</em> Connecting the dots between content, context, and network behavior.</p>
+<h2>Slide 2: The Problem</h2>
+<ul>
+<li><strong>Fragmented Tooling:</strong> Users receive phishing via SMS, Email, QR, and Web.</li>
+<li><strong>Lack of Context:</strong> Traditional scanners say "Bad" but don't explain "Why" or "How".</li>
+<li><strong>Missing Network Truth:</strong> An email might look safe, but post-click behavior reveals beaconing.</li>
+<li><strong>The PS#5 Mandate:</strong> Protect digital nagriks from cyber-fraud with intelligent detection.</li>
+</ul>
+<h2>Slide 3: The CyberOS Solution</h2>
+<ul>
+<li><strong>Multimodal Ingestion:</strong> Unified API for SMS, URL, Email, QR, and PCAPs.</li>
+<li><strong>Layered Detection:</strong> Lexical rules + Threat Intel + XGBoost ML + Isolated Web Sandboxing.</li>
+<li><strong>Explainable Risk:</strong> Generates 0-100 scores backed by natural language explanations.</li>
+<li><strong>Education First:</strong> Doesn't just block; teaches the user what happened.</li>
+</ul>
+<h2>Slide 4: System Architecture</h2>
+<div class="mermaid">graph LR
+    Payload --> FastAPI
+    Zeek --> Redpanda --> XGBoost
+    FastAPI --> MongoDB
+    XGBoost --> MongoDB
+    MongoDB --> NextJS
+</div>
+
+<h2>Slide 5: The Core Differentiator</h2>
+<ul>
+<li><strong>Not just an LLM Wrapper:</strong> We don't rely on a chatbot API for security decisions.</li>
+<li><strong>The Evidence Fabric:</strong> Every detection is cryptographically tied to its source event.</li>
+<li><strong>Entity Graph Correlation:</strong> We visually connect SMS -&gt; URL -&gt; IP instead of throwing isolated alerts.</li>
+<li><strong>Local ML:</strong> XGBoost provides fast, private, explainable tabular inference.</li>
+</ul>
+<h2>Slide 6: Security &amp; Resilience</h2>
+<ul>
+<li><strong>SSRF Protection:</strong> Web sandboxing explicitly blocks internal private IPs (RFC-1918).</li>
+<li><strong>Graceful Degradation:</strong> If the ML worker or Threat Intel fails, the API gracefully marks it as DEGRADED and completes the scan using local heuristics.</li>
+<li><strong>Release-Gate Tested:</strong> Subjected to 100-case automated torture tests and adversarial PCAPs.</li>
+</ul>
+<h2>Slide 7: Live Demo Walkthrough</h2>
+<ol>
+<li><strong>Inject SMS Phishing:</strong> Watch the API parse the link.</li>
+<li><strong>Network Replay:</strong> Zeek catches the C2 beaconing.</li>
+<li><strong>Entity Graph:</strong> See the SMS link mapped directly to the malicious IP.</li>
+<li><strong>Risk Explanation:</strong> The dashboard clearly explains the attack vector.</li>
+</ol>
+<h2>Slide 8: Future Roadmap</h2>
+<ul>
+<li><strong>Scale:</strong> Kubernetes autoscaling for the browser-analysis worker.</li>
+<li><strong>Intelligence:</strong> Cross-tenant federated learning for zero-day threat patterns.</li>
+<li><strong>Integration:</strong> Native SOAR/SIEM webhook exports.</li>
+</ul>
+<h2>Slide 9: Q&amp;A</h2>
+<ul>
+<li>"We are ready to answer your technical, ML, and architectural questions."</li>
+</ul>
+</body>
+</html>
