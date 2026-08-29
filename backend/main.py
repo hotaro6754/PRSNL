@@ -240,6 +240,8 @@ async def metrics_snapshot_task():
             metrics_history.append({
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "flows_per_sec": flows_sec,
+                "flows_processed": current_flows,
+                "ml_inferences": ML_INFERENCES._value.get(),
                 "total_active_cases": len([c for c in correlation_engine.get_all_cases() if c.status == "OPEN"]),
                 "alerts_per_min": round(ALERTS_GENERATED._value.get() / max(1, (time.time() - telemetry["start_time"]) / 60), 2)
             })
@@ -487,15 +489,34 @@ async def get_case_by_id(case_id: str, tenant_id: str = Depends(get_current_tena
 
     # Ensure 5-layer explanation is attached to the case object for the frontend
     if "explanation" not in case or not case["explanation"]:
-        from backend.engines import analyze_content
-        # We can dynamically construct an explanation from the threat_summary and alerts
+        severity = case.get("severity", "UNKNOWN")
+        threat_type = case.get("threat_summary", "Anomaly")
+        entity_type = case.get("primary_entity_type", "network/host").upper()
+        entity = case.get("primary_entity", case.get("source_ip", "Unknown Entity"))
+        
+        alerts = case.get("alerts", [])
+        evidence_list = []
+        for a in alerts:
+            if "evidence" in a and isinstance(a["evidence"], list):
+                for ev in a["evidence"]:
+                    evidence_list.append(f"{ev.get('feature', 'indicator')}: {ev.get('value', 'unknown')} (Contribution: {ev.get('contribution', 0)})")
+            else:
+                evidence_list.append(f"Detected {a.get('threat_class', 'suspicious behavior')} from {a.get('source_ip', 'unknown')}")
+        
+        if not evidence_list:
+            evidence_list = [f"Raw indicator: {threat_type} flagged by Risk Engine."]
+
+        action = "Immediate remediation required. Isolate host and rotate credentials." if severity in ["CRITICAL", "HIGH"] else "Monitor for further anomalous activity."
+        if entity_type in ["URL", "EMAIL", "SMS", "QR"]:
+            action = f"Block interaction with this {entity_type} payload and alert the targeted user." if severity in ["CRITICAL", "HIGH"] else f"No immediate action required. This {entity_type} appears benign."
+
         case["explanation"] = {
-            "what": f"The case has been classified as {case.get('severity', 'UNKNOWN')}.",
-            "why": case.get('threat_summary', 'Correlated threat detected across multiple alerts.'),
-            "evidence_summary": [a.get('threat_class', 'Alert') for a in case.get('alerts', [])][:5],
-            "confidence": "System confidence is HIGH." if case.get('severity') in ['CRITICAL', 'HIGH'] else "System confidence is MEDIUM.",
-            "action": "Investigate correlated alerts. Isolate affected host if critical.",
-            "uncertainty": None
+            "what": f"CyberOS detected a {severity} risk event involving {entity_type}: {entity[:50]}.",
+            "why": f"The Risk Engine classified this as '{threat_type}' due to correlated signals surpassing the acceptable anomaly threshold.",
+            "evidence_summary": evidence_list[:6],
+            "confidence": "System confidence is HIGH based on direct ML inference and deterministic rules." if severity in ["CRITICAL", "HIGH"] else "System confidence is MEDIUM due to isolated/weak signals.",
+            "action": action,
+            "uncertainty": "Telemetry may be incomplete if the payload was encrypted or if the host is outside the managed boundary."
         }
         
     return case
@@ -876,7 +897,34 @@ async def scan_content(request: ScanRequest):
     except Exception:
         pass
         
+
+    try:
+        from backend.contracts.case import CyberCase
+        
+        # Build the case object
+        c = {
+            "case_id": _alert["alert_id"],
+            "organization_id": "tenant-1",
+            "primary_entity": request.content,
+            "primary_entity_type": request.type.lower(), # IMPORTANT! This maps to URL, SMS, EMAIL, QR
+            "source_ip": request.type.upper(),
+            "status": "OPEN",
+            "severity": final_result["classification"],
+            "risk_score": final_result.get("risk_score", 0.0),
+            "title": f"Scan Investigation: {request.type.upper()}",
+            "threat_summary": final_result["threat_type"],
+            "alerts": [_alert],
+            "first_seen": _alert["timestamp"],
+            "last_seen": _alert["timestamp"],
+            "created_at": _alert["timestamp"],
+            "updated_at": _alert["timestamp"],
+        }
+        await mongo.upsert_case(c)
+    except Exception as e:
+        logger.error(f"Failed to persist scan case: {e}")
+        
     return final_result
+
 
 @app.post("/api/models/register")
 async def register_model(entry: ModelRegistryEntry):
