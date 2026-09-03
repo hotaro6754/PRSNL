@@ -6,7 +6,8 @@ import { usePathname } from 'next/navigation'
 import { 
   Shield, Activity, Layers, Terminal, AlertTriangle, 
   Settings, ChevronRight, Search, Bell, ExternalLink,
-  Lock, Radio, Cpu, Network, FileText, Database, PanelLeftClose, PanelLeft, GripVertical
+  Lock, Radio, Cpu, Network, FileText, Database, PanelLeftClose, PanelLeft, GripVertical,
+  BookOpen
 } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -46,6 +47,12 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/ml', label: 'AI/ML Anomaly Lab', icon: <Layers className="w-4 h-4" /> },
       { href: '/health', label: 'Diode Gateway Health', icon: <Shield className="w-4 h-4" /> },
       { href: '/logs', label: 'Ingress Audit Logs', icon: <FileText className="w-4 h-4" /> },
+    ]
+  },
+  {
+    label: 'ACADEMY & TRAINING',
+    items: [
+      { href: '/course', label: 'Master Course (PS26145)', icon: <BookOpen className="w-4 h-4" />, badge: '53 MODS' },
     ]
   }
 ]
