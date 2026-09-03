@@ -18,3 +18,8 @@ Thumbs.db
 # Logs at runtime
 logs/backend.log
 data/buffers/
+
+# WXT Extension build artifacts
+.output/
+.wxt/
+
