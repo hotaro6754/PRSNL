@@ -36,15 +36,24 @@ export default function CyberOSDashboard() {
         if (tunnelRes?.ok) setTunnelStats(await tunnelRes.json())
         if (casesRes?.ok) {
           const cases = await casesRes.json()
-          const mapped = cases.slice(0, 100).map((c: any) => ({
-            time: new Date(c.created_at || c.first_seen || Date.now()).toLocaleTimeString('en-IN', {hour: '2-digit', minute: '2-digit', second: '2-digit'}),
-            source: (c.primary_entity_type || 'url').toUpperCase(),
-            entity: (c.primary_entity || c.source_ip || 'unknown').substring(0, 40),
-            type: (c.attack_chain && c.attack_chain[0]) || 'ANOMALY',
-            severity: c.severity || 'LOW',
-            score: Math.min(100, Math.round(c.risk_score || 0)),
-            case_id: (c.case_id || '').substring(0, 8),
-          }))
+          const mapped = cases.slice(0, 100).map((c: any) => {
+            const rawScore = (c.risk_score !== undefined && c.risk_score !== null)
+              ? c.risk_score
+              : (c.severity === 'CRITICAL' ? 95 : (c.severity === 'HIGH' ? 85 : 65))
+            const cleanScore = Math.min(100, Math.max(10, Math.round(rawScore > 100 ? rawScore / 100 : rawScore)))
+            const threatTitle = (c.threat_summary || (c.attack_chain && c.attack_chain[0]) || 'UNIDIRECTIONAL_ANOMALY').toUpperCase()
+            const entityDesc = (c.primary_entity || (c.source_ip ? `${c.source_ip} -> ${c.destination_ip || '10.0.0.1'}` : 'SIMPLEX_INGRESS')).substring(0, 38)
+            
+            return {
+              time: new Date(c.created_at || c.first_seen || Date.now()).toLocaleTimeString('en-IN', {hour: '2-digit', minute: '2-digit', second: '2-digit'}),
+              source: 'DIODE_RX',
+              entity: entityDesc,
+              type: threatTitle,
+              severity: c.severity || 'HIGH',
+              score: cleanScore,
+              case_id: (c.case_id || '').substring(0, 8),
+            }
+          })
           setThreats(mapped)
         }
       } catch (err) {}
@@ -61,9 +70,9 @@ export default function CyberOSDashboard() {
   const ddosCount = threats.filter(t => t.type.includes('DOS') || t.type.includes('FLOOD') || t.type.includes('SYN')).length
   const beaconCount = threats.filter(t => t.type.includes('BEACON') || t.type.includes('C2')).length
   const dnsCount = threats.filter(t => t.type.includes('TUNNEL') || t.type.includes('DNS') || t.type.includes('DGA')).length
-  const tlsCount = threats.filter(t => t.type.includes('TLS') || t.type.includes('ENCRYPTED') || t.type.includes('SSL')).length
+  const tlsCount = threats.filter(t => t.type.includes('TLS') || t.type.includes('ENCRYPTED') || t.type.includes('SESSION') || t.type.includes('JA3')).length
   const scanCount = threats.filter(t => t.type.includes('SCAN') || t.type.includes('PROBE') || t.type.includes('RECON')).length
-  const exfilCount = threats.filter(t => t.type.includes('EXFIL') || t.type.includes('ASYMMETRIC')).length
+  const exfilCount = threats.filter(t => t.type.includes('EXFIL') || t.type.includes('ASYMMETRIC') || t.type.includes('HTTP')).length
   const critCount = threats.filter(t => t.severity === 'CRITICAL' || t.severity === 'HIGH').length
 
   // Network Threat Vector Data for the 6 NTRO Classes

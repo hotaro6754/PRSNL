@@ -435,7 +435,7 @@ app.include_router(report_router)
 @app.get("/api/cases")
 async def get_cases(tenant_id: str = Depends(get_current_tenant)):
     try:
-        cursor = mongo.cases.find({"organization_id": tenant_id}).sort("last_updated", -1).limit(100)
+        cursor = mongo.cases.find({"organization_id": tenant_id}).sort([("created_at", -1), ("last_seen", -1)]).limit(100)
         cases = await cursor.to_list(length=100)
         for c in cases:
             if "_id" in c:
