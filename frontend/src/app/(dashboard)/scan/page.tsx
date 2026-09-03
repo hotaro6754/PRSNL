@@ -4,8 +4,12 @@ import React, { useState, useEffect } from 'react'
 import { 
   Activity, ShieldAlert, Radio, Upload, Play, Terminal, Database, 
   ArrowRight, Zap, Network, ShieldCheck, AlertTriangle, RefreshCw,
-  Search, BookOpen, CheckCircle, HelpCircle, FileText, Cpu, Eye
+  Search, BookOpen, CheckCircle, HelpCircle, FileText, Cpu, Eye, Check
 } from 'lucide-react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { Badge, BadgeVariant } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
+import { TableContainer, Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table'
 
 const THREAT_VECTORS = [
   {
@@ -115,10 +119,6 @@ export default function PassiveFlowScanPage() {
   const [mlLoading, setMlLoading] = useState(false)
   const [mlResult, setMlResult] = useState<any>(null)
 
-  // Sniffer State
-  const [snifferRunning, setSnifferRunning] = useState(false)
-
-  // Fetch recent cases on mount
   const fetchRecentCases = async () => {
     try {
       const res = await fetch('http://localhost:8000/api/cases')
@@ -132,19 +132,8 @@ export default function PassiveFlowScanPage() {
     } catch {}
   }
 
-  const fetchSniffer = async () => {
-    try {
-      const res = await fetch('http://localhost:8000/api/network/sniffer/status')
-      if (res.ok) {
-        const data = await res.json()
-        setSnifferRunning(data.is_running)
-      }
-    } catch {}
-  }
-
   useEffect(() => {
     fetchRecentCases()
-    fetchSniffer()
   }, [])
 
   const handleLookupCase = async (idToQuery?: string) => {
@@ -207,434 +196,384 @@ export default function PassiveFlowScanPage() {
     setBytesTransferred(vec.bytes)
   }
 
+  const getSeverityVariant = (sev: string): BadgeVariant => {
+    switch (sev?.toUpperCase()) {
+      case 'CRITICAL': return 'critical'
+      case 'HIGH': return 'warning'
+      case 'MEDIUM': return 'neutral'
+      case 'LOW': return 'secure'
+      default: return 'neutral'
+    }
+  }
+
   return (
-    <div className="space-y-6 max-w-[1600px] animate-in fade-in duration-500 p-6 font-mono">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-4">
+    <div className="space-y-6 max-w-[1500px] mx-auto animate-in fade-in duration-300 font-mono">
+      {/* PAGE HEADER & TAB SWITCHER */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/[0.06] pb-4">
         <div>
-          <div className="flex items-center gap-3">
-            <Radio className="w-6 h-6 text-blue-500 animate-pulse" />
-            <h1 className="text-xl font-bold text-white tracking-widest uppercase">
-              NTRO PS #26145: Simplex Threat Ingestion & Forensics Terminal
-            </h1>
-          </div>
-          <p className="text-xs text-slate-400 mt-1">
-            Passive optical data diode monitoring enclave &bull; 0 reverse return packets &bull; AI/ML flow classifier &bull; CISA diode defense awareness
+          <h1 className="text-base font-bold tracking-tight text-white font-mono uppercase flex items-center gap-2">
+            <Search className="w-4 h-4 text-blue-400" />
+            Simplex Threat Ingestion & Analysis Terminal
+          </h1>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Passive optical diode telemetry intake, ML vector inference, and forensic case ledger.
           </p>
         </div>
 
-        {/* MODE TABS */}
-        <div className="flex items-center gap-2 bg-[#111] p-1 border border-slate-800 rounded-lg">
+        {/* Segmented Tab Controls */}
+        <div className="flex p-1 bg-[#111318] border border-white/[0.08] rounded-md text-xs font-mono">
           <button
             onClick={() => setActiveTab('case_lookup')}
-            className={`px-4 py-2 rounded-md text-xs font-bold transition-colors flex items-center gap-2 ${
-              activeTab === 'case_lookup' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+            className={`px-3 py-1 rounded transition-all cursor-pointer ${
+              activeTab === 'case_lookup'
+                ? 'bg-white/[0.08] text-white font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <BookOpen className="w-4 h-4" />
-            Case Forensics & Awareness
+            Case ID Forensic Lookup
           </button>
           <button
             onClick={() => setActiveTab('ml_predictor')}
-            className={`px-4 py-2 rounded-md text-xs font-bold transition-colors flex items-center gap-2 ${
-              activeTab === 'ml_predictor' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+            className={`px-3 py-1 rounded transition-all cursor-pointer ${
+              activeTab === 'ml_predictor'
+                ? 'bg-white/[0.08] text-white font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Cpu className="w-4 h-4" />
-            Live AI/ML Threat Predictor
+            Simplex Stream Predictor (a-f)
           </button>
         </div>
       </div>
 
-      {/* TAB 1: CASE ID LOOKUP & DEFENSE AWARENESS */}
+      {/* TAB 1: CASE ID FORENSIC LOOKUP */}
       {activeTab === 'case_lookup' && (
-        <div className="space-y-6">
-          {/* SEARCH & RECENT SELECTOR */}
-          <div className="bg-[#111] border border-slate-800 p-5 rounded-xl space-y-4">
-            <div className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-              <Search className="w-4 h-4 text-blue-400" />
-              Paste Investigation Case ID to Inspect Evidence & Security Playbook
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="text"
-                placeholder="Paste Case ID (e.g. b3b04df6-3e08-4322-a7d5-5b6ec0fe0b0f)..."
-                value={caseIdInput}
-                onChange={(e) => setCaseIdInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLookupCase()}
-                className="flex-1 bg-[#0a0a0a] border border-slate-800 rounded-lg px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 font-mono"
-              />
-              <button
-                onClick={() => handleLookupCase()}
-                disabled={caseLoading}
-                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold text-xs rounded-lg transition-colors flex items-center justify-center gap-2"
-              >
-                {caseLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-                Retrieve Forensics
-              </button>
-            </div>
-
-            {/* QUICK PRESET CHIPS */}
-            {recentCases.length > 0 && (
-              <div className="pt-2 border-t border-slate-800/60 flex flex-wrap items-center gap-2">
-                <span className="text-[11px] text-slate-500 uppercase">Active Incidents:</span>
-                {recentCases.map((rc, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleLookupCase(rc.case_id)}
-                    className={`px-2.5 py-1 rounded text-[11px] border transition-colors ${
-                      caseIdInput === rc.case_id
-                        ? 'bg-blue-900/30 border-blue-500 text-blue-300'
-                        : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    {rc.threat_summary || 'Incident'} ({rc.case_id.substring(0, 8)})
-                  </button>
-                ))}
+        <div className="space-y-5">
+          {/* SEARCH & RECENT CASES */}
+          <Card>
+            <CardContent className="p-4 space-y-3">
+              <div className="flex flex-col sm:flex-row gap-2.5">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-500" />
+                  <input
+                    type="text"
+                    value={caseIdInput}
+                    onChange={(e) => setCaseIdInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleLookupCase()}
+                    placeholder="Enter Case ID (e.g., CASE-001, CASE-DGA-99, or UUID)..."
+                    className="w-full bg-[#0d0f14] border border-white/[0.08] rounded-md py-2 pl-9 pr-4 text-xs text-zinc-200 font-mono placeholder:text-zinc-600 focus:outline-none focus:border-blue-500/50"
+                  />
+                </div>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  loading={caseLoading}
+                  onClick={() => handleLookupCase()}
+                  icon={<Search className="w-3.5 h-3.5" />}
+                >
+                  Lookup Case
+                </Button>
               </div>
-            )}
-          </div>
+
+              {/* Recent Case Quick-Select Chips */}
+              {recentCases.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap pt-1 text-[11px]">
+                  <span className="text-zinc-500 text-[10px] uppercase font-semibold">Recent Cases:</span>
+                  {recentCases.map((rc) => (
+                    <button
+                      key={rc.case_id}
+                      onClick={() => handleLookupCase(rc.case_id)}
+                      className={`px-2 py-0.5 rounded border transition-colors cursor-pointer text-[11px] font-mono ${
+                        caseIdInput === rc.case_id
+                          ? 'bg-blue-500/20 text-blue-300 border-blue-500/40 font-semibold'
+                          : 'bg-[#0d0f14] hover:bg-white/[0.04] text-zinc-400 border-white/[0.06]'
+                      }`}
+                    >
+                      {rc.case_id.substring(0, 10)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {caseError && (
-            <div className="bg-red-900/20 border border-red-500/30 p-4 rounded-lg text-xs text-red-400 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+            <div className="p-3 rounded-lg border border-red-500/20 bg-red-500/10 text-xs text-red-400 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0" />
               <span>{caseError}</span>
             </div>
           )}
 
-          {/* CASE DETAILS & AWARENESS CARD */}
           {caseData && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* LEFT 2 COLS: EVIDENCE & 5-LAYER EXPLANATION */}
-              <div className="lg:col-span-2 space-y-6">
-                {/* HERO CASE HEADER */}
-                <div className="bg-[#111] border border-slate-800 p-5 rounded-xl space-y-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                          caseData.severity === 'CRITICAL' ? 'bg-red-500/10 border-red-500 text-red-400' :
-                          caseData.severity === 'HIGH' ? 'bg-orange-500/10 border-orange-500 text-orange-400' :
-                          'bg-yellow-500/10 border-yellow-500 text-yellow-400'
-                        }`}>
-                          {caseData.severity}
-                        </span>
-                        <span className="text-xs text-slate-500">Case ID: {caseData.case_id}</span>
-                      </div>
-                      <h2 className="text-lg font-bold text-white tracking-wide">{caseData.title || caseData.threat_summary}</h2>
-                      <div className="text-xs text-slate-400 mt-1">
-                        Flow Entity: <strong className="text-blue-400">{caseData.primary_entity || `${caseData.source_ip} -> ${caseData.destination_ip}`}</strong>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-white">{caseData.risk_score ?? 90}%</div>
-                      <div className="text-[10px] text-slate-500 uppercase tracking-widest">Confidence Score</div>
-                    </div>
+            <div className="space-y-4">
+              {/* PRIMARY ATTRIBUTE CARDS */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="p-3 rounded-lg border border-white/[0.08] bg-[#111318]">
+                  <span className="text-[10px] text-zinc-500 uppercase block">Source Entity</span>
+                  <span className="text-xs font-bold text-red-400 truncate block mt-0.5">{caseData.source_ip || 'N/A'}</span>
+                </div>
+                <div className="p-3 rounded-lg border border-white/[0.08] bg-[#111318]">
+                  <span className="text-[10px] text-zinc-500 uppercase block">Enclave Target</span>
+                  <span className="text-xs font-bold text-blue-400 truncate block mt-0.5">{caseData.destination_ip || '10.0.1.50'}</span>
+                </div>
+                <div className="p-3 rounded-lg border border-white/[0.08] bg-[#111318]">
+                  <span className="text-[10px] text-zinc-500 uppercase block">Severity & Status</span>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <Badge variant={getSeverityVariant(caseData.severity)} size="xs">
+                      {caseData.severity || 'CRITICAL'}
+                    </Badge>
+                    <Badge variant={caseData.status === 'CONTAINED' ? 'secure' : 'critical'} size="xs" dot>
+                      {caseData.status || 'ACTIVE'}
+                    </Badge>
                   </div>
                 </div>
-
-                {/* 5-LAYER EXPLANATION */}
-                {caseData.explanation && (
-                  <div className="bg-[#111] border border-slate-800 p-5 rounded-xl space-y-4">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                      <Zap className="w-4 h-4 text-orange-400" />
-                      5-Layer AI Threat Attribution & Decision Rationale
-                    </h3>
-                    
-                    <div className="space-y-3 text-xs">
-                      <div className="bg-[#0a0a0a] p-3 rounded border border-slate-800/80">
-                        <span className="text-slate-500 font-bold block mb-1 uppercase text-[10px]">What was observed:</span>
-                        <p className="text-slate-200">{caseData.explanation.what}</p>
-                      </div>
-
-                      <div className="bg-[#0a0a0a] p-3 rounded border border-slate-800/80">
-                        <span className="text-slate-500 font-bold block mb-1 uppercase text-[10px]">Why it triggered:</span>
-                        <p className="text-slate-200">{caseData.explanation.why}</p>
-                      </div>
-
-                      <div className="bg-[#0a0a0a] p-3 rounded border border-slate-800/80">
-                        <span className="text-slate-500 font-bold block mb-1 uppercase text-[10px]">Confidence Basis:</span>
-                        <p className="text-blue-300">{caseData.explanation.confidence}</p>
-                      </div>
-
-                      <div className="bg-red-950/20 p-3 rounded border border-red-900/40">
-                        <span className="text-red-400 font-bold block mb-1 uppercase text-[10px]">Recommended Containment Action:</span>
-                        <p className="text-red-200">{caseData.explanation.action}</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* EVIDENCE LEDGER */}
-                <div className="bg-[#111] border border-slate-800 p-5 rounded-xl space-y-3">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                    <Database className="w-4 h-4 text-green-400" />
-                    Cryptographic Evidence Ledger & Passive Telemetry
-                  </h3>
-                  
-                  <div className="space-y-2">
-                    {(caseData.alerts && caseData.alerts[0]?.evidence ? caseData.alerts[0].evidence : [
-                      { feature: 'simplex_tap', value: 'CONFIRMED', explanation: 'Ingress across optical hardware data diode with 0 reverse ACKs' },
-                      { feature: 'ml_boundary', value: 'OUTLIER', explanation: 'Isolation Forest decision boundary exceeded' }
-                    ]).map((ev: any, idx: number) => (
-                      <div key={idx} className="flex justify-between items-center text-xs p-2.5 bg-[#0a0a0a] rounded border border-slate-800">
-                        <span className="text-slate-400 font-mono">{ev.feature}</span>
-                        <div className="text-right">
-                          <span className="text-white font-bold block">{String(ev.value)}</span>
-                          {ev.explanation && <span className="text-[10px] text-slate-500">{ev.explanation}</span>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div className="p-3 rounded-lg border border-white/[0.08] bg-[#111318]">
+                  <span className="text-[10px] text-zinc-500 uppercase block">Risk Score</span>
+                  <span className="text-base font-bold text-zinc-100 font-mono mt-0.5 block">
+                    {caseData.risk_score ?? 95} <span className="text-[10px] text-zinc-500 font-normal">/ 100</span>
+                  </span>
                 </div>
               </div>
 
-              {/* RIGHT COL: DATA DIODE AWARENESS & ANALYST QUIZ */}
-              <div className="space-y-6">
-                {/* DATA DIODE CONTAINMENT PLAYBOOK */}
-                <div className="bg-[#111] border border-slate-800 p-5 rounded-xl space-y-4">
-                  <h3 className="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-blue-400" />
-                    Data Diode Defense Playbook
-                  </h3>
-
-                  <div className="space-y-3">
-                    {(caseData.awareness?.containment_steps || [
-                      "Maintain Strict Physical Diode Isolation: Ensure zero protocol handshakes (no SYN-ACKs, no RSTs) cross back into production network.",
-                      "Network Enclave Quarantine: Blackhole or isolate internal destination entity from lateral movement.",
-                      "Passive Traffic Verification: Verify source IP entropy, IAT coefficient of variation, and flow volume via promiscuous sniffer.",
-                      "Forensic Chain of Custody: Preserve immutable PCAP capture and cryptographic evidence ledger for post-incident audit."
-                    ]).map((step: string, i: number) => (
-                      <div key={i} className="flex items-start gap-3 text-xs bg-[#0a0a0a] p-3 rounded border border-slate-800">
-                        <span className="w-5 h-5 rounded-full bg-blue-900/40 border border-blue-500/50 text-blue-400 flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">
-                          {i + 1}
-                        </span>
-                        <p className="text-slate-300 leading-relaxed">{step}</p>
-                      </div>
-                    ))}
+              {/* 5-LAYER EXPLANATION */}
+              <Card>
+                <CardHeader className="py-3 px-4">
+                  <CardTitle>5-Layer Threat Attribution Explanation</CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 text-xs space-y-3 font-sans">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06] space-y-1">
+                      <span className="text-[10px] font-mono font-bold text-blue-400 uppercase block">What Happened</span>
+                      <p className="text-zinc-300 leading-relaxed text-[11px]">
+                        {caseData.explanation?.what || `Unidirectional anomaly observed from ${caseData.source_ip}.`}
+                      </p>
+                    </div>
+                    <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06] space-y-1">
+                      <span className="text-[10px] font-mono font-bold text-amber-400 uppercase block">Why Detected</span>
+                      <p className="text-zinc-300 leading-relaxed text-[11px]">
+                        {caseData.explanation?.why || "Statistical distribution divergence in entropy and arrival timings."}
+                      </p>
+                    </div>
+                    <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06] space-y-1">
+                      <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase block">Diode Protection</span>
+                      <p className="text-zinc-300 leading-relaxed text-[11px]">
+                        Zero return packets (0 ACKs / 0 RSTs) on wire due to physical optical tap.
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                {/* INTERACTIVE ANALYST AWARENESS QUIZ */}
-                {caseData.awareness?.analyst_quiz && (
-                  <div className="bg-[#111] border border-slate-800 p-5 rounded-xl space-y-4">
+              {/* EDUCATIONAL MODULE & QUIZ (IF AVAILABLE) */}
+              {caseData.education_module && (
+                <Card>
+                  <CardHeader className="py-3 px-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
-                        <HelpCircle className="w-4 h-4 text-purple-400" />
-                        Analyst Awareness Verification
-                      </h3>
-                      <span className="text-[10px] text-purple-400 uppercase font-bold">NTRO Training</span>
+                      <CardTitle className="flex items-center gap-2">
+                        <BookOpen className="w-3.5 h-3.5 text-purple-400" />
+                        Threat Awareness: {caseData.education_module.title}
+                      </CardTitle>
+                      <Badge variant="purple" size="xs">AWARENESS</Badge>
                     </div>
-
-                    <p className="text-xs text-slate-200 leading-relaxed font-semibold">
-                      {caseData.awareness.analyst_quiz.question}
-                    </p>
-
-                    <div className="space-y-2">
-                      {caseData.awareness.analyst_quiz.options.map((opt: string, optIdx: number) => (
-                        <button
-                          key={optIdx}
-                          onClick={() => !quizSubmitted && setSelectedQuizAnswer(optIdx)}
-                          className={`w-full text-left p-3 rounded-lg border text-xs transition-colors ${
-                            quizSubmitted
-                              ? optIdx === caseData.awareness.analyst_quiz.correct_index
-                                ? 'bg-green-950/30 border-green-500 text-green-300 font-bold'
-                                : optIdx === selectedQuizAnswer
-                                ? 'bg-red-950/30 border-red-500 text-red-300'
-                                : 'bg-[#0a0a0a] border-slate-800 text-slate-500'
-                              : selectedQuizAnswer === optIdx
-                              ? 'bg-blue-900/30 border-blue-500 text-blue-200'
-                              : 'bg-[#0a0a0a] border-slate-800 text-slate-300 hover:border-slate-700'
-                          }`}
-                        >
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-
-                    {!quizSubmitted ? (
-                      <button
-                        onClick={() => selectedQuizAnswer !== null && setQuizSubmitted(true)}
-                        disabled={selectedQuizAnswer === null}
-                        className="w-full py-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-40 text-white text-xs font-bold rounded-lg transition-colors"
-                      >
-                        Submit Awareness Check
-                      </button>
-                    ) : (
-                      <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-                        <strong className="text-green-400 block mb-1">Defense Rationale:</strong>
-                        {caseData.awareness.analyst_quiz.rationale}
+                  </CardHeader>
+                  <CardContent className="p-4 text-xs space-y-4 font-sans">
+                    <p className="text-zinc-300 leading-relaxed">{caseData.education_module.summary}</p>
+                    
+                    {caseData.education_module.quiz && (
+                      <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06] space-y-2.5">
+                        <span className="text-xs font-semibold text-zinc-200 block">
+                          Knowledge Verification Quiz: {caseData.education_module.quiz.question}
+                        </span>
+                        <div className="space-y-1.5 font-mono text-xs">
+                          {caseData.education_module.quiz.options?.map((opt: string, idx: number) => (
+                            <label
+                              key={idx}
+                              onClick={() => !quizSubmitted && setSelectedQuizAnswer(idx)}
+                              className={`flex items-center gap-2.5 p-2 rounded border transition-colors cursor-pointer ${
+                                selectedQuizAnswer === idx
+                                  ? 'bg-blue-500/10 border-blue-500/30 text-blue-300'
+                                  : 'bg-black/40 border-white/[0.06] text-zinc-400 hover:text-zinc-200'
+                              } ${
+                                quizSubmitted && idx === caseData.education_module.quiz.correct_index
+                                  ? '!bg-emerald-500/20 !border-emerald-500/40 !text-emerald-300'
+                                  : ''
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name="quiz"
+                                checked={selectedQuizAnswer === idx}
+                                onChange={() => {}}
+                                className="accent-blue-500"
+                              />
+                              <span>{opt}</span>
+                            </label>
+                          ))}
+                        </div>
+                        {!quizSubmitted ? (
+                          <Button
+                            variant="secondary"
+                            size="xs"
+                            disabled={selectedQuizAnswer === null}
+                            onClick={() => setQuizSubmitted(true)}
+                          >
+                            Submit Answer
+                          </Button>
+                        ) : (
+                          <div className="text-[11px] text-zinc-300 pt-1 font-sans">
+                            {selectedQuizAnswer === caseData.education_module.quiz.correct_index ? (
+                              <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                                <Check className="w-3.5 h-3.5" /> Correct! {caseData.education_module.quiz.explanation}
+                              </span>
+                            ) : (
+                              <span className="text-amber-400">
+                                Incorrect. {caseData.education_module.quiz.explanation}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
-                )}
-              </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
         </div>
       )}
 
-      {/* TAB 2: LIVE AI/ML THREAT PREDICTOR */}
+      {/* TAB 2: SIMPLEX STREAM PREDICTOR */}
       {activeTab === 'ml_predictor' && (
-        <div className="space-y-6">
-          {/* PROFILE SELECTOR BAR */}
-          <div className="bg-[#111] border border-slate-800 p-5 rounded-xl space-y-3">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-              Select Official NTRO Problem Statement Threat Class (a &ndash; f)
-            </h3>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5">
-              {THREAT_VECTORS.map((vec) => (
-                <button
-                  key={vec.id}
-                  onClick={() => selectVectorPreset(vec)}
-                  className={`p-3 rounded-lg border text-left transition-colors flex flex-col justify-between ${
-                    selectedVector.id === vec.id
-                      ? 'bg-blue-600/10 border-blue-500 text-white'
-                      : 'bg-[#0a0a0a] border-slate-800 text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <span className="text-[10px] font-bold text-blue-400 uppercase">{vec.id}</span>
-                  <span className="text-xs font-bold mt-1 text-white leading-tight">{vec.name.split(' ')[0]} {vec.name.split(' ')[1]}</span>
-                  <span className="text-[10px] text-slate-500 mt-1">{vec.severity}</span>
-                </button>
-              ))}
+        <div className="space-y-5">
+          {/* 6-VECTOR PRESET SELECTOR */}
+          <div className="space-y-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 font-mono block">
+              Select NTRO Threat Vector Class (a-f):
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              {THREAT_VECTORS.map((vec) => {
+                const isSelected = selectedVector.id === vec.id
+                return (
+                  <div
+                    key={vec.id}
+                    onClick={() => selectVectorPreset(vec)}
+                    className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                      isSelected
+                        ? 'bg-blue-600/10 border-blue-500/40 shadow-sm'
+                        : 'bg-[#111318] hover:bg-white/[0.03] border-white/[0.08]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-bold font-mono text-zinc-100">{vec.name}</span>
+                      <Badge variant={getSeverityVariant(vec.severity)} size="xs">
+                        {vec.severity}
+                      </Badge>
+                    </div>
+                    <p className="text-[11px] text-zinc-400 font-sans line-clamp-2 leading-relaxed">
+                      {vec.desc}
+                    </p>
+                  </div>
+                )
+              })}
             </div>
           </div>
 
-          {/* SIMPLEX ML FLOW INGESTION FORM */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-[#111] border border-slate-800 p-5 rounded-xl space-y-4">
-              <h3 className="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-blue-400" />
-                Unidirectional Flow Ingress Vector Parameters
-              </h3>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[11px] text-slate-400 block mb-1.5 uppercase font-bold">Source IP (Adversary / Ingress)</label>
+          {/* PARAMETER CONFIGURATION FORM */}
+          <Card>
+            <CardHeader className="py-3 px-4">
+              <CardTitle>Stream Telemetry Parameters</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-500 uppercase block font-semibold">Source IP Address</label>
                   <input
                     type="text"
                     value={srcIp}
                     onChange={(e) => setSrcIp(e.target.value)}
-                    className="w-full bg-[#0a0a0a] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0f14] border border-white/[0.08] rounded p-2 text-xs font-mono text-zinc-200 focus:outline-none focus:border-blue-500/50"
                   />
                 </div>
-
-                <div>
-                  <label className="text-[11px] text-slate-400 block mb-1.5 uppercase font-bold">Destination IP (Isolated Enclave Target)</label>
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-500 uppercase block font-semibold">Destination IP Address</label>
                   <input
                     type="text"
                     value={dstIp}
                     onChange={(e) => setDstIp(e.target.value)}
-                    className="w-full bg-[#0a0a0a] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0f14] border border-white/[0.08] rounded p-2 text-xs font-mono text-zinc-200 focus:outline-none focus:border-blue-500/50"
                   />
                 </div>
-
-                <div>
-                  <label className="text-[11px] text-slate-400 block mb-1.5 uppercase font-bold">Packet Count in Micro-Window</label>
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-500 uppercase block font-semibold">Packet Count</label>
                   <input
                     type="number"
                     value={packetCount}
                     onChange={(e) => setPacketCount(Number(e.target.value))}
-                    className="w-full bg-[#0a0a0a] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0f14] border border-white/[0.08] rounded p-2 text-xs font-mono text-zinc-200 focus:outline-none focus:border-blue-500/50"
                   />
                 </div>
-
-                <div>
-                  <label className="text-[11px] text-slate-400 block mb-1.5 uppercase font-bold">Bytes on Wire (Outbound Volume)</label>
+                <div className="space-y-1">
+                  <label className="text-[10px] text-zinc-500 uppercase block font-semibold">Bytes Transferred</label>
                   <input
                     type="number"
                     value={bytesTransferred}
                     onChange={(e) => setBytesTransferred(Number(e.target.value))}
-                    className="w-full bg-[#0a0a0a] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#0d0f14] border border-white/[0.08] rounded p-2 text-xs font-mono text-zinc-200 focus:outline-none focus:border-blue-500/50"
                   />
                 </div>
               </div>
 
-              {/* MATHEMATICAL ATTRIBUTES DISPLAY */}
-              <div className="grid grid-cols-3 gap-3 p-3 bg-[#0a0a0a] rounded-lg border border-slate-800 text-xs">
-                <div>
-                  <span className="text-[10px] text-slate-500 uppercase block">Source-IP Entropy:</span>
-                  <span className="font-bold text-white">{selectedVector.entropy.toFixed(2)}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 uppercase block">IAT Jitter (CV):</span>
-                  <span className="font-bold text-white">{selectedVector.cv.toFixed(3)}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-500 uppercase block">Asymmetry Ratio:</span>
-                  <span className="font-bold text-white">{selectedVector.ratio}x</span>
-                </div>
+              <div className="flex justify-end pt-2 border-t border-white/[0.06]">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  loading={mlLoading}
+                  onClick={handleRunMlPrediction}
+                  icon={<Play className="w-3.5 h-3.5" />}
+                >
+                  Run Simplex Classifier Inference
+                </Button>
               </div>
+            </CardContent>
+          </Card>
 
-              <button
-                onClick={handleRunMlPrediction}
-                disabled={mlLoading}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold text-xs rounded-lg transition-colors flex items-center justify-center gap-2"
-              >
-                {mlLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Cpu className="w-4 h-4" />}
-                Run Live AI/ML Model Inference (XGBoost v5.0.0 & IForest)
-              </button>
-            </div>
-
-            {/* ML RESULT CARD */}
-            <div className="bg-[#111] border border-slate-800 p-5 rounded-xl flex flex-col justify-between space-y-4">
-              <div>
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-green-400" />
-                  Real-Time Model Inference Output
-                </h3>
-
-                {mlResult ? (
-                  <div className="mt-4 space-y-3">
-                    <div className="p-3 rounded-lg border bg-[#0a0a0a] border-slate-800">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-[10px] text-slate-500 uppercase">Detection Result</span>
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">
-                          {mlResult.classification}
-                        </span>
-                      </div>
-                      <div className="text-sm font-bold text-white">{mlResult.threat_type}</div>
-                      <p className="text-[11px] text-slate-400 mt-1">{mlResult.decision_summary}</p>
-                    </div>
-
-                    <div className="p-3 rounded-lg border bg-[#0a0a0a] border-slate-800 flex justify-between items-center">
-                      <span className="text-xs text-slate-400">Bayesian Confidence</span>
-                      <span className="text-lg font-bold text-blue-400">{Math.round(mlResult.confidence * 100)}%</span>
-                    </div>
-
-                    <div className="p-3 rounded-lg border bg-[#0a0a0a] border-slate-800 flex justify-between items-center">
-                      <span className="text-xs text-slate-400">Generated Case ID</span>
-                      <span className="text-[11px] font-mono text-slate-300">{mlResult.case_id?.substring(0, 16)}...</span>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        setActiveTab('case_lookup')
-                        handleLookupCase(mlResult.case_id)
-                      }}
-                      className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
-                    >
-                      <BookOpen className="w-4 h-4" />
-                      View Full Forensics & Playbook
-                    </button>
+          {/* ML INFERENCE VERDICT */}
+          {mlResult && (
+            <Card>
+              <CardHeader className="py-3 px-4">
+                <div className="flex items-center justify-between">
+                  <CardTitle>Classifier Inference Verdict</CardTitle>
+                  <Badge variant={getSeverityVariant(mlResult.classification)} size="xs">
+                    {mlResult.classification || 'CRITICAL'}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="p-4 space-y-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06]">
+                    <span className="text-[10px] text-zinc-500 uppercase block">Threat Type</span>
+                    <span className="text-xs font-bold text-red-400 block mt-0.5">{mlResult.threat_type || 'ANOMALOUS'}</span>
                   </div>
-                ) : (
-                  <div className="py-16 text-center text-slate-500 text-xs">
-                    <Activity className="w-8 h-8 mx-auto mb-2 opacity-40 animate-pulse" />
-                    Configure flow parameters and run live inference to evaluate using local XGBoost & Isolation Forest models.
+                  <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06]">
+                    <span className="text-[10px] text-zinc-500 uppercase block">Risk Score</span>
+                    <span className="text-xs font-bold text-zinc-100 block mt-0.5 font-mono">{mlResult.risk_score ?? 95} / 100</span>
                   </div>
-                )}
-              </div>
+                  <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06]">
+                    <span className="text-[10px] text-zinc-500 uppercase block">Confidence</span>
+                    <span className="text-xs font-bold text-blue-400 block mt-0.5 font-mono">{Math.round((mlResult.confidence || 0.94) * 100)}%</span>
+                  </div>
+                  <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06]">
+                    <span className="text-[10px] text-zinc-500 uppercase block">Generated Case ID</span>
+                    <span className="text-xs font-bold text-zinc-300 block mt-0.5 font-mono truncate">{mlResult.case_id || 'LOCAL_EVAL'}</span>
+                  </div>
+                </div>
 
-              <div className="pt-3 border-t border-slate-800 text-[11px] text-slate-500">
-                Data diode assurance: 0 ACK packets returned across optical link.
-              </div>
-            </div>
-          </div>
+                <div className="p-3 rounded bg-[#0d0f14] border border-white/[0.06] text-xs font-sans text-zinc-300 leading-relaxed">
+                  <strong className="text-zinc-100 font-semibold block mb-1 font-mono text-[11px] uppercase">Decision Summary:</strong>
+                  {mlResult.decision_summary}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       )}
     </div>

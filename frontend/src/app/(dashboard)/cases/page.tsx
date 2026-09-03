@@ -1,7 +1,11 @@
 'use client'
-import { useEffect, useState } from 'react'
+
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Search, Filter, AlertCircle } from 'lucide-react'
+import { Search, Filter, AlertCircle, Target, ArrowRight, ShieldCheck } from 'lucide-react'
+import { Badge, BadgeVariant } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
+import { TableContainer, Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table'
 
 export default function CasesPage() {
   const [cases, setCases] = useState<any[]>([])
@@ -26,116 +30,130 @@ export default function CasesPage() {
     return () => clearInterval(interval)
   }, [])
 
-  const getSeverityColor = (sev: string) => {
-    if (sev === 'CRITICAL') return 'bg-red-500/10 text-red-500 border-red-500/20'
-    if (sev === 'HIGH') return 'bg-orange-500/10 text-orange-500 border-orange-500/20'
-    if (sev === 'MEDIUM') return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
-    return 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+  const getSeverityVariant = (sev: string): BadgeVariant => {
+    switch (sev?.toUpperCase()) {
+      case 'CRITICAL': return 'critical'
+      case 'HIGH': return 'warning'
+      case 'MEDIUM': return 'neutral'
+      case 'LOW': return 'secure'
+      default: return 'neutral'
+    }
   }
 
   const filteredCases = cases.filter(c => 
-    c.case_id.includes(search) || 
-    c.source_ip.includes(search) ||
-    c.threat_summary.toLowerCase().includes(search.toLowerCase())
+    (c.case_id && c.case_id.toLowerCase().includes(search.toLowerCase())) || 
+    (c.source_ip && c.source_ip.toLowerCase().includes(search.toLowerCase())) ||
+    (c.threat_summary && c.threat_summary.toLowerCase().includes(search.toLowerCase())) ||
+    (c.title && c.title.toLowerCase().includes(search.toLowerCase()))
   )
 
   return (
-    <div className="space-y-6 max-w-[1600px] animate-in fade-in duration-500">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="space-y-5 max-w-[1500px] mx-auto animate-in fade-in duration-300">
+      {/* PAGE HEADER & CONTROLS */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/[0.06] pb-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Security Cases</h2>
-          <p className="text-sm text-slate-400">Correlated threat incidents requiring analyst review.</p>
+          <h1 className="text-base font-bold tracking-tight text-white font-mono uppercase flex items-center gap-2">
+            <Target className="w-4 h-4 text-blue-400" />
+            Simplex Tunnel Incident Ledger
+          </h1>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Correlated forensic threat incidents requiring analyst review and containment.
+          </p>
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+
+        <div className="flex items-center gap-2.5 w-full sm:w-auto">
           <div className="relative w-full sm:w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-500" />
+            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-500" />
             <input 
               type="text" 
-              placeholder="Search cases..." 
+              placeholder="Search case, IP, vector..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-[#121620] border border-slate-700/50 rounded-md py-2 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-[#111318] border border-white/[0.08] rounded-md py-1.5 pl-8 pr-3 text-xs text-zinc-200 placeholder:text-zinc-500 font-mono focus:outline-none focus:border-blue-500/50 transition-colors"
             />
           </div>
-          <button className="flex items-center gap-2 px-3 py-2 bg-[#121620] border border-slate-700/50 rounded-md text-sm text-slate-300 hover:text-white transition-colors">
-            <Filter className="w-4 h-4" />
+          <Button variant="secondary" size="sm" icon={<Filter className="w-3.5 h-3.5 text-zinc-400" />}>
             Filters
-          </button>
+          </Button>
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-800 bg-[#0c0f17] shadow-sm flex flex-col min-h-[500px]">
-        <div className="flex-1 p-0 overflow-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-[#121620] text-slate-400 sticky top-0 z-10">
-              <tr>
-                <th className="px-6 py-3 font-medium">Case ID</th>
-                <th className="px-6 py-3 font-medium">Entity</th>
-                <th className="px-6 py-3 font-medium">Threat Summary</th>
-                <th className="px-6 py-3 font-medium">Severity</th>
-                <th className="px-6 py-3 font-medium">Status</th>
-                <th className="px-6 py-3 font-medium">First Seen</th>
-                <th className="px-6 py-3 font-medium text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/50">
-              {loading ? (
-                <tr>
-                  <td colSpan={7} className="p-12 text-center text-slate-500">
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
-                      Loading security cases...
-                    </div>
-                  </td>
-                </tr>
-              ) : filteredCases.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="p-12 text-center text-slate-500">
-                    <div className="flex flex-col items-center justify-center">
-                      <AlertCircle className="h-8 w-8 text-slate-600 mb-4" />
-                      {search ? "No cases match your search." : "No security cases observed in the selected time range."}
-                    </div>
-                  </td>
-                </tr>
-              ) : filteredCases.map((c) => (
-                <tr key={c.case_id} className="hover:bg-slate-800/30 transition-colors cursor-pointer group">
-                  <td className="px-6 py-4">
-                    <Link href={`/cases/${c.case_id}`} className="font-mono text-blue-400 hover:text-blue-300">
-                      {c.case_id.substring(0, 8)}
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 font-medium text-white">
-                    {c.primary_entity || (c.source_ip ? `${c.source_ip} -> ${c.destination_ip || '10.0.1.50'}` : 'SIMPLEX_INGRESS')}
-                  </td>
-                  <td className="px-6 py-4 text-slate-300 font-bold">{c.title || c.threat_summary}</td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center rounded border px-2.5 py-0.5 text-[10px] font-bold tracking-wider ${getSeverityColor(c.severity)}`}>
-                      {c.severity}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-slate-300">
-                    <div className="flex items-center gap-2">
-                      <div className={`h-2 w-2 rounded-full ${c.status === 'CONTAINED' ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`}></div>
-                      <span className="text-xs font-bold">{c.status || 'ACTIVE'}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-slate-400 font-mono text-xs">
-                    {new Date(c.first_seen || c.created_at || Date.now()).toLocaleTimeString('en-IN')}
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <Link
-                      href={`/cases/${c.case_id}`}
-                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-bold transition-colors inline-block"
-                    >
-                      Investigate & Contain
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* CASES DATA GRID */}
+      <TableContainer>
+        <Table>
+          <TableHeader>
+            <tr>
+              <TableHead>CASE ID</TableHead>
+              <TableHead>ENTITY (SOURCE → TARGET)</TableHead>
+              <TableHead>THREAT CLASSIFICATION</TableHead>
+              <TableHead>SEVERITY</TableHead>
+              <TableHead>STATUS</TableHead>
+              <TableHead>FIRST SEEN</TableHead>
+              <TableHead className="text-right">ACTION</TableHead>
+            </tr>
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={7} className="py-12 text-center text-zinc-500 font-mono">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <span className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    <span>Loading forensic incident ledger...</span>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : filteredCases.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="py-12 text-center text-zinc-500 font-mono">
+                  <div className="flex flex-col items-center justify-center gap-1.5">
+                    <AlertCircle className="w-5 h-5 text-zinc-600" />
+                    <span>{search ? "No cases match your search criteria." : "No security incidents observed in the selected time range."}</span>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              filteredCases.map((c) => {
+                const isContained = c.status === 'CONTAINED'
+                return (
+                  <TableRow key={c.case_id}>
+                    <TableCell>
+                      <Link href={`/cases/${c.case_id}`} className="font-mono font-semibold text-blue-400 hover:text-blue-300">
+                        {c.case_id.substring(0, 8)}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="font-mono text-zinc-200">
+                      {c.primary_entity || (c.source_ip ? `${c.source_ip} → ${c.destination_ip || '10.0.1.50'}` : 'SIMPLEX_INGRESS')}
+                    </TableCell>
+                    <TableCell className="font-mono text-zinc-300 font-medium">
+                      <span className="truncate max-w-[220px] block">{c.title || c.threat_summary}</span>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={getSeverityVariant(c.severity)} size="xs">
+                        {c.severity || 'HIGH'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={isContained ? 'secure' : 'critical'} size="xs" dot>
+                        {isContained ? 'CONTAINED' : 'ACTIVE'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-zinc-500 font-mono">
+                      {new Date(c.first_seen || c.created_at || Date.now()).toLocaleTimeString('en-US', { hour12: false })}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link href={`/cases/${c.case_id}`}>
+                        <Button variant="outline" size="xs">
+                          Investigate <ArrowRight className="w-3 h-3 ml-1" />
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

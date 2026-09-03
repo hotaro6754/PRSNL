@@ -1,11 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { 
-  ArrowLeft, ShieldAlert, Activity, Calendar, Server, Tag, Info, 
-  CheckCircle2, AlertTriangle, ShieldCheck, Zap, HelpCircle, RefreshCw, Cpu, Database, Play, Terminal, Eye, Code, Network
+  ArrowLeft, ShieldCheck, Activity, Terminal, Eye, Code, Cpu, 
+  Play, RefreshCw, Zap, Lock, ChevronDown, ChevronRight, Copy, Check
 } from 'lucide-react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { Badge, BadgeVariant } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
 
 export default function CaseDetailPage() {
   const params = useParams()
@@ -13,7 +17,8 @@ export default function CaseDetailPage() {
   const [caseData, setCaseData] = useState<any>(null)
   const [packetDemo, setPacketDemo] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const [expandedLayer, setExpandedLayer] = useState<number | null>(null)
+  const [expandedLayer, setExpandedLayer] = useState<number | null>(0)
+  const [copied, setCopied] = useState(false)
 
   // Status containment toggle
   const [togglingStatus, setTogglingStatus] = useState(false)
@@ -92,12 +97,18 @@ export default function CaseDetailPage() {
     }
   }
 
+  const copyCommand = (cmd: string) => {
+    navigator.clipboard.writeText(cmd)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-12 text-center text-slate-400 font-mono">
+      <div className="min-h-[400px] flex items-center justify-center p-12 text-center text-zinc-500 font-mono">
         <div className="flex flex-col items-center gap-3">
-          <RefreshCw className="w-6 h-6 animate-spin text-blue-500" />
-          <span>Extracting simplex telemetry from forensic ledger...</span>
+          <span className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs">Extracting simplex telemetry from forensic ledger...</span>
         </div>
       </div>
     )
@@ -105,183 +116,207 @@ export default function CaseDetailPage() {
 
   if (!caseData) {
     return (
-      <div className="space-y-4 font-mono p-6 bg-black min-h-screen">
-        <button onClick={() => router.back()} className="flex items-center text-sm text-slate-400 hover:text-white">
-          <ArrowLeft className="w-4 h-4 mr-1" /> Back to Cases
-        </button>
-        <div className="p-12 text-center border border-slate-800 rounded-xl bg-[#0c0f17] text-slate-400">
-          Case not found or could not be loaded from MongoDB.
-        </div>
+      <div className="space-y-4 font-mono max-w-[1500px] mx-auto">
+        <Button variant="ghost" size="sm" onClick={() => router.back()} icon={<ArrowLeft className="w-4 h-4" />}>
+          Back to Investigations
+        </Button>
+        <Card className="p-8 text-center text-zinc-500 text-xs font-mono">
+          Case not found or could not be loaded from forensic storage.
+        </Card>
       </div>
     )
   }
 
   const isContained = caseData.status === 'CONTAINED'
+  const kaliCommand = packetDemo?.kali_tool_command || `hping3 -S -p 80 --flood ${caseData.destination_ip || '10.0.1.50'}`
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto animate-in fade-in duration-300 p-6 font-mono text-slate-200">
-      {/* TOP HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-800 pb-4">
-        <div className="space-y-1">
-          <button onClick={() => router.back()} className="flex items-center text-xs text-slate-400 hover:text-blue-400 mb-2 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Investigations
-          </button>
-          <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-xl font-bold tracking-tight text-white uppercase">{caseData.title || caseData.threat_summary}</h1>
-            <span className={`inline-flex items-center rounded px-2.5 py-0.5 text-xs font-bold tracking-wider ${
-              caseData.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400 border border-red-500/40' : 'bg-orange-500/20 text-orange-400 border border-orange-500/40'
-            }`}>
-              {caseData.severity}
-            </span>
-            <span className={`inline-flex items-center rounded px-2.5 py-0.5 text-xs font-bold tracking-wider border ${
-              isContained ? 'bg-green-500/20 text-green-400 border-green-500/40' : 'bg-red-500/10 text-red-400 border-red-500/30 animate-pulse'
-            }`}>
-              {isContained ? 'CONTAINED' : 'ACTIVE THREAT'}
-            </span>
+    <div className="space-y-6 max-w-[1500px] mx-auto animate-in fade-in duration-300 font-mono">
+      {/* INCIDENT HEADER & ACTION STRIP */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/[0.08] pb-4">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="xs" onClick={() => router.back()} icon={<ArrowLeft className="w-3.5 h-3.5" />}>
+              Back to Investigations
+            </Button>
+            <span className="text-zinc-600">/</span>
+            <span className="text-xs text-zinc-400 font-semibold">{caseData.case_id}</span>
           </div>
-          <p className="text-slate-400 text-xs">
-            Incident ID: <span className="text-blue-400 font-bold">{caseData.case_id}</span> &bull; Optical Diode Ingress: <span className="text-green-400">0 ACKs / 100% Simplex Tap</span>
-          </p>
+
+          <div className="flex items-center gap-2.5 flex-wrap pt-0.5">
+            <h1 className="text-base font-bold tracking-tight text-white font-mono uppercase">
+              {caseData.title || caseData.threat_summary}
+            </h1>
+            <Badge variant={caseData.severity === 'CRITICAL' ? 'critical' : 'warning'} size="xs">
+              {caseData.severity || 'CRITICAL'}
+            </Badge>
+            <Badge variant={isContained ? 'secure' : 'critical'} size="xs" dot>
+              {isContained ? 'CONTAINED' : 'ACTIVE THREAT'}
+            </Badge>
+          </div>
+
+          <div className="text-[11px] text-zinc-400 flex items-center gap-2">
+            <span>Entity: <strong className="text-zinc-200">{caseData.primary_entity || `${caseData.source_ip} → ${caseData.destination_ip}`}</strong></span>
+            <span>•</span>
+            <span>Tap Ingress: <strong className="text-emerald-400">100% Simplex (0 Return ACKs)</strong></span>
+          </div>
         </div>
-        
-        {/* ACTION BUTTONS */}
-        <div className="flex gap-3">
-          <button
+
+        <div className="flex items-center gap-2 shrink-0">
+          <Button
+            variant={isContained ? 'secondary' : 'primary'}
+            size="sm"
+            loading={togglingStatus}
             onClick={handleToggleContainment}
-            disabled={togglingStatus}
-            className={`px-4 py-2 rounded text-xs font-bold transition-colors flex items-center gap-2 border ${
-              isContained 
-                ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700' 
-                : 'bg-green-600 hover:bg-green-700 text-white border-green-500'
-            }`}
+            icon={<ShieldCheck className="w-3.5 h-3.5" />}
           >
-            {togglingStatus ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
-            {isContained ? 'Reopen Case (Set Active)' : 'Mark Incident Contained'}
-          </button>
+            {isContained ? 'Reopen Incident (Set Active)' : 'Mark Incident Contained'}
+          </Button>
         </div>
       </div>
 
-      {/* COMPREHENSIVE THREAT EXPLANATION & DIODE PHYSICS (WHY, WHAT, HOW) */}
-      <div className="bg-[#111] border border-slate-800 p-6 rounded-xl space-y-4">
-        <div className="flex items-center gap-2 text-sm font-bold text-white uppercase tracking-wider border-b border-slate-800 pb-3">
-          <Zap className="w-4 h-4 text-blue-400" />
-          Technical Threat Explanation & Data Diode Analysis (NTRO PS #26145)
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-          {/* WHAT */}
-          <div className="bg-[#0a0a0a] p-4 rounded-lg border border-slate-800 space-y-2">
-            <span className="font-bold text-blue-400 uppercase text-[10px] tracking-wider block">1. What Was Observed:</span>
-            <p className="text-slate-300 leading-relaxed">
+      {/* 3-PILLAR FORENSIC EXPLANATION */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardHeader className="py-3 px-4">
+            <div className="flex items-center justify-between">
+              <CardTitle>1. What Was Observed</CardTitle>
+              <Badge variant="info" size="xs">TELEMETRY</Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 text-xs space-y-3 font-sans">
+            <p className="text-zinc-300 leading-relaxed">
               {caseData.explanation?.what || `Passive optical tap captured anomalous unidirectional traffic from ${caseData.source_ip || 'source IP'} targeted at internal enclave ${caseData.destination_ip || 'destination target'}.`}
             </p>
-            <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-800/80">
-              <span className="text-slate-500">Flow Entity:</span> <span className="text-white font-mono">{caseData.primary_entity || `${caseData.source_ip} -> ${caseData.destination_ip}`}</span>
+            <div className="pt-2 border-t border-white/[0.06] text-[11px] font-mono text-zinc-400">
+              <span className="text-zinc-500">Flow Entity: </span>
+              <span className="text-zinc-200">{caseData.primary_entity || `${caseData.source_ip} → ${caseData.destination_ip}`}</span>
             </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          {/* WHY */}
-          <div className="bg-[#0a0a0a] p-4 rounded-lg border border-slate-800 space-y-2">
-            <span className="font-bold text-orange-400 uppercase text-[10px] tracking-wider block">2. Why It Was Detected:</span>
-            <p className="text-slate-300 leading-relaxed">
+        <Card>
+          <CardHeader className="py-3 px-4">
+            <div className="flex items-center justify-between">
+              <CardTitle>2. Why It Was Detected</CardTitle>
+              <Badge variant="warning" size="xs">ANOMALY</Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 text-xs space-y-3 font-sans">
+            <p className="text-zinc-300 leading-relaxed">
               {caseData.explanation?.why || "Statistical divergence in packet arrival times and payload entropy exceeded baseline thresholds across the passive tap."}
             </p>
-            <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-800/80">
-              <span className="text-slate-500">Classification Confidence:</span> <span className="text-orange-400 font-bold">{caseData.explanation?.confidence || '94%'}</span>
+            <div className="pt-2 border-t border-white/[0.06] text-[11px] font-mono text-zinc-400 flex justify-between">
+              <span className="text-zinc-500">Model Confidence:</span>
+              <span className="text-amber-400 font-semibold">{caseData.explanation?.confidence || '94%'}</span>
             </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          {/* HOW DIODE AFFECTS IT */}
-          <div className="bg-[#0a0a0a] p-4 rounded-lg border border-slate-800 space-y-2">
-            <span className="font-bold text-green-400 uppercase text-[10px] tracking-wider block">3. Simplex Diode Physics:</span>
-            <p className="text-slate-300 leading-relaxed">
-              In this unidirectional monitoring enclave, physical data diodes have no transmit fiber. No TCP handshakes (SYN-ACK) or TCP resets (RST) are ever sent back. Detection relies 100% on passive statistical entropy and timing.
+        <Card>
+          <CardHeader className="py-3 px-4">
+            <div className="flex items-center justify-between">
+              <CardTitle>3. Simplex Diode Physics</CardTitle>
+              <Badge variant="secure" size="xs">PHYSICS</Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 text-xs space-y-3 font-sans">
+            <p className="text-zinc-300 leading-relaxed">
+              In this unidirectional monitoring enclave, physical data diodes have no transmit fiber. No TCP handshakes or resets are ever sent back. Detection relies 100% on passive statistical entropy and timing.
             </p>
-            <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-800/80">
-              <span className="text-slate-500">Return Channel:</span> <span className="text-green-400 font-bold">Physically Severed (0 Return ACKs)</span>
+            <div className="pt-2 border-t border-white/[0.06] text-[11px] font-mono text-zinc-400 flex justify-between">
+              <span className="text-zinc-500">Return Channel:</span>
+              <span className="text-emerald-400 font-semibold">0 Return ACKs / 0 RSTs</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* MATHEMATICAL TELEMETRY METRICS */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="p-3.5 rounded-lg border border-white/[0.08] bg-[#111318] flex items-center justify-between">
+          <div>
+            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Shannon Entropy (H)</div>
+            <div className="text-sm font-bold text-blue-400 font-mono mt-0.5">
+              H = {round(caseData.entropy || 4.12, 2)} / 8.0
             </div>
           </div>
+          <Badge variant="info" size="xs">High Entropy</Badge>
         </div>
 
-        {/* MATHEMATICAL ATTRIBUTION METRICS */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-          <div className="bg-[#0e121b] border border-blue-500/20 p-3 rounded-lg flex justify-between items-center">
-            <div>
-              <div className="text-[10px] text-slate-500 uppercase">Shannon Entropy (H)</div>
-              <div className="text-sm font-bold text-blue-400 font-mono">H = {round(caseData.entropy || 4.12, 2)} / 8.0</div>
+        <div className="p-3.5 rounded-lg border border-white/[0.08] bg-[#111318] flex items-center justify-between">
+          <div>
+            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">IAT Periodicity (CV)</div>
+            <div className="text-sm font-bold text-amber-400 font-mono mt-0.5">
+              CV = {round(caseData.iat_cv || 0.14, 2)}
             </div>
-            <span className="text-[10px] text-slate-400">High randomness</span>
           </div>
+          <Badge variant="warning" size="xs">
+            {Number(caseData.iat_cv || 0.14) < 0.5 ? 'Robotic Pulse' : 'Variable Flow'}
+          </Badge>
+        </div>
 
-          <div className="bg-[#0e121b] border border-orange-500/20 p-3 rounded-lg flex justify-between items-center">
-            <div>
-              <div className="text-[10px] text-slate-500 uppercase">IAT Periodicity (CV)</div>
-              <div className="text-sm font-bold text-orange-400 font-mono">CV = {round(caseData.iat_cv || 0.14, 2)}</div>
+        <div className="p-3.5 rounded-lg border border-white/[0.08] bg-[#111318] flex items-center justify-between">
+          <div>
+            <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Volume Asymmetry</div>
+            <div className="text-sm font-bold text-emerald-400 font-mono mt-0.5">
+              100% Simplex Ingress
             </div>
-            <span className="text-[10px] text-slate-400">{Number(caseData.iat_cv || 0.14) < 0.5 ? 'Robotic Heartbeat' : 'Variable Flow'}</span>
           </div>
-
-          <div className="bg-[#0e121b] border border-green-500/20 p-3 rounded-lg flex justify-between items-center">
-            <div>
-              <div className="text-[10px] text-slate-500 uppercase">Flow Volume Asymmetry</div>
-              <div className="text-sm font-bold text-green-400 font-mono">100% Simplex Ingress</div>
-            </div>
-            <span className="text-[10px] text-green-400">0 Return Packets</span>
-          </div>
+          <Badge variant="secure" size="xs">0 Return Pkts</Badge>
         </div>
       </div>
 
-      {/* INTERACTIVE WIRESHARK PACKET DISSECTION & KALI TOOL DEMO */}
-      <div className="bg-[#111] border border-slate-800 p-6 rounded-xl space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-slate-800 pb-3">
-          <div className="flex items-center gap-2 text-sm font-bold text-white uppercase tracking-wider">
-            <Terminal className="w-4 h-4 text-purple-400" />
-            Interactive Wire Dissection Demo & Kali Tool Equivalence
+      {/* KALI TOOL EQUIVALENCE BANNER */}
+      <div className="p-3.5 rounded-lg border border-white/[0.08] bg-[#111318] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          <Terminal className="w-4 h-4 text-purple-400 shrink-0" />
+          <div className="text-xs">
+            <span className="text-zinc-500 uppercase tracking-wider text-[10px] block">Equivalent Kali Linux Attack Vector</span>
+            <code className="text-zinc-200 font-mono font-medium">{kaliCommand}</code>
           </div>
-          <span className="text-xs text-slate-400">Simplex Sniffer Dissection Engine</span>
         </div>
+        <Button 
+          variant="outline" 
+          size="xs" 
+          onClick={() => copyCommand(kaliCommand)}
+          icon={copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+        >
+          {copied ? 'Copied' : 'Copy Command'}
+        </Button>
+      </div>
 
-        {/* KALI TOOL COMMAND BANNER */}
-        <div className="bg-[#0a0a0a] border border-purple-500/30 rounded-lg p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div className="space-y-1">
-            <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest block flex items-center gap-1.5">
-              <Terminal className="w-3 h-3" /> Equivalent Kali Linux Attack Vector:
-            </span>
-            <code className="text-xs text-white font-mono bg-black px-2 py-1 rounded border border-slate-800 inline-block">
-              {packetDemo?.kali_tool_command || `hping3 -S -p 80 --flood ${caseData.destination_ip || '10.0.1.50'}`}
-            </code>
-          </div>
-          <span className="text-[11px] text-slate-400">Generates unidirectional packets matching this exact case signature</span>
-        </div>
-
-        {/* WIRESHARK PROTOCOL TREE */}
-        <div className="bg-[#0a0a0a] border border-slate-800 rounded-lg p-4 space-y-2">
-          <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <Eye className="w-3.5 h-3.5 text-blue-400" />
-            Wireshark Protocol Tree Breakdown
-          </div>
-
-          <div className="space-y-2 font-mono text-xs">
+      {/* WIRESHARK PROTOCOL DISSECTION & HEX DUMP */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Protocol Tree */}
+        <Card>
+          <CardHeader className="py-3 px-4">
+            <div className="flex items-center justify-between">
+              <CardTitle>Wireshark Protocol Tree Breakdown</CardTitle>
+              <Badge variant="neutral" size="xs">DISSECTION</Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="p-3 space-y-1.5 font-mono text-xs">
             {(packetDemo?.wire_layers || defaultLayers(caseData)).map((layer: any, idx: number) => {
               const isExp = expandedLayer === idx
               return (
-                <div key={idx} className="border border-slate-800/80 rounded bg-[#111] overflow-hidden">
+                <div key={idx} className="border border-white/[0.06] rounded bg-[#0d0f14] overflow-hidden">
                   <div 
                     onClick={() => setExpandedLayer(isExp ? null : idx)}
-                    className="p-2.5 flex justify-between items-center cursor-pointer hover:bg-slate-800/40 transition-colors"
+                    className="p-2.5 flex justify-between items-center cursor-pointer hover:bg-white/[0.03] transition-colors"
                   >
-                    <div className="flex items-center gap-2 text-slate-200 font-semibold">
-                      <span className="text-slate-500 text-[10px]">{isExp ? '▼' : '▶'}</span>
-                      <span className="text-blue-400">{layer.layer}:</span>
-                      <span className="text-slate-300 font-normal">{layer.summary}</span>
+                    <div className="flex items-center gap-2 text-zinc-200">
+                      <span className="text-zinc-500 text-[10px]">{isExp ? '▼' : '▶'}</span>
+                      <span className="text-blue-400 font-semibold">{layer.layer}:</span>
+                      <span className="text-zinc-300 font-normal truncate max-w-[280px]">{layer.summary}</span>
                     </div>
                   </div>
 
                   {isExp && (
-                    <div className="bg-black/60 p-3 border-t border-slate-800/60 pl-8 space-y-1 text-[11px] text-slate-400">
+                    <div className="bg-black/40 p-2.5 border-t border-white/[0.04] pl-6 space-y-1 text-[11px] text-zinc-400">
                       {layer.details?.map((detail: string, dIdx: number) => (
-                        <div key={dIdx} className="hover:text-white transition-colors">
-                          &bull; {detail}
+                        <div key={dIdx} className="hover:text-zinc-200 transition-colors">
+                          • {detail}
                         </div>
                       ))}
                     </div>
@@ -289,62 +324,67 @@ export default function CaseDetailPage() {
                 </div>
               )
             })}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        {/* WIRESHARK HEX & ASCII DUMP */}
-        <div className="bg-[#0a0a0a] border border-slate-800 rounded-lg p-4 space-y-2">
-          <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-            <Code className="w-3.5 h-3.5 text-green-400" />
-            Raw Wire Packet Bytes (Hex / ASCII Dissection)
-          </div>
-          <pre className="bg-black p-3 rounded font-mono text-[11px] text-green-400 overflow-x-auto leading-tight border border-slate-900">
-            {packetDemo?.raw_hex_dump || defaultHexDump()}
-          </pre>
-        </div>
+        {/* Raw Wire Hex & ASCII Dump */}
+        <Card>
+          <CardHeader className="py-3 px-4">
+            <div className="flex items-center justify-between">
+              <CardTitle>Raw Wire Packet Bytes (Hex / ASCII)</CardTitle>
+              <Badge variant="neutral" size="xs">HEX VIEW</Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="p-3">
+            <pre className="bg-[#090a0d] p-3 rounded font-mono text-[11px] text-emerald-400 overflow-x-auto leading-relaxed border border-white/[0.04]">
+              {packetDemo?.raw_hex_dump || defaultHexDump()}
+            </pre>
+          </CardContent>
+        </Card>
       </div>
 
       {/* LIVE AI/ML CLASSIFIER LAB */}
-      <div className="bg-[#111] border border-slate-800 p-6 rounded-xl space-y-4">
-        <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-          <div className="flex items-center gap-2 text-sm font-bold text-white uppercase tracking-wider">
-            <Cpu className="w-4 h-4 text-blue-400" />
-            Live Flow AI/ML Classifier Sandbox (XGBoost v5.0.0 & Isolation Forest)
+      <Card>
+        <CardHeader className="py-3.5 px-4 flex-row justify-between items-center space-y-0">
+          <div>
+            <CardTitle>Live Flow AI/ML Classifier Sandbox</CardTitle>
+            <p className="text-xs text-zinc-500 font-sans mt-0.5">
+              Production XGBoost v5 & UNSW-NB15 Isolation Forest classifier inference without payload decryption
+            </p>
           </div>
-          <button
+          <Button
+            variant="primary"
+            size="sm"
+            loading={mlLoading}
             onClick={handleRunMlTest}
-            disabled={mlLoading}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded text-xs font-bold transition-colors flex items-center gap-2 shadow-lg shadow-blue-900/30"
+            icon={<Play className="w-3.5 h-3.5" />}
           >
-            {mlLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
-            Run Live Classifier Inference
-          </button>
-        </div>
-
-        <p className="text-xs text-slate-400">
-          Evaluates this flow through the production XGBoost classifier and UNSW-NB15 Isolation Forest engine without payload decryption.
-        </p>
+            Run Classifier Inference
+          </Button>
+        </CardHeader>
 
         {mlResult && (
-          <div className="p-4 bg-[#0a0a0a] rounded-lg border border-blue-500/30 text-xs space-y-3 animate-in fade-in">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div>
-                <span className="text-slate-500 uppercase text-[10px] block">Model Decision</span>
-                <span className="font-bold text-red-400 text-sm">{mlResult.threat_type || mlResult.classification}</span>
+          <CardContent className="p-4 border-t border-white/[0.06] bg-[#090b0e]">
+            <div className="p-3 rounded border border-blue-500/20 bg-[#0e121b] text-xs space-y-2.5 font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <span className="text-zinc-500 uppercase text-[10px] block">Model Decision</span>
+                  <span className="font-bold text-red-400 text-sm">{mlResult.threat_type || mlResult.classification}</span>
+                </div>
+                <div>
+                  <span className="text-zinc-500 uppercase text-[10px] block">Severity Tier</span>
+                  <span className="font-bold text-amber-400 text-sm">{mlResult.classification || 'CRITICAL'}</span>
+                </div>
+                <div>
+                  <span className="text-zinc-500 uppercase text-[10px] block">Confidence</span>
+                  <span className="font-bold text-blue-400 text-sm">{Math.round((mlResult.confidence || 0.94) * 100)}%</span>
+                </div>
               </div>
-              <div>
-                <span className="text-slate-500 uppercase text-[10px] block">Severity Tier</span>
-                <span className="font-bold text-orange-400 text-sm">{mlResult.classification || 'CRITICAL'}</span>
-              </div>
-              <div>
-                <span className="text-slate-500 uppercase text-[10px] block">Bayesian Confidence</span>
-                <span className="font-bold text-blue-400 text-sm">{Math.round((mlResult.confidence || 0.94) * 100)}%</span>
-              </div>
+              <p className="text-zinc-300 text-xs border-t border-white/[0.06] pt-2 font-sans">{mlResult.decision_summary}</p>
             </div>
-            <p className="text-slate-300 text-xs border-t border-slate-800/80 pt-2">{mlResult.decision_summary}</p>
-          </div>
+          </CardContent>
         )}
-      </div>
+      </Card>
     </div>
   )
 }
@@ -360,7 +400,7 @@ function defaultLayers(caseData: any) {
   return [
     {
       layer: 'Frame 1',
-      summary: '74 bytes on wire (592 bits), captured on interface eth0 (Simplex Tap)',
+      summary: '74 bytes on wire (592 bits), captured on eth0 (Simplex Tap)',
       details: [
         'Arrival Time: Live Ingress',
         'Frame Length: 74 bytes',

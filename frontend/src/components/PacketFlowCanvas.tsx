@@ -278,22 +278,22 @@ export default function PacketFlowCanvas() {
   }
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-[#0a0a0f] p-5 space-y-4 font-mono text-slate-200">
+    <div className="rounded-lg border border-white/[0.08] bg-[#111318] p-4 sm:p-5 space-y-4 font-mono text-zinc-200 shadow-sm">
       {/* HEADER & CONTROLS */}
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-800 pb-3">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-white/[0.06] pb-3.5">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400">
-            <Radio className="w-5 h-5 animate-pulse" />
+          <div className="p-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400">
+            <Radio className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
               Physical Data Diode Simplex Packet Flow Visualizer
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${wsConnected ? 'bg-green-500/20 text-green-400 border border-green-500/40' : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/40'}`}>
+              <span className={`px-1.5 py-0.2 rounded text-[10px] font-bold font-mono ${wsConnected ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}`}>
                 {wsConnected ? 'LIVE STREAM' : 'LOCAL SIMULATOR'}
               </span>
             </h3>
-            <p className="text-xs text-slate-400">
-              Live photon & packet trajectory across the optical tap (Strict 1-Way Physics &bull; Zero Return ACKs)
+            <p className="text-[11px] text-zinc-400 font-sans mt-0.5">
+              Live photon & packet trajectory across the optical tap (Strict 1-Way Physics • Zero Return ACKs)
             </p>
           </div>
         </div>
@@ -302,14 +302,14 @@ export default function PacketFlowCanvas() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-xs text-white flex items-center gap-1.5 transition-colors"
+            className="px-2.5 py-1 rounded bg-[#161a22] hover:bg-[#1d222e] border border-white/[0.08] text-xs text-zinc-200 flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+            {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
             {isPlaying ? 'Pause' : 'Play'}
           </button>
           <button
             onClick={() => setSpeedMultiplier(prev => prev === 1 ? 2 : (prev === 2 ? 0.5 : 1))}
-            className="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition-colors"
+            className="px-2.5 py-1 rounded bg-[#161a22] hover:bg-[#1d222e] border border-white/[0.08] text-xs text-zinc-300 transition-colors cursor-pointer"
           >
             {speedMultiplier}x Speed
           </button>
@@ -319,58 +319,58 @@ export default function PacketFlowCanvas() {
       {/* THREE-STAGE TOPOLOGY OVERVIEW */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
         {/* STAGE 1: EXTERNAL THREAT ACTOR */}
-        <div className="bg-[#111] p-3 rounded-lg border border-slate-800 flex flex-col justify-between">
+        <div className="bg-[#0d0f14] p-3 rounded-lg border border-white/[0.06] flex flex-col justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1.5">
-              <Terminal className="w-3.5 h-3.5 text-orange-400" /> Untrusted External WAN Link
+            <span className="text-[10px] font-bold text-zinc-400 uppercase flex items-center gap-1.5 font-mono">
+              <Terminal className="w-3.5 h-3.5 text-amber-400" /> Untrusted External WAN Link
             </span>
-            <div className="font-bold text-white text-sm">Source: 185.220.101.34</div>
-            <div className="text-[11px] text-slate-400">Red Team Tool: <code className="text-orange-300">hping3 / nmap</code></div>
+            <div className="font-bold text-white text-xs font-mono">Source: 185.220.101.34</div>
+            <div className="text-[11px] text-zinc-400">Red Team Tool: <code className="text-amber-300 font-mono">hping3 / nmap</code></div>
           </div>
-          <div className="mt-2 pt-2 border-t border-slate-800/80 flex justify-between text-[11px]">
-            <span className="text-slate-500">Emission Rate:</span>
-            <span className="text-blue-400 font-bold">{pps} pkts/sec</span>
+          <div className="mt-2.5 pt-2 border-t border-white/[0.06] flex justify-between text-[11px] font-mono">
+            <span className="text-zinc-500">Emission Rate:</span>
+            <span className="text-blue-400 font-semibold">{pps} pkts/sec</span>
           </div>
         </div>
 
         {/* STAGE 2: PHYSICAL DATA DIODE */}
-        <div className="bg-[#111] p-3 rounded-lg border border-red-500/30 flex flex-col justify-between">
+        <div className="bg-[#0d0f14] p-3 rounded-lg border border-red-500/20 flex flex-col justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-red-400 uppercase flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-red-500" /> Physical Data Diode Barrier
+            <span className="text-[10px] font-bold text-red-400 uppercase flex items-center gap-1.5 font-mono">
+              <Lock className="w-3.5 h-3.5 text-red-400" /> Physical Data Diode Barrier
             </span>
-            <div className="font-bold text-green-400 text-sm">Rx Tap: 100% Simplex Light</div>
-            <div className="text-[11px] text-slate-300">Tx Fiber: <span className="text-red-400 font-bold">PHYSICALLY SEVERED</span></div>
+            <div className="font-bold text-emerald-400 text-xs font-mono">Rx Tap: 100% Simplex Light</div>
+            <div className="text-[11px] text-zinc-300">Tx Fiber: <span className="text-red-400 font-semibold">PHYSICALLY SEVERED</span></div>
           </div>
-          <div className="mt-2 pt-2 border-t border-slate-800/80 flex justify-between text-[11px]">
-            <span className="text-slate-500">Return Channel:</span>
-            <span className="text-red-400 font-bold">0 Return ACKs / 0 RSTs</span>
+          <div className="mt-2.5 pt-2 border-t border-white/[0.06] flex justify-between text-[11px] font-mono">
+            <span className="text-zinc-500">Return Channel:</span>
+            <span className="text-red-400 font-semibold">0 ACKs / 0 RSTs</span>
           </div>
         </div>
 
         {/* STAGE 3: SENTINEL ENCLAVE */}
-        <div className="bg-[#111] p-3 rounded-lg border border-slate-800 flex flex-col justify-between">
+        <div className="bg-[#0d0f14] p-3 rounded-lg border border-white/[0.06] flex flex-col justify-between">
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-green-400 uppercase flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-emerald-400 uppercase flex items-center gap-1.5 font-mono">
               <Cpu className="w-3.5 h-3.5 text-blue-400" /> NTRO Sentinel Enclave (eth0)
             </span>
-            <div className="font-bold text-white text-sm truncate">{classifierVerdict}</div>
-            <div className="text-[11px] text-slate-400">AI/ML Engine: <span className="text-blue-400 font-bold">XGBoost v5 &bull; {classifierConf}%</span></div>
+            <div className="font-bold text-white text-xs font-mono truncate">{classifierVerdict}</div>
+            <div className="text-[11px] text-zinc-400">AI/ML Engine: <span className="text-blue-400 font-semibold">XGBoost v5 • {classifierConf}%</span></div>
           </div>
-          <div className="mt-2 pt-2 border-t border-slate-800/80 flex justify-between text-[11px]">
-            <span className="text-slate-500">Shannon Entropy:</span>
-            <span className="text-orange-400 font-bold">H = {latestEntropy.toFixed(2)} / 8.0</span>
+          <div className="mt-2.5 pt-2 border-t border-white/[0.06] flex justify-between text-[11px] font-mono">
+            <span className="text-zinc-500">Shannon Entropy:</span>
+            <span className="text-amber-400 font-semibold">H = {latestEntropy.toFixed(2)} / 8.0</span>
           </div>
         </div>
       </div>
 
       {/* CANVAS CONTAINER */}
-      <div className="relative border border-slate-800 rounded-lg overflow-hidden bg-black/80 flex items-center justify-center">
+      <div className="relative border border-white/[0.08] rounded-lg overflow-hidden bg-[#07080a] flex items-center justify-center">
         {/* Stage Overlays on Canvas */}
-        <div className="absolute left-4 top-4 bg-[#0a0a0f]/80 backdrop-blur px-2.5 py-1 rounded border border-slate-800 text-[10px] text-slate-400">
+        <div className="absolute left-3 top-3 bg-[#0d0f14]/90 backdrop-blur px-2 py-0.5 rounded border border-white/[0.08] text-[9px] font-mono text-zinc-400">
           WAN INGRESS (TX)
         </div>
-        <div className="absolute right-4 top-4 bg-[#0a0a0f]/80 backdrop-blur px-2.5 py-1 rounded border border-slate-800 text-[10px] text-green-400">
+        <div className="absolute right-3 top-3 bg-[#0d0f14]/90 backdrop-blur px-2 py-0.5 rounded border border-white/[0.08] text-[9px] font-mono text-emerald-400">
           ENCLAVE SENSOR (RX)
         </div>
 
@@ -381,30 +381,32 @@ export default function PacketFlowCanvas() {
         />
       </div>
 
-      {/* QUICK ATTACK INJECTION BUTTONS FOR DEMONSTRATION */}
+      {/* QUICK ATTACK INJECTION BUTTONS */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
         <div className="flex items-center gap-2">
-          <span className="text-slate-500 uppercase text-[10px] font-bold">Quick Ingress Injection:</span>
+          <span className="text-zinc-500 uppercase text-[10px] font-bold font-mono">Simplex Burst Injection:</span>
           <button
             onClick={() => triggerTestBurst('uni_directional')}
-            className="px-2.5 py-1 bg-red-950/40 hover:bg-red-900/60 text-red-300 border border-red-800/60 rounded text-[11px] transition-colors"
+            className="px-2 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-300 border border-red-500/20 rounded text-[11px] transition-colors cursor-pointer"
           >
             + Burst SYN Flood
           </button>
           <button
             onClick={() => triggerTestBurst('dns_tunnel')}
-            className="px-2.5 py-1 bg-purple-950/40 hover:bg-purple-900/60 text-purple-300 border border-purple-800/60 rounded text-[11px] transition-colors"
+            className="px-2 py-1 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/20 rounded text-[11px] transition-colors cursor-pointer"
           >
             + Burst DNS Tunnel
           </button>
           <button
             onClick={() => triggerTestBurst('port_scan')}
-            className="px-2.5 py-1 bg-blue-950/40 hover:bg-blue-900/60 text-blue-300 border border-blue-800/60 rounded text-[11px] transition-colors"
+            className="px-2 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/20 rounded text-[11px] transition-colors cursor-pointer"
           >
             + Burst Port Scan
           </button>
         </div>
-        <span className="text-slate-500 text-[11px]">Total Observed Tap Packets: <strong className="text-white">{totalObserved}</strong></span>
+        <span className="text-zinc-500 text-[11px] font-mono">
+          Total Observed Tap Packets: <strong className="text-zinc-200 font-semibold">{totalObserved}</strong>
+        </span>
       </div>
     </div>
   )
