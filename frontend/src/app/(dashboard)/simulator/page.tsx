@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Skull, Target, Zap, Activity, Wifi, Radio, Upload, Play, CheckCircle2, Shield, RefreshCw } from 'lucide-react'
+import { Skull, Target, Zap, Activity, Wifi, Radio, Upload, Play, CheckCircle2, Shield, RefreshCw, HelpCircle, BookOpen, Terminal, ChevronDown, ChevronUp, Lock, Cpu, FileCode, Server } from 'lucide-react'
 import PacketFlowCanvas from '@/components/PacketFlowCanvas'
 
 const ATTACKS = [
@@ -40,6 +40,8 @@ export default function ActionCenterPage() {
   const [results, setResults] = useState<{type: string, msg: string, attack: string}[]>([])
   const [snifferStats, setSnifferStats] = useState<any>({ is_running: false, packets_captured: 0, bytes_captured: 0, interface: 'default' })
   const [uploading, setUploading] = useState(false)
+  const [isExplainerOpen, setIsExplainerOpen] = useState(false)
+  const [explainerTab, setExplainerTab] = useState<'pcap' | 'visualizer' | 'sniffer'>('pcap')
 
   const fetchSniffer = async () => {
     try {
@@ -133,7 +135,7 @@ export default function ActionCenterPage() {
 
   return (
     <div className="space-y-6 max-w-[1400px] animate-in fade-in duration-500 p-6">
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-3">
             <Radio className="w-6 h-6 text-blue-500 animate-pulse" />
@@ -143,7 +145,136 @@ export default function ActionCenterPage() {
             Replay authentic defense PCAPs, manage passive line-rate network sniffing, or inject raw socket attack streams across the data diode tap.
           </p>
         </div>
+        <button
+          onClick={() => setIsExplainerOpen(!isExplainerOpen)}
+          className="px-3.5 py-2 rounded-lg bg-blue-600/10 border border-blue-500/30 hover:bg-blue-600/20 text-blue-400 text-xs font-bold flex items-center gap-2 transition-all shrink-0 self-start shadow-sm"
+        >
+          <HelpCircle className="w-4 h-4" />
+          {isExplainerOpen ? 'Hide Architecture Guide' : 'How These Systems Work (NTRO Architecture)'}
+          {isExplainerOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+        </button>
       </div>
+
+      {/* ARCHITECTURE & PHYSICS EXPLAINER DRAWER */}
+      {isExplainerOpen && (
+        <div className="rounded-xl border border-blue-500/30 bg-[#0d121f] p-5 space-y-4 animate-in fade-in duration-300 font-mono text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2 text-white font-bold text-sm">
+              <BookOpen className="w-4 h-4 text-blue-400" />
+              NTRO PS #26145 System Architecture & Optical Diode Physics Reference
+            </div>
+            <div className="flex rounded-lg bg-slate-900 p-1 border border-slate-800">
+              <button
+                onClick={() => setExplainerTab('pcap')}
+                className={`px-3 py-1 rounded text-xs font-bold transition-all ${explainerTab === 'pcap' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+              >
+                1. Authentic PCAP Replay
+              </button>
+              <button
+                onClick={() => setExplainerTab('visualizer')}
+                className={`px-3 py-1 rounded text-xs font-bold transition-all ${explainerTab === 'visualizer' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+              >
+                2. Diode Packet Visualizer
+              </button>
+              <button
+                onClick={() => setExplainerTab('sniffer')}
+                className={`px-3 py-1 rounded text-xs font-bold transition-all ${explainerTab === 'sniffer' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+              >
+                3. Passive Live Sniffer
+              </button>
+            </div>
+          </div>
+
+          {/* TAB 1: PCAP REPLAY */}
+          {explainerTab === 'pcap' && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Disk Repository</span>
+                  <code className="text-blue-300 text-xs mt-1 block">data/pcaps/ (24 Samples)</code>
+                  <p className="text-slate-400 text-[11px] mt-1">Mounted into <code className="text-slate-300">cyberos-backend</code> at <code className="text-slate-300">/app/data/pcaps</code>.</p>
+                </div>
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Execution Engine</span>
+                  <span className="text-green-400 font-bold text-xs mt-1 block">Scapy PcapReader Streaming</span>
+                  <p className="text-slate-400 text-[11px] mt-1">Iterates frame-by-frame with zero memory bloat, feeding sliding 5s tumbling windows.</p>
+                </div>
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Zero-Simulation Rule</span>
+                  <span className="text-orange-400 font-bold text-xs mt-1 block">Real Raw Wire Bytes</span>
+                  <p className="text-slate-400 text-[11px] mt-1">No fake random scores. Computes exact Shannon entropy H and real XGBoost/Isolation Forest inference.</p>
+                </div>
+              </div>
+              <div className="p-3 bg-slate-950/60 rounded border border-slate-800/80 text-[11px] text-slate-300 flex items-start gap-2">
+                <Terminal className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                <div>
+                  <strong>How to trigger programmatically:</strong>
+                  <code className="bg-black px-2 py-0.5 rounded text-blue-300 border border-slate-800 ml-2">POST http://localhost:8000/api/network/pcap/replay/syn_flood.pcap</code>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: VISUALIZER */}
+          {explainerTab === 'visualizer' && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Stage 1: Attacker WAN</span>
+                  <span className="text-red-400 font-bold text-xs mt-1 block">185.220.101.34 (Kali Tools)</span>
+                  <p className="text-slate-400 text-[11px] mt-1">Simulates adversary firing unidirectional packets (hping3, nmap, dnscat2) towards enclave.</p>
+                </div>
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Stage 2: Optical Tap</span>
+                  <span className="text-purple-400 font-bold text-xs mt-1 block">Simplex Light Conduit</span>
+                  <p className="text-slate-400 text-[11px] mt-1">Photons flow strictly Left-to-Right. Return fiber is physically absent: <strong>0 RETURN ACKs / 0 RSTs</strong>.</p>
+                </div>
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Stage 3: Sentinel Enclave</span>
+                  <span className="text-blue-400 font-bold text-xs mt-1 block">eth0 Sensor & Dual ML</span>
+                  <p className="text-slate-400 text-[11px] mt-1">Promiscuous RX extracts Shannon entropy H and IAT CV to detect anomalies without handshakes.</p>
+                </div>
+              </div>
+              <div className="p-3 bg-slate-950/60 rounded border border-slate-800/80 text-[11px] text-slate-300 flex items-start gap-2">
+                <Zap className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
+                <div>
+                  <strong>Live Stream Mechanics:</strong> The badge indicates an active WebSocket connection to <code className="text-green-300">ws://localhost:8000/ws/packet-stream</code> which broadcasts lightweight packet pulses at 60 FPS whenever packets traverse the diode.
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: LIVE SNIFFER */}
+          {explainerTab === 'sniffer' && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Daemon Location</span>
+                  <code className="text-blue-300 text-xs mt-1 block">backend/ingestion/live_sniffer.py</code>
+                  <p className="text-slate-400 text-[11px] mt-1">Runs as an asynchronous daemon using Scapy's <code className="text-slate-300">AsyncSniffer</code>.</p>
+                </div>
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">Interface & Privileges</span>
+                  <span className="text-green-400 font-bold text-xs mt-1 block">eth0 (NET_ADMIN, NET_RAW)</span>
+                  <p className="text-slate-400 text-[11px] mt-1">Promiscuous raw socket enabled in Docker Compose to capture all optical ingress traffic.</p>
+                </div>
+                <div className="bg-black/40 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 uppercase text-[10px] font-bold block">100% Passive Guarantee</span>
+                  <span className="text-orange-400 font-bold text-xs mt-1 block">0 Outbound Transmissions</span>
+                  <p className="text-slate-400 text-[11px] mt-1">Strict read-only listening. Never injects SYN-ACKs, RSTs, or ICMP replies into the protected network.</p>
+                </div>
+              </div>
+              <div className="p-3 bg-slate-950/60 rounded border border-slate-800/80 text-[11px] text-slate-300 flex items-start gap-2">
+                <Server className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                <div>
+                  <strong>Health Check API:</strong>
+                  <code className="bg-black px-2 py-0.5 rounded text-blue-300 border border-slate-800 ml-2">GET http://localhost:8000/api/network/sniffer/status</code>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* REAL-TIME SIMPLEX PACKET FLOW VISUALIZER */}
       <PacketFlowCanvas />
