@@ -51,7 +51,7 @@ export default function CyberOSDashboard() {
               type: threatTitle,
               severity: c.severity || 'HIGH',
               score: cleanScore,
-              case_id: (c.case_id || '').substring(0, 8),
+              case_id: c.case_id || '',
             }
           })
           setThreats(mapped)
@@ -238,12 +238,13 @@ export default function CyberOSDashboard() {
                     <th className="py-3 px-4 font-normal">ATTACK SIGNATURE</th>
                     <th className="py-3 px-4 font-normal">SEVERITY</th>
                     <th className="py-3 px-4 font-normal">SCORE</th>
+                    <th className="py-3 px-4 font-normal text-right">ACTION</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/50">
                   {threats.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-slate-500">
+                      <td colSpan={7} className="py-8 text-center text-slate-500">
                         <div className="flex flex-col items-center gap-2">
                           <Activity className="w-5 h-5 text-slate-600 animate-pulse" />
                           <span>No active threat alerts on wire. Monitoring live simplex flows...</span>
@@ -263,6 +264,14 @@ export default function CyberOSDashboard() {
                           </span>
                         </td>
                         <td className="py-3 px-4 text-white font-bold">{t.score}%</td>
+                        <td className="py-3 px-4 text-right">
+                          <Link
+                            href={t.case_id ? `/cases/${t.case_id}` : '/cases'}
+                            className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[11px] font-bold transition-colors inline-block"
+                          >
+                            Investigate
+                          </Link>
+                        </td>
                       </tr>
                     ))
                   )}

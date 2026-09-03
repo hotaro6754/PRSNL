@@ -493,10 +493,13 @@ async def get_case_by_id(case_id: str, tenant_id: str = Depends(get_current_tena
             
     if not case:
         try:
+            import re
             from bson import ObjectId
             db_case = await mongo.cases.find_one({"case_id": case_id, "organization_id": tenant_id})
             if not db_case:
                 db_case = await mongo.cases.find_one({"case_id": case_id})
+            if not db_case:
+                db_case = await mongo.cases.find_one({"case_id": {"$regex": f"^{re.escape(case_id)}"}})
             if db_case:
                 if "_id" in db_case:
                     del db_case["_id"]
@@ -567,9 +570,10 @@ async def get_case_by_id(case_id: str, tenant_id: str = Depends(get_current_tena
 
 @app.post("/api/cases/{case_id}/close")
 async def close_case(case_id: str, payload: dict = None, tenant_id: str = Depends(get_current_tenant)):
+    import re
     notes = (payload or {}).get("notes", "Physical data diode isolation confirmed. Zero reverse packets transmitted across optical tap.")
     await mongo.cases.update_one(
-        {"case_id": case_id},
+        {"$or": [{"case_id": case_id}, {"case_id": {"$regex": f"^{re.escape(case_id)}"}}, {"case_id": {"$regex": f"^{re.escape(case_id)}", "$options": "i"}}]},
         {"$set": {
             "status": "CONTAINED",
             "closed_at": datetime.now(timezone.utc).isoformat(),
