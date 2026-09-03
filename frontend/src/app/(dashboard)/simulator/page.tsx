@@ -5,18 +5,22 @@ import { Skull, Target, Zap, Activity, Wifi, Radio, Upload, Play, CheckCircle2, 
 const ATTACKS = [
   {
     type: 'uni_directional', name: 'Unidirectional SYN Flood', icon: Wifi, color: 'red',
+    kali: 'hping3 -S -p 80 --flood',
     desc: 'Fires high-rate simplex SYN packets to blackholed targets with 0 SYN-ACK return packets.',
   },
   {
     type: 'port_scan', name: 'Simplex Reconnaissance Scan', icon: Target, color: 'blue',
+    kali: 'nmap -sS -Pn -p 1-150',
     desc: 'Simulates rapid sequential port probing (1-150) without waiting for response handshakes.',
   },
   {
     type: 'dga', name: 'Covert DGA & DNS Beaconing', icon: Activity, color: 'purple',
+    kali: 'dnscat2 / iodine covert channel',
     desc: 'Transmits high-entropy domain queries to test covert channel and DGA detection over gateway.',
   },
   {
     type: 'brute_force', name: 'Edge Service Brute Force', icon: Skull, color: 'orange',
+    kali: 'hydra -l admin -P wordlist ssh',
     desc: 'Fires rapid bursts of authentication attempts directed into isolated service ports.',
   },
 ]
@@ -255,6 +259,11 @@ export default function ActionCenterPage() {
                     <Icon className="w-5 h-5 text-blue-400" />
                   </div>
                   <h4 className="text-sm font-semibold text-white">{atk.name}</h4>
+                  <div className="my-1.5">
+                    <span className="text-[10px] font-mono bg-purple-950/40 text-purple-300 border border-purple-800/60 px-1.5 py-0.5 rounded">
+                      Kali: {atk.kali}
+                    </span>
+                  </div>
                   <p className="text-xs text-slate-400 mt-1 leading-relaxed">{atk.desc}</p>
                 </div>
                 <button

