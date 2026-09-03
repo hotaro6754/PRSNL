@@ -234,8 +234,22 @@ export default function ActionCenterPage() {
               </div>
             )}
             {explainerTab === 'visualizer' && (
-              <div className="space-y-3 pt-1">
-                <PacketFlowCanvas />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="p-2.5 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Stage 1: Attacker WAN</span>
+                  <span className="text-red-400 font-bold text-xs font-mono block">185.220.101.34 (Kali Tools)</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Adversary fires unidirectional packets towards enclave.</p>
+                </div>
+                <div className="p-2.5 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Stage 2: Optical Tap</span>
+                  <span className="text-purple-400 font-bold text-xs font-mono block">Simplex Optical Barrier</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Photons flow strictly Left-to-Right: <strong>0 Return ACKs / 0 RSTs</strong>.</p>
+                </div>
+                <div className="p-2.5 rounded bg-[#090b0e] border border-white/[0.06] space-y-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase block font-semibold">Stage 3: Sentinel Enclave</span>
+                  <span className="text-emerald-400 font-bold text-xs font-mono block">Rx Sensor on eth0</span>
+                  <p className="text-zinc-400 text-[11px] mt-1 leading-relaxed">Decodes headers, evaluates entropy and classifies threats.</p>
+                </div>
               </div>
             )}
             {explainerTab === 'sniffer' && (
