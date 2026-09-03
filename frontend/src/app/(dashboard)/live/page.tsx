@@ -8,6 +8,16 @@ export default function LiveThreatsPage() {
   const [connected, setConnected] = useState(false)
 
   useEffect(() => {
+    // Fetch initial persistent alerts from MongoDB
+    fetch('http://localhost:8000/api/alerts?limit=50')
+      .then(res => res.json())
+      .then(initialAlerts => {
+        if (Array.isArray(initialAlerts)) {
+          setAlerts(initialAlerts)
+        }
+      })
+      .catch(() => {})
+
     let ws: WebSocket
     const connect = () => {
       ws = new WebSocket('ws://localhost:8000/alerts')

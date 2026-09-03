@@ -368,17 +368,19 @@ def process_pcap_background(filename: str, loop: asyncio.AbstractEventLoop, tena
     """Background thread: replay PCAP through the full pipeline."""
     logger.info("Starting PCAP replay: %s", filename)
     try:
-        adapter = ScapyAdapter()
+        packet_count = 0
         for flow in adapter.consume(filename):
+            packet_count += 1
             flow.organization_id = tenant_id
             telemetry["total_flows"] += 1
             FLOWS_PROCESSED.inc()
             window_manager.add_observation(flow)
             redis_host_manager.add_flow(flow)
             recent_flows_buffer.append(flow)
-            ready_windows = window_manager.flush_ready_windows(0, is_live=False)
-            for wid, src_ip, org_id, window_flows in ready_windows:
-                asyncio.run_coroutine_threadsafe(process_window(wid, src_ip, window_flows, org_id), loop)
+            if packet_count % 50 == 0:
+                ready_windows = window_manager.flush_ready_windows(0, is_live=False)
+                for wid, src_ip, org_id, window_flows in ready_windows:
+                    asyncio.run_coroutine_threadsafe(process_window(wid, src_ip, window_flows, org_id), loop)
 
         # Final flush
         final_windows = window_manager.flush_all()

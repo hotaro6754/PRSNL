@@ -13,15 +13,19 @@ class ScapyAdapter(BaseIngestionAdapter):
     def __init__(self, flow_timeout_ms: int = 10000):
         self.flow_timeout_ms = flow_timeout_ms
         
-    def consume(self, source: str) -> Iterator[NetworkObservation]:
-        logger.info(f"Using ScapyAdapter to strictly parse {source}")
+    def consume(self, source: str, max_packets: int = 500) -> Iterator[NetworkObservation]:
+        logger.info(f"Using ScapyAdapter to strictly parse {source} (max_packets={max_packets})")
         
         # Key: (ipA, portA, ipB, portB, proto) always sorted lexically for state tracking
         # We will determine canonical direction internally.
         active_flows = {}
+        pkt_count = 0
         
         with PcapReader(source) as pcap_reader:
             for pkt in pcap_reader:
+                pkt_count += 1
+                if max_packets and pkt_count > max_packets:
+                    break
                 if IP in pkt:
                     proto = 6 if TCP in pkt else (17 if UDP in pkt else (1 if ICMP in pkt else pkt[IP].proto))
                     src_port = pkt[TCP].sport if TCP in pkt else (pkt[UDP].sport if UDP in pkt else 0)
