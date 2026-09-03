@@ -398,7 +398,7 @@ async def window_tick_task():
             now_ms = int(time.time() * 1000)
             ready_windows = window_manager.flush_ready_windows(now_ms, is_live=True)
             for wid, src_ip, org_id, window_flows in ready_windows:
-                await process_window(wid, src_ip, window_flows)
+                await process_window(wid, src_ip, window_flows, org_id)
         except Exception as e:
             logger.error("Error in window tick: %s", e)
         await asyncio.sleep(0.5)
@@ -473,7 +473,7 @@ async def get_stats(tenant_id: str = Depends(get_current_tenant)):
         "throughput_fps": processed_eps,
         "offered_eps": processed_eps + (lag / 5.0),
         "consumer_lag": lag,
-        "detection_latency_ms": random.randint(12, 45)
+        "detection_latency_ms": round(1000.0 / max(1.0, processed_eps), 2) if processed_eps > 0 else 0.5
     }
 
 @app.get("/api/metrics/history")

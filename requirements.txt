@@ -20,3 +20,4 @@ prometheus_client
 aiofiles
 websockets
 httpx
+python-multipart

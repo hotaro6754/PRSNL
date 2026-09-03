@@ -57,38 +57,36 @@ export default function CyberOSDashboard() {
   const isHealthy = health?.status === "ok"
   const securityPosture = stats.critical_cases > 0 ? "CRITICAL" : (stats.active_cases > 0 ? "ELEVATED" : "SAFE")
 
-  // Categorize threats by network attack type for NTRO SIH26145
+  // Categorize threats strictly by the 6 NTRO SIH26145 Problem Statement categories (a-f)
   const ddosCount = threats.filter(t => t.type.includes('DOS') || t.type.includes('FLOOD') || t.type.includes('SYN')).length
-  const scanCount = threats.filter(t => t.type.includes('SCAN') || t.type.includes('PROBE')).length
   const beaconCount = threats.filter(t => t.type.includes('BEACON') || t.type.includes('C2')).length
-  const tunnelCount = threats.filter(t => t.type.includes('TUNNEL') || t.type.includes('EXFIL') || t.type.includes('DNS')).length
+  const dnsCount = threats.filter(t => t.type.includes('TUNNEL') || t.type.includes('DNS') || t.type.includes('DGA')).length
+  const tlsCount = threats.filter(t => t.type.includes('TLS') || t.type.includes('ENCRYPTED') || t.type.includes('SSL')).length
+  const scanCount = threats.filter(t => t.type.includes('SCAN') || t.type.includes('PROBE') || t.type.includes('RECON')).length
+  const exfilCount = threats.filter(t => t.type.includes('EXFIL') || t.type.includes('ASYMMETRIC')).length
   const critCount = threats.filter(t => t.severity === 'CRITICAL' || t.severity === 'HIGH').length
 
-  // Network Threat Vector Data
+  // Network Threat Vector Data for the 6 NTRO Classes
   const vectorData = [
-    { name: 'DoS / Flood', count: ddosCount || (threats.length > 0 ? Math.ceil(threats.length * 0.35) : 3), fill: '#ef4444' },
-    { name: 'Port Scan', count: scanCount || (threats.length > 0 ? Math.ceil(threats.length * 0.25) : 2), fill: '#f97316' },
-    { name: 'C2 Beacon', count: beaconCount || (threats.length > 0 ? Math.ceil(threats.length * 0.20) : 2), fill: '#a855f7' },
-    { name: 'Covert Tunnel', count: tunnelCount || (threats.length > 0 ? Math.ceil(threats.length * 0.20) : 1), fill: '#3b82f6' },
+    { name: 'DDoS (a)', count: ddosCount, fill: '#ef4444' },
+    { name: 'C2 Beacon (b)', count: beaconCount, fill: '#a855f7' },
+    { name: 'DNS Tunnel (c)', count: dnsCount, fill: '#3b82f6' },
+    { name: 'TLS Session (d)', count: tlsCount, fill: '#06b6d4' },
+    { name: 'Recon Scan (e)', count: scanCount, fill: '#f97316' },
+    { name: 'Data Exfil (f)', count: exfilCount, fill: '#ec4899' },
   ]
 
   const severityData = [
-    { name: 'CRITICAL', value: threats.filter(t => t.severity === 'CRITICAL').length || 2, fill: '#ef4444' },
-    { name: 'HIGH', value: threats.filter(t => t.severity === 'HIGH').length || 4, fill: '#f97316' },
-    { name: 'MEDIUM', value: threats.filter(t => t.severity === 'MEDIUM').length || 3, fill: '#eab308' },
-    { name: 'LOW', value: threats.filter(t => t.severity === 'LOW').length || 1, fill: '#22c55e' },
+    { name: 'CRITICAL', value: threats.filter(t => t.severity === 'CRITICAL').length, fill: '#ef4444' },
+    { name: 'HIGH', value: threats.filter(t => t.severity === 'HIGH').length, fill: '#f97316' },
+    { name: 'MEDIUM', value: threats.filter(t => t.severity === 'MEDIUM').length, fill: '#eab308' },
+    { name: 'LOW', value: threats.filter(t => t.severity === 'LOW').length, fill: '#22c55e' },
   ].filter(d => d.value > 0)
 
-  const scoreTimeline = threats.length > 0 ? threats.map((t, i) => ({
+  const scoreTimeline = threats.slice(0, 10).map((t, i) => ({
     name: 'FL-' + (i + 1),
     score: t.score,
-  })) : [
-    { name: 'FL-1', score: 45 },
-    { name: 'FL-2', score: 78 },
-    { name: 'FL-3', score: 92 },
-    { name: 'FL-4', score: 65 },
-    { name: 'FL-5', score: 85 },
-  ]
+  }))
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-slate-300 font-mono flex flex-col">
@@ -126,11 +124,11 @@ export default function CyberOSDashboard() {
             </div>
             <div className="flex space-x-6">
               <div className="text-right">
-                <div className="text-3xl font-bold text-white">{tunnelStats?.monitored_ips || threats.length || 47}</div>
+                <div className="text-3xl font-bold text-white">{tunnelStats?.monitored_ips ?? threats.length}</div>
                 <div className="text-xs text-slate-500 uppercase tracking-wider">Monitored Flows</div>
               </div>
               <div className="text-right">
-                <div className="text-3xl font-bold text-red-500">{critCount || tunnelStats?.one_way_tunnels || 3}</div>
+                <div className="text-3xl font-bold text-red-500">{critCount}</div>
                 <div className="text-xs text-slate-500 uppercase tracking-wider">Threat Alerts</div>
               </div>
             </div>
@@ -196,17 +194,17 @@ export default function CyberOSDashboard() {
         <div className="grid grid-cols-4 gap-4">
           <div className="bg-[#111] border border-slate-800 p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-2"><Activity className="w-4 h-4 text-blue-400" /><span className="text-xs text-slate-500 tracking-widest">INGRESS FLOWS</span></div>
-            <div className="text-2xl font-bold text-white">{tunnelStats?.monitored_ips || stats.total_flows || 47}</div>
+            <div className="text-2xl font-bold text-white">{tunnelStats?.monitored_ips ?? 0}</div>
             <div className="text-[10px] text-slate-500 mt-1">Passive Optical Ingress Tap</div>
           </div>
           <div className="bg-[#111] border border-slate-800 p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-2"><Zap className="w-4 h-4 text-orange-400" /><span className="text-xs text-slate-500 tracking-widest">AI ANOMALIES</span></div>
-            <div className="text-2xl font-bold text-white">{critCount || 8}</div>
+            <div className="text-2xl font-bold text-white">{critCount}</div>
             <div className="text-[10px] text-slate-500 mt-1">XGBoost + Isolation Forest</div>
           </div>
           <div className="bg-[#111] border border-slate-800 p-4 rounded-lg">
             <div className="flex items-center gap-2 mb-2"><Network className="w-4 h-4 text-purple-400" /><span className="text-xs text-slate-500 tracking-widest">ONE-WAY TUNNELS</span></div>
-            <div className="text-2xl font-bold text-white">{tunnelStats?.one_way_tunnels || 12}</div>
+            <div className="text-2xl font-bold text-white">{tunnelStats?.one_way_tunnels ?? 0}</div>
             <div className="text-[10px] text-slate-500 mt-1">Covert DNS / ICMP Tunnels</div>
           </div>
           <div className="bg-[#111] border border-slate-800 p-4 rounded-lg">
@@ -234,25 +232,31 @@ export default function CyberOSDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/50">
-                  {(threats.length > 0 ? threats : [
-                    { time: '10:24:12', source: 'UDP', entity: '185.220.101.34 → 10.0.1.45:53', type: 'DNS_TUNNEL_EXFIL', severity: 'CRITICAL', score: 94 },
-                    { time: '10:23:55', source: 'TCP', entity: '45.154.255.147 → 10.0.2.112:80', type: 'SYN_FLOOD_SIMPLEX', severity: 'HIGH', score: 82 },
-                    { time: '10:22:30', source: 'TCP', entity: '91.240.118.172 → 10.0.3.19:443', type: 'SIMPLEX_C2_BEACON', severity: 'HIGH', score: 79 },
-                    { time: '10:21:05', source: 'TCP', entity: '194.26.135.89 → 10.0.1.100:1-1024', type: 'ONE_WAY_PORT_SCAN', severity: 'MEDIUM', score: 65 }
-                  ]).map((t: any, i: number) => (
-                    <tr key={i} className="hover:bg-slate-800/20 cursor-pointer transition-colors group">
-                      <td className="py-3 px-4 text-slate-400">{t.time}</td>
-                      <td className="py-3 px-4 text-blue-400 font-bold">{t.source || '→'}</td>
-                      <td className="py-3 px-4 text-white font-medium truncate max-w-[200px]">{t.entity}</td>
-                      <td className="py-3 px-4 text-orange-300">{t.type}</td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2 py-0.5 border text-xs ${t.severity === 'CRITICAL' ? 'bg-red-500/10 border-red-500/20 text-red-500' : t.severity === 'HIGH' ? 'bg-orange-500/10 border-orange-500/20 text-orange-500' : t.severity === 'MEDIUM' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500' : 'bg-green-500/10 border-green-500/20 text-green-500'}`}>
-                          {t.severity}
-                        </span>
+                  {threats.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-slate-500">
+                        <div className="flex flex-col items-center gap-2">
+                          <Activity className="w-5 h-5 text-slate-600 animate-pulse" />
+                          <span>No active threat alerts on wire. Monitoring live simplex flows...</span>
+                        </div>
                       </td>
-                      <td className="py-3 px-4 text-white font-bold">{t.score}%</td>
                     </tr>
-                  ))}
+                  ) : (
+                    threats.map((t: any, i: number) => (
+                      <tr key={i} className="hover:bg-slate-800/20 cursor-pointer transition-colors group">
+                        <td className="py-3 px-4 text-slate-400">{t.time}</td>
+                        <td className="py-3 px-4 text-blue-400 font-bold">{t.source || '→'}</td>
+                        <td className="py-3 px-4 text-white font-medium truncate max-w-[200px]">{t.entity}</td>
+                        <td className="py-3 px-4 text-orange-300">{t.type}</td>
+                        <td className="py-3 px-4">
+                          <span className={`px-2 py-0.5 border text-xs ${t.severity === 'CRITICAL' ? 'bg-red-500/10 border-red-500/20 text-red-500' : t.severity === 'HIGH' ? 'bg-orange-500/10 border-orange-500/20 text-orange-500' : t.severity === 'MEDIUM' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500' : 'bg-green-500/10 border-green-500/20 text-green-500'}`}>
+                            {t.severity}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-white font-bold">{t.score}%</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -302,20 +306,20 @@ export default function CyberOSDashboard() {
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-[#111] border border-slate-800 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-white">{tunnelStats?.monitored_ips || 47}</div>
+              <div className="text-2xl font-bold text-white">{tunnelStats?.monitored_ips ?? 0}</div>
               <div className="text-xs text-slate-500 tracking-widest mt-1">MONITORED IPs</div>
             </div>
             <div className="bg-[#111] border border-slate-800 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-red-500">{tunnelStats?.one_way_tunnels || 12}</div>
+              <div className="text-2xl font-bold text-red-500">{tunnelStats?.one_way_tunnels ?? 0}</div>
               <div className="text-xs text-slate-500 tracking-widest mt-1">ONE-WAY TUNNELS</div>
             </div>
             <div className="bg-[#111] border border-slate-800 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-orange-500">{tunnelStats?.blocked_ssrf || 8}</div>
-              <div className="text-xs text-slate-500 tracking-widest mt-1">BLOCKED SSRF</div>
+              <div className="text-2xl font-bold text-blue-400">{stats.active_cases ?? 0}</div>
+              <div className="text-xs text-slate-500 tracking-widest mt-1">ACTIVE CASES</div>
             </div>
             <div className="bg-[#111] border border-slate-800 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-green-500">{tunnelStats?.avg_latency_ms || 23}ms</div>
-              <div className="text-xs text-slate-500 tracking-widest mt-1">TUNNEL LATENCY</div>
+              <div className="text-2xl font-bold text-green-500">{tunnelStats?.avg_latency_ms ?? 0}ms</div>
+              <div className="text-xs text-slate-500 tracking-widest mt-1">FLOW IAT LATENCY</div>
             </div>
           </div>
 
@@ -335,43 +339,50 @@ export default function CyberOSDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/30">
-                  {((tunnelStats?.recent_flows && tunnelStats.recent_flows.length > 0) ? tunnelStats.recent_flows : [
-                    {timestamp: new Date().toISOString(), source_ip: "185.220.101.34", destination_ip: "10.0.1.45", packets: 847},
-                    {timestamp: new Date().toISOString(), source_ip: "45.154.255.147", destination_ip: "10.0.2.112", packets: 523}
-                  ]).map((flow: any, i: number) => (
-                    <tr key={i} className="hover:bg-slate-800/20">
-                      <td className="py-2 px-4 text-slate-500">{new Date(flow.timestamp).toLocaleTimeString('en-US', {hour12:false})}</td>
-                      <td className="py-2 px-4 text-red-400 font-mono">{flow.source_ip}</td>
-                      <td className="py-2 px-4 text-center text-slate-600">→</td>
-                      <td className="py-2 px-4 text-blue-400 font-mono">{flow.destination_ip}</td>
-                      <td className="py-2 px-4 text-right text-slate-300">{flow.packets}</td>
+                  {(!tunnelStats?.recent_flows || tunnelStats.recent_flows.length === 0) ? (
+                    <tr>
+                      <td colSpan={5} className="py-6 text-center text-slate-500">
+                        Awaiting incoming simplex flows. Replay PCAP or start Live Sniffer.
+                      </td>
                     </tr>
-                  ))}
+                  ) : (
+                    tunnelStats.recent_flows.map((flow: any, i: number) => (
+                      <tr key={i} className="hover:bg-slate-800/20">
+                        <td className="py-2 px-4 text-slate-500">{new Date(flow.timestamp).toLocaleTimeString('en-US', {hour12:false})}</td>
+                        <td className="py-2 px-4 text-red-400 font-mono">{flow.source_ip}</td>
+                        <td className="py-2 px-4 text-center text-slate-600">→</td>
+                        <td className="py-2 px-4 text-blue-400 font-mono">{flow.destination_ip}</td>
+                        <td className="py-2 px-4 text-right text-slate-300">{flow.packets}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
 
             <div className="bg-[#111] border border-slate-800 rounded-lg overflow-hidden">
               <div className="bg-slate-900 p-3 border-b border-slate-800 text-xs font-bold tracking-widest text-slate-400">
-                ATTACKER IP GEOLOCATION & INTEL
+                ANOMALOUS IP ENTITIES OBSERVED ON WIRE
               </div>
               <div className="p-4 space-y-3">
-                {(tunnelStats?.attacker_ips || [
-                  {flag: "🇩🇪", ip: "185.220.101.34", label: "TOR Exit Node", country: "DE"},
-                  {flag: "🇳🇱", ip: "45.154.255.147", label: "VPN Provider", country: "NL"},
-                  {flag: "🇺🇦", ip: "91.240.118.172", label: "Bulletproof Hosting", country: "UA"}
-                ]).map((ip: any, i: number) => (
-                  <div key={i} className="flex items-center justify-between bg-black/40 p-2 rounded border border-slate-800/50">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{ip.flag}</span>
-                      <span className="font-mono text-red-400 text-sm">{ip.ip}</span>
-                    </div>
-                    <div className="text-xs text-slate-400 flex items-center gap-2">
-                      <span>{ip.label}</span>
-                      <span className="bg-slate-800 px-1.5 py-0.5 rounded text-slate-300">{ip.country}</span>
-                    </div>
+                {(!tunnelStats?.attacker_ips || tunnelStats.attacker_ips.length === 0) ? (
+                  <div className="py-6 text-center text-xs text-slate-500">
+                    No anomalous external IP entities detected on wire.
                   </div>
-                ))}
+                ) : (
+                  tunnelStats.attacker_ips.map((ip: any, i: number) => (
+                    <div key={i} className="flex items-center justify-between bg-black/40 p-2 rounded border border-slate-800/50">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl">{ip.flag || '🌐'}</span>
+                        <span className="font-mono text-red-400 text-sm">{ip.ip}</span>
+                      </div>
+                      <div className="text-xs text-slate-400 flex items-center gap-2">
+                        <span>{ip.label}</span>
+                        <span className="bg-slate-800 px-1.5 py-0.5 rounded text-slate-300">{ip.country}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

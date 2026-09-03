@@ -38,9 +38,13 @@ services:
     ports:
     - 8000:8000
     restart: unless-stopped
+    cap_add:
+    - NET_ADMIN
+    - NET_RAW
     volumes:
     - ./backend:/app/backend
     - ./models:/app/models
+    - ./data:/app/data
   frontend:
     build:
       context: ./frontend
