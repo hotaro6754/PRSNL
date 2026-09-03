@@ -103,21 +103,23 @@ export default function CasesPage() {
                       {c.case_id.substring(0, 8)}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 font-medium text-white">{c.source_ip}</td>
-                  <td className="px-6 py-4 text-slate-300">{c.title || c.threat_summary}</td>
+                  <td className="px-6 py-4 font-medium text-white">
+                    {c.primary_entity || (c.source_ip ? `${c.source_ip} -> ${c.destination_ip || '10.0.1.50'}` : 'SIMPLEX_INGRESS')}
+                  </td>
+                  <td className="px-6 py-4 text-slate-300 font-bold">{c.title || c.threat_summary}</td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-bold tracking-wider ${getSeverityColor(c.severity)}`}>
+                    <span className={`inline-flex items-center rounded border px-2.5 py-0.5 text-[10px] font-bold tracking-wider ${getSeverityColor(c.severity)}`}>
                       {c.severity}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-slate-300">
                     <div className="flex items-center gap-2">
-                      <div className={`h-2 w-2 rounded-full ${c.status === 'OPEN' ? 'bg-red-500 animate-pulse' : 'bg-slate-500'}`}></div>
-                      {c.status}
+                      <div className={`h-2 w-2 rounded-full ${c.status === 'CONTAINED' ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`}></div>
+                      <span className="text-xs font-bold">{c.status || 'ACTIVE'}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-slate-400 font-mono text-xs">
-                    {new Date(c.first_seen).toLocaleString()}
+                    {new Date(c.first_seen || c.created_at || Date.now()).toLocaleTimeString('en-IN')}
                   </td>
                 </tr>
               ))}

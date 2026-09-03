@@ -11,7 +11,6 @@ const NAV_ITEMS = [
   { name: 'Diode Gateway Health', href: '/health', icon: <Server className="w-4 h-4" /> },
   { name: 'Ingress Audit Logs', href: '/logs', icon: <Terminal className="w-4 h-4" /> },
   { name: 'Attack Replay Lab', href: '/simulator', icon: <Skull className="w-4 h-4" /> },
-  { name: 'Passive Flow Terminal', href: '/scan', icon: <Search className="w-4 h-4" /> },
 ]
 
 export default function DashboardLayout({
