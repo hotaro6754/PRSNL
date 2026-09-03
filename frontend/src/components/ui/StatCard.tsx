@@ -45,7 +45,7 @@ export function StatCard({
   const color = sparklineColor || defaultSparkColors[highlight]
 
   return (
-    <div className={`p-4 rounded-lg border border-white/[0.08] bg-[#111318]/80 backdrop-blur-md shadow-[0_4px_20px_-2px_rgba(0,0,0,0.35)] hover:border-white/[0.14] transition-all flex flex-col justify-between group ${className}`}>
+    <div className={`glass-card-interactive p-4 rounded-lg flex flex-col justify-between group ${className}`}>
       {/* Top row: Label + Icon + Badge */}
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 truncate">

@@ -185,7 +185,7 @@ export default function CyberOSDashboard() {
     <div className="space-y-5 max-w-[1500px] mx-auto animate-in fade-in duration-300 font-mono">
       
       {/* MISSION CONTROL STATUS STRIP (LIQUID GLASS TREATMENT) */}
-      <div className="rounded-lg border border-white/[0.08] bg-[#111318]/80 backdrop-blur-md p-4 flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-[0_4px_24px_-1px_rgba(0,0,0,0.35)]">
+      <div className="glass-panel rounded-lg p-4 flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />

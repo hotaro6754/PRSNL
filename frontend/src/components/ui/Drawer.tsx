@@ -45,7 +45,7 @@ export function Drawer({
       <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
         <div className={`w-screen ${width} transform transition ease-in-out duration-200 animate-in slide-in-from-right`}>
           {/* Drawer Liquid Glass Surface */}
-          <div className="flex h-full flex-col bg-[#12151d]/95 backdrop-blur-xl border-l border-white/[0.12] shadow-2xl">
+          <div className="glass-drawer flex h-full flex-col">
             
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-white/[0.08] bg-[#0c0e14]/60">

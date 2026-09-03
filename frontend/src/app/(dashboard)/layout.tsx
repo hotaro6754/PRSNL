@@ -82,7 +82,7 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen overflow-hidden bg-[#090a0d] text-zinc-100 font-sans antialiased">
       {/* SIDEBAR (SECTION 7 & 8) */}
-      <aside className="w-60 border-r border-white/[0.08] bg-[#0d0f14] flex-shrink-0 flex flex-col justify-between select-none">
+      <aside className="w-60 glass-sidebar flex-shrink-0 flex flex-col justify-between select-none">
         <div>
           {/* Brand Header */}
           <div className="h-13 flex items-center px-4 border-b border-white/[0.08]">
@@ -155,9 +155,9 @@ export default function DashboardLayout({
       </aside>
 
       {/* MAIN VIEWPORT (SECTION 9) */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#090a0d] relative">
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden bg-transparent relative">
         {/* Topbar */}
-        <header className="h-13 flex items-center justify-between px-6 border-b border-white/[0.08] bg-[#0d0f14]/80 backdrop-blur-md shrink-0 sticky top-0 z-20">
+        <header className="h-13 flex items-center justify-between px-6 glass-topbar shrink-0 sticky top-0 z-20">
           <div className="flex items-center gap-2 text-xs font-mono">
             <span className="text-zinc-500">Sentinel</span>
             <ChevronRight className="w-3 h-3 text-zinc-600" />
