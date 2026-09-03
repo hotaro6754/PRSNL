@@ -67,20 +67,21 @@ export default function DashboardLayout({
   }, [])
 
   // Calculate current breadcrumb
+  let currentGroup = 'Monitoring'
   let currentTitle = 'Diode Overview'
-  if (pathname === '/live') currentTitle = 'Simplex Live Stream'
-  else if (pathname === '/analytics') currentTitle = 'Flow Analytics'
-  else if (pathname === '/cases') currentTitle = 'Tunnel Investigations'
-  else if (pathname.startsWith('/cases/')) currentTitle = 'Forensic Investigation'
-  else if (pathname === '/scan') currentTitle = 'Simplex Flow Ingestion'
-  else if (pathname === '/simulator') currentTitle = 'Attack Replay Lab'
-  else if (pathname === '/ml') currentTitle = 'AI/ML Anomaly Lab'
-  else if (pathname === '/health') currentTitle = 'Diode Gateway Health'
-  else if (pathname === '/logs') currentTitle = 'Ingress Audit Logs'
+  if (pathname === '/live') { currentGroup = 'Monitoring'; currentTitle = 'Simplex Live Stream'; }
+  else if (pathname === '/analytics') { currentGroup = 'Monitoring'; currentTitle = 'Flow Analytics'; }
+  else if (pathname === '/cases') { currentGroup = 'Incidents'; currentTitle = 'Tunnel Investigations'; }
+  else if (pathname.startsWith('/cases/')) { currentGroup = 'Incidents'; currentTitle = 'Forensic Investigation'; }
+  else if (pathname === '/scan') { currentGroup = 'Incidents'; currentTitle = 'Simplex Flow Ingestion'; }
+  else if (pathname === '/simulator') { currentGroup = 'System'; currentTitle = 'Attack Replay Lab'; }
+  else if (pathname === '/ml') { currentGroup = 'System'; currentTitle = 'AI/ML Anomaly Lab'; }
+  else if (pathname === '/health') { currentGroup = 'System'; currentTitle = 'Diode Gateway Health'; }
+  else if (pathname === '/logs') { currentGroup = 'System'; currentTitle = 'Ingress Audit Logs'; }
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#090a0d] text-zinc-100 font-sans antialiased">
-      {/* SIDEBAR */}
+      {/* SIDEBAR (SECTION 7 & 8) */}
       <aside className="w-60 border-r border-white/[0.08] bg-[#0d0f14] flex-shrink-0 flex flex-col justify-between select-none">
         <div>
           {/* Brand Header */}
@@ -97,13 +98,13 @@ export default function DashboardLayout({
           </div>
 
           {/* Navigation Groups */}
-          <nav className="p-3 space-y-5 overflow-y-auto max-h-[calc(100vh-140px)]">
+          <nav className="p-3 space-y-4 overflow-y-auto max-h-[calc(100vh-160px)]">
             {NAV_GROUPS.map((group) => (
               <div key={group.label} className="space-y-1">
                 <div className="px-2.5 text-[10px] font-mono font-semibold tracking-wider text-zinc-500 uppercase">
                   {group.label}
                 </div>
-                <div className="space-y-0.5 pt-1">
+                <div className="space-y-0.5 pt-0.5">
                   {group.items.map((item) => {
                     const Icon = item.icon
                     const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
@@ -135,29 +136,32 @@ export default function DashboardLayout({
           </nav>
         </div>
 
-        {/* Physical Diode Hardware Status Card */}
+        {/* BOTTOM SIDEBAR STATUS (SECTION 8) */}
         <div className="p-3 border-t border-white/[0.08]">
-          <div className="p-2.5 rounded-md bg-[#12151c] border border-white/[0.06] flex flex-col gap-1.5">
+          <div className="p-2.5 rounded-md bg-[#12151c] border border-white/[0.06] flex flex-col gap-1.5 font-mono">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span className="text-[10px] font-bold tracking-wider text-zinc-300 font-mono uppercase">Diode Link: Simplex Rx</span>
-              </div>
+              <span className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold">DIODE LINK</span>
               <Badge variant="secure" size="xs">ACTIVE</Badge>
             </div>
-            <p className="text-[10px] text-zinc-500 font-mono leading-tight">
-              Physical Rx-only tap on eth0. Zero reverse packets on wire.
+            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+              <span>SIMPLEX RX</span>
+            </div>
+            <p className="text-[10px] text-zinc-500 leading-tight">
+              Physical RX-only tap · eth0<br />0 reverse packets
             </p>
           </div>
         </div>
       </aside>
 
-      {/* MAIN VIEWPORT */}
+      {/* MAIN VIEWPORT (SECTION 9) */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#090a0d] relative">
         {/* Topbar */}
         <header className="h-13 flex items-center justify-between px-6 border-b border-white/[0.08] bg-[#0d0f14]/80 backdrop-blur-md shrink-0 sticky top-0 z-20">
           <div className="flex items-center gap-2 text-xs font-mono">
             <span className="text-zinc-500">Sentinel</span>
+            <ChevronRight className="w-3 h-3 text-zinc-600" />
+            <span className="text-zinc-400">{currentGroup}</span>
             <ChevronRight className="w-3 h-3 text-zinc-600" />
             <span className="text-zinc-200 font-medium">{currentTitle}</span>
           </div>
@@ -179,13 +183,13 @@ export default function DashboardLayout({
 
             {/* Link Security Status Badge */}
             <Badge variant="secure" size="xs" dot>
-              OPTICAL LINK SECURE
+              SIMPLEX RX
             </Badge>
           </div>
         </header>
 
         {/* Canvas Area */}
-        <div className="flex-1 overflow-y-auto bg-[#090a0d] p-6">
+        <div className="flex-1 overflow-y-auto bg-[#090a0d] p-5">
           {children}
         </div>
       </main>
