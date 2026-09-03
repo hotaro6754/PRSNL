@@ -2,8 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'CyberOS — Intelligent Cybersecurity Platform',
-  description: 'AI-Driven Phishing, Scam & Cyber-Fraud Detection',
+  title: 'NTRO Sentinel-26145 | Unidirectional IP Cyber Threat Detection',
+  description: 'AI-Based Detection of Cyber Threats in Unidirectional IP Traffic across Data Diodes (NTRO Problem Statement #26145)',
 }
 
 export default function RootLayout({

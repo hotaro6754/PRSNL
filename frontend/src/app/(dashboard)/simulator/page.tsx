@@ -4,32 +4,20 @@ import { Skull, Target, Zap, Activity, Mail, MessageSquare, QrCode, Wifi } from 
 
 const ATTACKS = [
   {
-    type: 'port_scan', name: 'Aggressive Port Scan', icon: Target, color: 'blue',
-    desc: 'Simulates rapid sequential connection attempts across 150 ports against the Zeek sensor.',
+    type: 'uni_directional', name: 'Unidirectional SYN Flood (Data Diode)', icon: Wifi, color: 'red',
+    desc: 'Simulates high-rate volumetric simplex SYN flows where zero SYN-ACK return packets exist on the wire.',
   },
   {
-    type: 'brute_force', name: 'SSH Brute Force', icon: Skull, color: 'orange',
-    desc: 'Generates rapid bursts of failed authentication attempts against Port 22.',
+    type: 'port_scan', name: 'Simplex Reconnaissance & Port Scan', icon: Target, color: 'blue',
+    desc: 'Simulates sequential connection attempts across 150 ports across the diode without response waiting.',
   },
   {
-    type: 'dga', name: 'DGA Beaconing', icon: Activity, color: 'purple',
-    desc: 'Simulates high-entropy DNS queries to test Domain Generation Algorithm detection.',
+    type: 'dga', name: 'Covert DGA & DNS Beaconing', icon: Activity, color: 'purple',
+    desc: 'Fires high-entropy domain queries to test covert channel and Domain Generation Algorithm detection over simplex gateway.',
   },
   {
-    type: 'uni_directional', name: 'Uni-directional IP Tunnel', icon: Wifi, color: 'red',
-    desc: 'Simulates SYN flood with uni-directional flows (no SYN-ACK) to blackholed IPs.',
-  },
-  {
-    type: 'qr', name: 'QR Quishing Attack', icon: QrCode, color: 'amber',
-    desc: 'Injects a malicious QR payload containing a phishing URL for credential theft.',
-  },
-  {
-    type: 'sms', name: 'SMS Smishing Blast', icon: MessageSquare, color: 'green',
-    desc: 'Fires an SMS phishing payload with fake bank/logistics social engineering.',
-  },
-  {
-    type: 'email', name: 'Email Phishing Payload', icon: Mail, color: 'indigo',
-    desc: 'Pushes a Business Email Compromise (BEC) wire-transfer phishing email.',
+    type: 'brute_force', name: 'Edge Service Brute Force', icon: Skull, color: 'orange',
+    desc: 'Generates rapid bursts of authentication attempts directed into the isolated network through the gateway.',
   },
 ]
 
@@ -75,8 +63,8 @@ export default function ActionCenterPage() {
   return (
     <div className="space-y-6 max-w-[1400px] animate-in fade-in duration-500 p-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Action Center</h2>
-        <p className="text-sm text-slate-400">Launch real attack simulations against the CyberOS sensor network. Detections appear in Live Threats.</p>
+        <h2 className="text-2xl font-bold tracking-tight">Unidirectional Attack Simulation Lab</h2>
+        <p className="text-sm text-slate-400">Launch real simplex cyber attack simulations against the NTRO Data Diode sensor. Detections stream in real-time to the NDR dashboard.</p>
       </div>
 
       {/* Attack execution log */}
