@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { 
   ArrowLeft, ShieldAlert, Activity, Calendar, Server, Tag, Info, 
-  CheckCircle2, AlertTriangle, ShieldCheck, Zap, HelpCircle, RefreshCw, Cpu, Database
+  CheckCircle2, AlertTriangle, ShieldCheck, Zap, HelpCircle, RefreshCw, Cpu, Database, Play
 } from 'lucide-react'
 
 export default function CaseDetailPage() {
