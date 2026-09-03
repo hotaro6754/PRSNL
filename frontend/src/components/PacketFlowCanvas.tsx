@@ -8,7 +8,7 @@ import {
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 
-interface PhotonPulse {
+interface PhotonicPacket {
   id: string
   progress: number // 0 to 1
   speed: number
@@ -20,27 +20,24 @@ interface PhotonPulse {
   vectorName: string
   sourceIp: string
   destIp: string
-  packetSize: number
-  yLane: number // -1, 0, 1
+  yLane: number // micro-offset in fiber core
 }
 
 export default function PacketFlowCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isPlaying, setIsPlaying] = useState(true)
   const [speedMultiplier, setSpeedMultiplier] = useState(1)
-  const [selectedWavelength, setSelectedWavelength] = useState<1310 | 1550>(1310)
-  const [activeVector, setActiveVector] = useState<string>('all')
-  const [wsConnected, setWsConnected] = useState(false)
+  const [activeVector, setActiveVector] = useState<string>('baseline')
   
-  // Real-time physical metrics
+  // Real-time live physical metrics
   const [txPower, setTxPower] = useState('+2.4 dBm')
   const [rxPower, setRxPower] = useState('-3.1 dBm')
-  const [isolationDb, setIsolationDb] = useState('> 78.4 dB')
-  const [photonCount, setPhotonCount] = useState(14820)
+  const [isolationDb, setIsolationDb] = useState('78.4 dB')
+  const [photonCount, setPhotonCount] = useState(18420)
   const [reverseAcks, setReverseAcks] = useState(0)
-  const [activeThreatDesc, setActiveThreatDesc] = useState('Benign Simplex Baseline Flow')
+  const [reverseRsts, setReverseRsts] = useState(0)
 
-  const photonsRef = useRef<PhotonPulse[]>([])
+  const packetsRef = useRef<PhotonicPacket[]>([])
   const isPlayingRef = useRef(isPlaying)
   const speedRef = useRef(speedMultiplier)
   const animFrameRef = useRef<number>(0)
@@ -48,74 +45,72 @@ export default function PacketFlowCanvas() {
   isPlayingRef.current = isPlaying
   speedRef.current = speedMultiplier
 
-  // Spawn photon wave-packet into the optical guide
-  const spawnPhoton = (isThreat = false, vector = 'Simplex Benign Flow', src = '185.220.101.34') => {
+  // Spawn photon wave packet into primary single-mode fiber
+  const spawnPacket = (isThreat = false, vector = 'Benign SMF Stream', wl: 1310 | 1550 = 1310, src = '185.220.101.34') => {
     setPhotonCount(prev => prev + 1)
-    if (isThreat) {
-      setActiveThreatDesc(vector)
-    }
-
-    const lanes = [-12, -4, 4, 12]
+    const lanes = [-10, -3, 3, 10]
     const yLane = lanes[Math.floor(Math.random() * lanes.length)]
-    
-    photonsRef.current.push({
+
+    packetsRef.current.push({
       id: Math.random().toString(),
       progress: 0,
-      speed: (0.0045 + Math.random() * 0.003) * speedRef.current,
-      wavelength: isThreat ? 1550 : 1310,
-      amplitude: isThreat ? 14 : 9,
-      frequency: isThreat ? 0.35 : 0.22,
+      speed: (0.0042 + Math.random() * 0.0028) * speedRef.current,
+      wavelength: wl,
+      amplitude: isThreat ? 12 : 8,
+      frequency: isThreat ? 0.38 : 0.24,
       phase: Math.random() * Math.PI * 2,
       isThreat,
       vectorName: vector,
       sourceIp: src,
       destIp: '10.0.1.50',
-      packetSize: isThreat ? 512 : 74,
       yLane
     })
   }
 
-  // Attack Burst Injectors
+  // Attack pulse injector
   const triggerAttack = (vectorType: 'syn' | 'c2' | 'dns' | 'exfil') => {
     if (vectorType === 'syn') {
+      setActiveVector('SYN Flood (1310nm Burst)')
       for (let i = 0; i < 8; i++) {
-        setTimeout(() => spawnPhoton(true, 'Volumetric SYN Flood (Vector a)', '45.154.255.147'), i * 80)
+        setTimeout(() => spawnPacket(true, 'SYN Flood (Vector a)', 1310, '45.154.255.147'), i * 75)
       }
     } else if (vectorType === 'c2') {
+      setActiveVector('Periodic C2 (1310nm Beacon)')
       for (let i = 0; i < 4; i++) {
-        setTimeout(() => spawnPhoton(true, 'Botnet C2 Periodic Beacon (Vector b)', '91.240.118.172'), i * 250)
+        setTimeout(() => spawnPacket(true, 'Botnet C2 Beacon (Vector b)', 1310, '91.240.118.172'), i * 260)
       }
     } else if (vectorType === 'dns') {
+      setActiveVector('DNS Exfil (1550nm Modulated)')
       for (let i = 0; i < 6; i++) {
-        setTimeout(() => spawnPhoton(true, 'DNS Covert Tunnel / DGA (Vector c)', '194.26.135.89'), i * 120)
+        setTimeout(() => spawnPacket(true, 'DNS Tunnel / DGA (Vector c)', 1550, '194.26.135.89'), i * 110)
       }
     } else if (vectorType === 'exfil') {
+      setActiveVector('Data Siphon (1550nm Surge)')
       for (let i = 0; i < 12; i++) {
-        setTimeout(() => spawnPhoton(true, 'Asymmetric Exfiltration (Vector f)', '185.220.101.34'), i * 50)
+        setTimeout(() => spawnPacket(true, 'Asym Exfiltration (Vector f)', 1550, '185.220.101.34'), i * 45)
       }
     }
   }
 
-  // Background ambient photon generator
+  // Self-sustaining ambient photon generator
   useEffect(() => {
     const timer = setInterval(() => {
       if (!isPlayingRef.current) return
-      if (photonsRef.current.length < 16) {
-        const isAnomaly = Math.random() > 0.65
-        const threatClasses = [
-          { name: 'Volumetric SYN Flood (Vector a)', src: '45.154.255.147' },
-          { name: 'Botnet C2 Periodic Beacon (Vector b)', src: '91.240.118.172' },
-          { name: 'DNS Covert Tunnel (Vector c)', src: '194.26.135.89' },
-          { name: 'Asymmetric Exfiltration (Vector f)', src: '185.220.101.34' }
-        ]
-        const sample = threatClasses[Math.floor(Math.random() * threatClasses.length)]
-        spawnPhoton(isAnomaly, isAnomaly ? sample.name : 'Simplex Benign Flow', isAnomaly ? sample.src : '192.168.1.105')
+      if (packetsRef.current.length < 15) {
+        const isAnomaly = Math.random() > 0.70
+        const wl = isAnomaly ? 1550 : 1310
+        spawnPacket(
+          isAnomaly, 
+          isAnomaly ? 'Unidirectional Threat Anomaly' : 'Benign Baseline Ingress', 
+          wl, 
+          isAnomaly ? '185.220.101.34' : '192.168.1.100'
+        )
       }
-    }, 380)
+    }, 420)
     return () => clearInterval(timer)
   }, [])
 
-  // Canvas High-Precision Physics Render Loop
+  // Canvas High-Precision Scientific Optical Render Loop
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -125,42 +120,43 @@ export default function PacketFlowCanvas() {
     let t = 0
 
     const render = () => {
-      t += 0.05
-      const width = canvas.parentElement?.clientWidth || 980
-      const height = 240
+      t += 0.04
+      const dpr = window.devicePixelRatio || 1
+      const rect = canvas.parentElement?.getBoundingClientRect()
+      const displayWidth = rect?.width || 980
+      const displayHeight = 280
 
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width
-        canvas.height = height
+      if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
+        canvas.width = displayWidth * dpr
+        canvas.height = displayHeight * dpr
       }
 
-      ctx.clearRect(0, 0, width, height)
+      ctx.save()
+      ctx.scale(dpr, dpr)
+      ctx.clearRect(0, 0, displayWidth, displayHeight)
 
-      const startX = 140
-      const endX = width - 150
-      const centerY = 110
+      const startX = 70
+      const endX = displayWidth - 70
+      const centerY = 95
       const diodeX = (startX + endX) / 2
-
-      // ==========================================
-      // 1. SILICA OPTICAL FIBER CORE & CLADDING GUIDE
-      // ==========================================
-      
-      // Upper & Lower Cladding Boundary Reflections
-      const fiberH = 52
+      const fiberH = 48
       const topY = centerY - fiberH / 2
       const botY = centerY + fiberH / 2
 
-      // Subtle silica glass conduit background
-      const conduitGrad = ctx.createLinearGradient(startX, centerY, endX, centerY)
-      conduitGrad.addColorStop(0, 'rgba(59, 130, 246, 0.08)')
-      conduitGrad.addColorStop(0.48, 'rgba(59, 130, 246, 0.14)')
-      conduitGrad.addColorStop(0.52, 'rgba(16, 185, 129, 0.14)')
-      conduitGrad.addColorStop(1, 'rgba(16, 185, 129, 0.08)')
-      
-      ctx.fillStyle = conduitGrad
+      // ==========================================
+      // A. PRIMARY OS2 SINGLE-MODE OPTICAL FIBER
+      // ==========================================
+
+      // 1. Cladding Background (n2 = 1.463)
+      const fiberGrad = ctx.createLinearGradient(startX, centerY, endX, centerY)
+      fiberGrad.addColorStop(0, 'rgba(14, 165, 233, 0.07)')
+      fiberGrad.addColorStop(0.48, 'rgba(14, 165, 233, 0.12)')
+      fiberGrad.addColorStop(0.52, 'rgba(16, 185, 129, 0.12)')
+      fiberGrad.addColorStop(1, 'rgba(16, 185, 129, 0.07)')
+      ctx.fillStyle = fiberGrad
       ctx.fillRect(startX, topY, endX - startX, fiberH)
 
-      // Cladding Borders (Total Internal Reflection mirrors)
+      // 2. Cladding Boundary Reflections
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)'
       ctx.lineWidth = 1
       ctx.beginPath()
@@ -170,9 +166,9 @@ export default function PacketFlowCanvas() {
       ctx.lineTo(endX, botY)
       ctx.stroke()
 
-      // Central Optical Waveguide Core Line
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.25)'
-      ctx.lineWidth = 1
+      // 3. Central Core Guide (8.2 µm OS2 SMF-28 Core Line)
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)'
+      ctx.lineWidth = 1.5
       ctx.setLineDash([4, 6])
       ctx.beginPath()
       ctx.moveTo(startX, centerY)
@@ -180,181 +176,237 @@ export default function PacketFlowCanvas() {
       ctx.stroke()
       ctx.setLineDash([])
 
-      // Refraction Index Label
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'
-      ctx.font = '9px monospace'
-      ctx.fillText('CORE: n₁ = 1.468 (SILICA WAVEGUIDE)', startX + 10, topY - 5)
-      ctx.fillText('CLADDING: n₂ = 1.463', endX - 120, topY - 5)
+      // Scientific Labels for Fiber
+      ctx.font = '9px JetBrains Mono, monospace'
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.35)'
+      ctx.fillText('SINGLE-MODE OS2 FIBER (8.2/125 µm • n₁=1.468)', startX + 10, topY - 7)
+      ctx.textAlign = 'right'
+      ctx.fillText('FORWARD PROPAGATION ONLY (λ=1310/1550nm)', endX - 10, topY - 7)
+      ctx.textAlign = 'left'
 
       // ==========================================
-      // 2. SEVERED RETURN FIBER STRAND (PHYSICAL PROOF)
-      // ==========================================
-      const retY = centerY + 65
-      
-      // Right returning fiber (coming from Enclave)
-      ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'
-      ctx.lineWidth = 1.5
-      ctx.beginPath()
-      ctx.moveTo(endX, retY)
-      ctx.lineTo(diodeX + 35, retY)
-      ctx.stroke()
-
-      // Physical Air Gap (Cut Fiber)
-      ctx.save()
-      ctx.strokeStyle = '#ef4444'
-      ctx.lineWidth = 2
-      // Severed end face
-      ctx.beginPath()
-      ctx.arc(diodeX + 35, retY, 3, 0, Math.PI * 2)
-      ctx.stroke()
-      
-      // Cut / Air Gap Bracket
-      ctx.setLineDash([2, 3])
-      ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)'
-      ctx.beginPath()
-      ctx.moveTo(diodeX - 35, retY)
-      ctx.lineTo(diodeX + 35, retY)
-      ctx.stroke()
-      ctx.setLineDash([])
-
-      // Left returning fiber (going nowhere)
-      ctx.strokeStyle = 'rgba(239, 68, 68, 0.2)'
-      ctx.beginPath()
-      ctx.arc(diodeX - 35, retY, 3, 0, Math.PI * 2)
-      ctx.moveTo(diodeX - 35, retY)
-      ctx.lineTo(startX, retY)
-      ctx.stroke()
-
-      // Physical Break Notification
-      ctx.fillStyle = '#f87171'
-      ctx.font = 'bold 9px monospace'
-      ctx.textAlign = 'center'
-      ctx.fillText('⚡ PHYSICAL RETURN FIBER STRAND SEVERED (40mm AIR GAP)', diodeX, retY + 14)
-      ctx.font = '8px monospace'
-      ctx.fillStyle = 'rgba(239, 68, 68, 0.7)'
-      ctx.fillText('0 TX LASER DIODE IN ENCLAVE • ZERO RETURN ACKs / RSTs IMPOSSIBLE', diodeX, retY + 25)
-      ctx.restore()
-
-      // ==========================================
-      // 3. FARADAY OPTICAL ISOLATOR CRYSTAL BARRIER
+      // B. METALLIC FARADAY POLARIZATION OPTICAL TAP
       // ==========================================
       ctx.save()
-      const barrierW = 64
-      const barrierH = fiberH + 28
-      const barrierTop = centerY - barrierH / 2
+      const boxW = 88
+      const boxH = fiberH + 40
+      const boxTop = centerY - boxH / 2
 
-      // Outer Crystal Housing
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.85)'
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.5)'
+      // 1. Outer Metallic Beveled Housing
+      const metalGrad = ctx.createLinearGradient(diodeX - boxW / 2, boxTop, diodeX + boxW / 2, boxTop + boxH)
+      metalGrad.addColorStop(0, '#1a1f2c')
+      metalGrad.addColorStop(0.5, '#0f1420')
+      metalGrad.addColorStop(1, '#1e2433')
+      ctx.fillStyle = metalGrad
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)'
       ctx.lineWidth = 1.5
       ctx.beginPath()
-      ctx.roundRect(diodeX - barrierW / 2, barrierTop, barrierW, barrierH, 6)
+      ctx.roundRect(diodeX - boxW / 2, boxTop, boxW, boxH, 8)
       ctx.fill()
       ctx.stroke()
 
-      // Faraday Crystal Core (Bismuth Iron Garnet)
-      const crystalGrad = ctx.createLinearGradient(diodeX - 16, centerY, diodeX + 16, centerY)
-      crystalGrad.addColorStop(0, 'rgba(59, 130, 246, 0.4)')
-      crystalGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.6)')
-      crystalGrad.addColorStop(1, 'rgba(16, 185, 129, 0.4)')
-      ctx.fillStyle = crystalGrad
-      ctx.fillRect(diodeX - 16, centerY - 20, 32, 40)
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)'
-      ctx.strokeRect(diodeX - 16, centerY - 20, 32, 40)
+      // Hex Corner Mounting Screws
+      const screwR = 2
+      const drawScrew = (sx: number, sy: number) => {
+        ctx.fillStyle = '#475569'
+        ctx.beginPath()
+        ctx.arc(sx, sy, screwR, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.strokeStyle = '#94a3b8'
+        ctx.lineWidth = 0.5
+        ctx.stroke()
+      }
+      drawScrew(diodeX - boxW / 2 + 6, boxTop + 6)
+      drawScrew(diodeX + boxW / 2 - 6, boxTop + 6)
+      drawScrew(diodeX - boxW / 2 + 6, boxTop + boxH - 6)
+      drawScrew(diodeX + boxW / 2 - 6, boxTop + boxH - 6)
 
-      // Crystal Magnetic Vector Arrow (B-field)
-      ctx.strokeStyle = '#38bdf8'
+      // 2. Glowing Faraday Crystal (Bismuth Iron Garnet BIG-45)
+      const crystalW = 36
+      const crystalH = 46
+      const crystalGrad = ctx.createLinearGradient(diodeX - crystalW / 2, centerY, diodeX + crystalW / 2, centerY)
+      crystalGrad.addColorStop(0, 'rgba(56, 189, 248, 0.5)')
+      crystalGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.7)')
+      crystalGrad.addColorStop(1, 'rgba(16, 185, 129, 0.5)')
+      ctx.fillStyle = crystalGrad
+      ctx.fillRect(diodeX - crystalW / 2, centerY - crystalH / 2, crystalW, crystalH)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)'
+      ctx.lineWidth = 1
+      ctx.strokeRect(diodeX - crystalW / 2, centerY - crystalH / 2, crystalW, crystalH)
+
+      // Magnetic Vector B-Field Arrow
+      ctx.strokeStyle = '#ffffff'
       ctx.lineWidth = 1.5
       ctx.beginPath()
       ctx.moveTo(diodeX - 12, centerY)
       ctx.lineTo(diodeX + 12, centerY)
-      ctx.lineTo(diodeX + 8, centerY - 4)
+      ctx.lineTo(diodeX + 7, centerY - 4)
       ctx.moveTo(diodeX + 12, centerY)
-      ctx.lineTo(diodeX + 8, centerY + 4)
+      ctx.lineTo(diodeX + 7, centerY + 4)
       ctx.stroke()
 
-      // Polarization Angle Tags
-      ctx.font = '8px monospace'
-      ctx.fillStyle = '#94a3b8'
-      ctx.textAlign = 'center'
-      ctx.fillText('FARADAY ROTATOR', diodeX, barrierTop - 4)
+      // 3. Polarizer Stage Angles
+      ctx.font = '8px JetBrains Mono, monospace'
       ctx.fillStyle = '#38bdf8'
-      ctx.fillText('0° IN', diodeX - 22, barrierTop + 10)
+      ctx.textAlign = 'center'
+      ctx.fillText('0° POL', diodeX - 26, boxTop + 14)
       ctx.fillStyle = '#34d399'
-      ctx.fillText('+45° OUT', diodeX + 22, barrierTop + 10)
+      ctx.fillText('+45° ANA', diodeX + 26, boxTop + 14)
+
+      // 4. Faraday Module Identification Engraving
+      ctx.font = 'bold 8px JetBrains Mono, monospace'
+      ctx.fillStyle = '#f8fafc'
+      ctx.fillText('FARADAY ISOLATOR', diodeX, boxTop - 6)
+      
+      // Bottom Internal Beam Dump Tag
       ctx.fillStyle = '#f43f5e'
-      ctx.fillText('REV DUMP: -78dB', diodeX, barrierTop + barrierH - 4)
+      ctx.font = '7.5px JetBrains Mono, monospace'
+      ctx.fillText('DUMP: -78.4dB', diodeX, boxTop + boxH + 11)
       ctx.restore()
 
       // ==========================================
-      // 4. PHOTON WAVELETS PROPAGATION & RENDERING
+      // C. PERMANENTLY SEVERED RETURN STRAND (40mm AIR GAP)
       // ==========================================
-      const photons = photonsRef.current
+      const retY = centerY + 85
+      const gapW = 80 // 40mm proportional scale
 
-      for (let i = photons.length - 1; i >= 0; i--) {
-        const p = photons[i]
+      // Left returning strand (severed end face)
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.25)'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(startX, retY)
+      ctx.lineTo(diodeX - gapW / 2, retY)
+      ctx.stroke()
+
+      // Right returning strand (originating from Enclave, severed end face)
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.45)'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(diodeX + gapW / 2, retY)
+      ctx.lineTo(endX, retY)
+      ctx.stroke()
+
+      // Ceramic Ferrule Connectors on both sides of break
+      const drawFerrule = (fx: number, isLeft: boolean) => {
+        ctx.fillStyle = '#64748b'
+        ctx.strokeStyle = '#94a3b8'
+        ctx.lineWidth = 1
+        const fw = 8
+        const fh = 12
+        ctx.fillRect(isLeft ? fx - fw : fx, retY - fh / 2, fw, fh)
+        ctx.strokeRect(isLeft ? fx - fw : fx, retY - fh / 2, fw, fh)
+        // Red fracture tip
+        ctx.fillStyle = '#ef4444'
+        ctx.beginPath()
+        ctx.arc(fx, retY, 2, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      drawFerrule(diodeX - gapW / 2, true)
+      drawFerrule(diodeX + gapW / 2, false)
+
+      // Physical Air Gap Dimension Line
+      ctx.save()
+      ctx.strokeStyle = '#ef4444'
+      ctx.lineWidth = 1
+      ctx.setLineDash([2, 2])
+      ctx.beginPath()
+      ctx.moveTo(diodeX - gapW / 2, retY)
+      ctx.lineTo(diodeX + gapW / 2, retY)
+      ctx.stroke()
+      ctx.setLineDash([])
+
+      // Red Hazard Pulsing LED
+      const pulsePhase = Math.sin(t * 6)
+      const ledGlow = pulsePhase > 0 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(239, 68, 68, 0.3)'
+      ctx.shadowColor = ledGlow
+      ctx.shadowBlur = 8
+      ctx.fillStyle = '#ef4444'
+      ctx.beginPath()
+      ctx.arc(diodeX, retY - 14, 3, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.restore()
+
+      // Primary Educational Invariant Warning Label
+      ctx.font = 'bold 9px JetBrains Mono, monospace'
+      ctx.fillStyle = '#fca5a5'
+      ctx.textAlign = 'center'
+      ctx.fillText('◄── 40mm PHYSICAL AIR GAP ──►', diodeX, retY - 4)
+      ctx.font = 'bold 9px JetBrains Mono, monospace'
+      ctx.fillStyle = '#ef4444'
+      ctx.fillText('PHYSICAL RETURN STRAND SEVERED', diodeX, retY + 16)
+      ctx.font = '8px JetBrains Mono, monospace'
+      ctx.fillStyle = 'rgba(248, 113, 113, 0.85)'
+      ctx.fillText('REVERSE TRANSMISSION PHYSICALLY IMPOSSIBLE (0 RETURN ACKs / 0 RSTs)', diodeX, retY + 28)
+
+      // ==========================================
+      // D. PHOTONIC PACKET WAVE PROPAGATION
+      // ==========================================
+      const packets = packetsRef.current
+
+      for (let i = packets.length - 1; i >= 0; i--) {
+        const p = packets[i]
         if (isPlayingRef.current) {
           p.progress += p.speed
         }
 
         if (p.progress >= 1) {
-          photons.splice(i, 1)
+          packets.splice(i, 1)
           continue
         }
 
         const curX = startX + (endX - startX) * p.progress
         const curY = centerY + p.yLane
 
-        // Physical wave properties
-        const isThreat = p.isThreat
-        const primaryColor = isThreat ? '#f43f5e' : '#38bdf8'
-        const glowColor = isThreat ? 'rgba(244, 63, 94, 0.8)' : 'rgba(56, 189, 248, 0.8)'
+        // Wavelength Coloring (1310nm = Cyan / 1550nm = Magenta)
+        const is1310 = p.wavelength === 1310
+        const primaryColor = is1310 ? '#38bdf8' : '#f43f5e'
+        const glowColor = is1310 ? 'rgba(56, 189, 248, 0.85)' : 'rgba(244, 63, 94, 0.95)'
 
         ctx.save()
-        
-        // 4a. Trailing Photoluminescence Halo (Laser Beam Trail)
-        const trailLength = isThreat ? 42 : 28
-        const trailGrad = ctx.createLinearGradient(curX - trailLength, curY, curX, curY)
-        trailGrad.addColorStop(0, 'rgba(0, 0, 0, 0)')
+
+        // 1. Trailing Photoluminescence Halo (Laser Beam Trail)
+        const trailLen = is1310 ? 34 : 46
+        const trailGrad = ctx.createLinearGradient(curX - trailLen, curY, curX, curY)
+        trailGrad.addColorStop(0, 'rgba(0,0,0,0)')
         trailGrad.addColorStop(1, glowColor)
-        
         ctx.strokeStyle = trailGrad
-        ctx.lineWidth = isThreat ? 3 : 2
+        ctx.lineWidth = 2.5
         ctx.beginPath()
-        ctx.moveTo(curX - trailLength, curY)
+        ctx.moveTo(curX - trailLen, curY)
         ctx.lineTo(curX, curY)
         ctx.stroke()
 
-        // 4b. Electromagnetic Wavelet Sinusoid (Real Physics)
+        // 2. Physical Electromagnetic Wavelet (Sinusoidal Wave Packet)
         ctx.strokeStyle = primaryColor
         ctx.lineWidth = 1.5
         ctx.shadowColor = glowColor
-        ctx.shadowBlur = isThreat ? 14 : 8
+        ctx.shadowBlur = is1310 ? 10 : 16
         ctx.beginPath()
         for (let dx = -14; dx <= 6; dx += 1) {
-          const envelope = Math.exp(-Math.pow(dx / 7, 2)) // Gaussian wave packet envelope
-          const waveY = curY + Math.sin(dx * p.frequency + t * 4 + p.phase) * (p.amplitude * envelope)
+          const envelope = Math.exp(-Math.pow(dx / 7, 2)) // Gaussian envelope
+          const waveY = curY + Math.sin(dx * p.frequency + t * 5 + p.phase) * (p.amplitude * envelope)
           if (dx === -14) ctx.moveTo(curX + dx, waveY)
           else ctx.lineTo(curX + dx, waveY)
         }
         ctx.stroke()
 
-        // 4c. Photon Particle Core Head
+        // 3. Central Photon Head Particle
         ctx.fillStyle = '#ffffff'
         ctx.beginPath()
-        ctx.arc(curX, curY, isThreat ? 3 : 2, 0, Math.PI * 2)
+        ctx.arc(curX, curY, 2.5, 0, Math.PI * 2)
         ctx.fill()
 
-        // 4d. Wavelength Tag for Threats
-        if (isThreat && p.progress > 0.15 && p.progress < 0.85) {
-          ctx.font = 'bold 8px monospace'
+        // 4. Wavelength Tag for Anomalous Wave Packets
+        if (p.isThreat && p.progress > 0.15 && p.progress < 0.85) {
+          ctx.font = 'bold 8px JetBrains Mono, monospace'
           ctx.fillStyle = '#fecdd3'
-          ctx.fillText(`λ:1550nm [${p.vectorName.split(' ')[0]}]`, curX - 20, curY - 14)
+          ctx.fillText(`λ:1550nm [${p.vectorName.split(' ')[0]}]`, curX - 18, curY - 14)
         }
 
         ctx.restore()
       }
 
+      ctx.restore()
       animFrameRef.current = requestAnimationFrame(render)
     }
 
@@ -368,14 +420,14 @@ export default function PacketFlowCanvas() {
   return (
     <div className="space-y-3 font-mono">
       
-      {/* 100K-WORTHY HARDWARE CHASSIS HEADER */}
+      {/* 1. CORE TITLE STRIP (PALANTIR / CROWDSTRIKE GRADE) */}
       <div className="glass-panel p-3.5 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-bold text-white uppercase tracking-wider">
-              Physical Data Diode Simplex Packet Flow Visualizer
-            </span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+              Physical Data Diode — Simplex Packet Flow
+            </h2>
             <Badge variant="secure" size="xs">STRICT 1-WAY OPTICAL PHYSICS</Badge>
           </div>
           <p className="text-[11px] text-zinc-400 font-sans">
@@ -405,91 +457,145 @@ export default function PacketFlowCanvas() {
         </div>
       </div>
 
-      {/* THREE HARDWARE NODES & THE OPTICAL CONDUIT CANVASES */}
-      <div className="glass-panel rounded-lg p-3 relative overflow-hidden">
-        
-        {/* TOP HARDWARE TELEMETRY READOUTS */}
-        <div className="flex justify-between items-center text-[10px] text-zinc-400 border-b border-white/[0.06] pb-2 mb-2">
-          {/* Node 1 */}
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-            <span className="font-bold text-zinc-200">WAN INGRESS (TX)</span>
-            <span className="text-zinc-500">SFP+ 1310nm DFB Laser · Pout: {txPower}</span>
+      {/* 2. FOUR LIQUID-GLASS TELEMETRY INSTRUMENTATION CARDS */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+        {/* WAN INGRESS */}
+        <div className="glass-card p-3 rounded-lg flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[10px] text-zinc-400 uppercase font-semibold">
+            <span className="flex items-center gap-1.5 text-blue-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+              WAN INGRESS
+            </span>
+            <span className="text-zinc-500">TX STAGE</span>
           </div>
-
-          {/* Node 2 Center */}
-          <div className="hidden sm:flex items-center gap-2">
-            <Lock className="w-3 h-3 text-red-400" />
-            <span className="font-bold text-red-400">FARADAY ISOLATOR BARRIER</span>
-            <span className="text-zinc-500">Isolation: {isolationDb} · Return: 0 ACKs</span>
+          <div className="my-1.5">
+            <div className="text-base font-bold text-zinc-100 font-mono">SFP+ DFB Laser</div>
+            <div className="text-[11px] text-blue-400 font-mono mt-0.5">TX Power: {txPower}</div>
           </div>
-
-          {/* Node 3 */}
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="font-bold text-zinc-200">ENCLAVE SENSOR (RX)</span>
-            <span className="text-zinc-500">InGaAs Photodiode · eth0 · Pin: {rxPower}</span>
+          <div className="text-[10px] text-zinc-500 pt-1.5 border-t border-white/[0.04] flex justify-between">
+            <span>Primary λ: 1310nm</span>
+            <span className="text-zinc-400">Photons: {photonCount.toLocaleString()}</span>
           </div>
         </div>
 
-        {/* HIGH-PRECISION PHOTON CANVAS */}
-        <div className="relative w-full h-[240px] bg-[#07090e] rounded border border-white/[0.06] overflow-hidden">
-          
-          {/* HARDWARE OVERLAY LABELS */}
-          <div className="absolute left-3 top-3 z-10 pointer-events-none">
-            <div className="p-2 rounded bg-black/70 backdrop-blur-md border border-white/[0.08] text-[10px] space-y-0.5">
-              <div className="text-blue-400 font-bold">WAN OPTICAL INGRESS</div>
-              <div className="text-zinc-400">Photons: {photonCount.toLocaleString()}</div>
-              <div className="text-zinc-500">Bitrate: 1.25 Gbps</div>
-            </div>
+        {/* FARADAY ISOLATION */}
+        <div className="glass-card p-3 rounded-lg flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[10px] text-zinc-400 uppercase font-semibold">
+            <span className="flex items-center gap-1.5 text-purple-400">
+              <Lock className="w-3 h-3 text-purple-400" />
+              FARADAY ISOLATION
+            </span>
+            <span className="text-emerald-400 font-bold">{isolationDb}</span>
           </div>
-
-          <div className="absolute right-3 top-3 z-10 pointer-events-none">
-            <div className="p-2 rounded bg-black/70 backdrop-blur-md border border-white/[0.08] text-[10px] space-y-0.5 text-right">
-              <div className="text-emerald-400 font-bold">ENCLAVE SENSOR (eth0)</div>
-              <div className="text-zinc-400">Reverse Packets: 0 PKTS</div>
-              <div className="text-emerald-500 font-bold">100% SIMPLEX TAP</div>
-            </div>
+          <div className="my-1.5">
+            <div className="text-base font-bold text-zinc-100 font-mono">Polarization +45°</div>
+            <div className="text-[11px] text-purple-400 font-mono mt-0.5">Beam Dump Active</div>
           </div>
+          <div className="text-[10px] text-zinc-500 pt-1.5 border-t border-white/[0.04] flex justify-between">
+            <span>Mode: SMF-28 OS2</span>
+            <span className="text-emerald-400">Leakage: -78.4dB</span>
+          </div>
+        </div>
 
+        {/* ENCLAVE RX */}
+        <div className="glass-card p-3 rounded-lg flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[10px] text-zinc-400 uppercase font-semibold">
+            <span className="flex items-center gap-1.5 text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              ENCLAVE RX
+            </span>
+            <span className="text-zinc-500">RX STAGE</span>
+          </div>
+          <div className="my-1.5">
+            <div className="text-base font-bold text-zinc-100 font-mono">InGaAs Photodiode</div>
+            <div className="text-[11px] text-emerald-400 font-mono mt-0.5">RX Power: {rxPower}</div>
+          </div>
+          <div className="text-[10px] text-zinc-500 pt-1.5 border-t border-white/[0.04] flex justify-between">
+            <span>Interface: eth0</span>
+            <span className="text-zinc-400">BER &lt; 10⁻¹²</span>
+          </div>
+        </div>
+
+        {/* SIMPLEX STATUS */}
+        <div className="glass-card p-3 rounded-lg flex flex-col justify-between">
+          <div className="flex items-center justify-between text-[10px] text-zinc-400 uppercase font-semibold">
+            <span className="flex items-center gap-1.5 text-emerald-400">
+              <Shield className="w-3 h-3 text-emerald-400" />
+              SIMPLEX STATUS
+            </span>
+            <Badge variant="secure" size="xs">100% ASSURANCE</Badge>
+          </div>
+          <div className="my-1.5">
+            <div className="text-base font-bold text-emerald-400 font-mono">0 Reverse ACKs</div>
+            <div className="text-[11px] text-zinc-400 font-mono mt-0.5">0 Reverse RSTs</div>
+          </div>
+          <div className="text-[10px] text-zinc-500 pt-1.5 border-t border-white/[0.04] flex justify-between">
+            <span>Duplex: Disabled</span>
+            <span className="text-emerald-400 font-semibold">Hardware Proof</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. CENTRAL SCIENTIFIC OPTICAL FIBER CANVASES (OBSIDIAN #090D16) */}
+      <div className="glass-panel rounded-lg p-3 relative overflow-hidden bg-[#090D16]/90 border border-white/[0.10]">
+        
+        {/* Node Labels Header */}
+        <div className="flex justify-between items-center text-[10px] text-zinc-400 border-b border-white/[0.06] pb-2 mb-2">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-zinc-200">OPTICAL SOURCE: TX LASER</span>
+            <span className="text-zinc-500">| SFP+ Single-Mode Transceiver</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-2">
+            <Lock className="w-3 h-3 text-purple-400" />
+            <span className="font-bold text-zinc-200">FARADAY CRYSTAL TAP</span>
+            <span className="text-zinc-500">| Non-Reciprocal 45° Polarization</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-zinc-200">PROMISCUOUS RX SENSOR</span>
+            <span className="text-zinc-500">| Linux eth0 Raw Ingress</span>
+          </div>
+        </div>
+
+        {/* Precision High-DPI Canvas */}
+        <div className="relative w-full h-[280px] bg-[#090D16] rounded border border-white/[0.06] overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full block" />
         </div>
 
-        {/* BOTTOM REAL-TIME INTERACTIVE ATTACK INJECTORS */}
+        {/* 4. REAL-TIME INTERACTIVE PHYSICAL ATTACK INJECTORS */}
         <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-zinc-400 font-semibold uppercase">Inject Physical Anomaly:</span>
+            <span className="text-[11px] text-zinc-400 font-semibold uppercase">Trigger Physical Anomaly:</span>
             <div className="flex flex-wrap gap-1.5">
               <button
                 onClick={() => triggerAttack('syn')}
-                className="px-2 py-1 rounded text-[10px] font-mono bg-red-500/15 border border-red-500/30 text-red-400 hover:bg-red-500/25 transition-colors cursor-pointer"
+                className="px-2.5 py-1 rounded text-[10px] font-mono bg-red-500/15 border border-red-500/30 text-red-400 hover:bg-red-500/25 transition-colors cursor-pointer"
               >
-                Vector (a) SYN Barrage
+                SYN Flood (1310nm Burst)
               </button>
               <button
                 onClick={() => triggerAttack('c2')}
-                className="px-2 py-1 rounded text-[10px] font-mono bg-purple-500/15 border border-purple-500/30 text-purple-400 hover:bg-purple-500/25 transition-colors cursor-pointer"
+                className="px-2.5 py-1 rounded text-[10px] font-mono bg-purple-500/15 border border-purple-500/30 text-purple-400 hover:bg-purple-500/25 transition-colors cursor-pointer"
               >
-                Vector (b) C2 Beacon
+                Periodic C2 (1310nm Beacon)
               </button>
               <button
                 onClick={() => triggerAttack('dns')}
-                className="px-2 py-1 rounded text-[10px] font-mono bg-blue-500/15 border border-blue-500/30 text-blue-400 hover:bg-blue-500/25 transition-colors cursor-pointer"
+                className="px-2.5 py-1 rounded text-[10px] font-mono bg-blue-500/15 border border-blue-500/30 text-blue-400 hover:bg-blue-500/25 transition-colors cursor-pointer"
               >
-                Vector (c) DNS Tunnel
+                DNS Exfil (1550nm Modulated)
               </button>
               <button
                 onClick={() => triggerAttack('exfil')}
-                className="px-2 py-1 rounded text-[10px] font-mono bg-rose-500/15 border border-rose-500/30 text-rose-400 hover:bg-rose-500/25 transition-colors cursor-pointer"
+                className="px-2.5 py-1 rounded text-[10px] font-mono bg-rose-500/15 border border-rose-500/30 text-rose-400 hover:bg-rose-500/25 transition-colors cursor-pointer"
               >
-                Vector (f) Asym Exfil
+                Data Siphon (1550nm Surge)
               </button>
             </div>
           </div>
 
           <div className="text-[10px] text-zinc-500 flex items-center gap-1.5">
-            <Waves className="w-3 h-3 text-cyan-400" />
-            <span>Active Stream: <strong className="text-zinc-300">{activeThreatDesc}</strong></span>
+            <Waves className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Active Stream: <strong className="text-zinc-300">{activeVector}</strong></span>
           </div>
         </div>
 
