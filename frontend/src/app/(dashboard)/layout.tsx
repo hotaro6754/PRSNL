@@ -6,6 +6,7 @@ const NAV_ITEMS = [
   { name: 'Diode Overview', href: '/', icon: <Activity className="w-4 h-4" /> },
   { name: 'Simplex Live Stream', href: '/live', icon: <Radar className="w-4 h-4" /> },
   { name: 'Tunnel Investigations', href: '/cases', icon: <Target className="w-4 h-4" /> },
+  { name: 'Simplex Flow Ingestion', href: '/scan', icon: <Search className="w-4 h-4" /> },
   { name: 'Flow Analytics', href: '/analytics', icon: <BarChart3 className="w-4 h-4" /> },
   { name: 'AI/ML Anomaly Lab', href: '/ml', icon: <Zap className="w-4 h-4" /> },
   { name: 'Diode Gateway Health', href: '/health', icon: <Server className="w-4 h-4" /> },

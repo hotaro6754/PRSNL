@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { AlertTriangle, ShieldCheck, Activity, Search, Shield, Zap, FileText, Database, ArrowRight, Link, MessageSquare, QrCode, Mail, Radar, BarChart3, Network } from 'lucide-react'
+import { AlertTriangle, ShieldCheck, Activity, Search, Shield, Zap, FileText, Database, ArrowRight, Radar, BarChart3, Network } from 'lucide-react'
+import Link from 'next/link'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, CartesianGrid } from 'recharts'
 
 interface LiveThreat {
