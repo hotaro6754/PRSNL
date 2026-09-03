@@ -54,6 +54,7 @@ logger = logging.getLogger(__name__)
 import asyncio
 import json
 import time
+import uuid
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional, Dict, Any
 from collections import deque
@@ -180,12 +181,51 @@ async def broadcast_alert(alert_data: dict):
     if len(recent_alerts) > 200:
         recent_alerts.pop(0)
     dead = set()
-    for ws in alert_clients:
+    for ws in list(alert_clients):
         try:
             await ws.send_json({"type": "NEW_ALERT", "alert": alert_data})
         except Exception:
             dead.add(ws)
-    alert_clients -= dead
+    alert_clients.difference_update(dead)
+
+# ── Live Packet Flow Stream WebSocket ──────────────────────────────────
+packet_stream_clients: set = set()
+recent_packet_pulses: list = []
+
+@app.websocket("/ws/packet-stream")
+async def websocket_packet_stream(websocket: WebSocket):
+    await websocket.accept()
+    packet_stream_clients.add(websocket)
+    try:
+        if recent_packet_pulses:
+            await websocket.send_json({
+                "type": "BATCH_PACKETS",
+                "packets": recent_packet_pulses[-25:]
+            })
+        while True:
+            await websocket.receive_text()
+    except (WebSocketDisconnect, Exception):
+        packet_stream_clients.discard(websocket)
+
+async def broadcast_packet_pulse(packet_dict: dict):
+    """Push an individual packet pulse to connected visualizer clients."""
+    recent_packet_pulses.append(packet_dict)
+    if len(recent_packet_pulses) > 100:
+        recent_packet_pulses.pop(0)
+    if not packet_stream_clients:
+        return
+    dead = set()
+    for ws in list(packet_stream_clients):
+        try:
+            await ws.send_json({"type": "PACKET_PULSE", "packet": packet_dict})
+        except Exception:
+            dead.add(ws)
+    packet_stream_clients.difference_update(dead)
+
+@app.get("/api/network/packets/recent")
+async def get_recent_packet_pulses():
+    """Return recent packet pulses for visualization."""
+    return {"packets": recent_packet_pulses[-50:]}
 
 window_manager = WindowManager(window_size_ms=10000, allowed_lateness_ms=2000)
 redis_host_manager = RedisHostBehaviorManager(redis_host=os.getenv("REDIS_HOST", "cyberos-redis-prod"))
@@ -355,6 +395,22 @@ def _on_live_sniffed_flow(obs):
     window_manager.add_observation(obs)
     redis_host_manager.add_flow(obs)
     recent_flows_buffer.append(obs)
+    try:
+        pkt = {
+            "id": str(uuid.uuid4())[:8],
+            "timestamp": int(time.time() * 1000),
+            "source_ip": getattr(obs, "source_ip", "185.220.101.34"),
+            "destination_ip": getattr(obs, "destination_ip", "10.0.1.50"),
+            "protocol": "TCP" if getattr(obs, "protocol", 6) == 6 else "UDP",
+            "flags": ["SYN"] if getattr(obs, "tcp_syn_orig", False) else ["DATA"],
+            "size": getattr(obs, "orig_ip_bytes", 74),
+            "entropy": round(getattr(obs, "entropy", 3.8), 2),
+            "is_threat": getattr(obs, "tcp_syn_orig", False) or getattr(obs, "dns_query", None) is not None
+        }
+        loop = asyncio.get_running_loop()
+        asyncio.create_task(broadcast_packet_pulse(pkt))
+    except Exception:
+        pass
 
 live_sniffer = LiveNetworkSniffer(callback=_on_live_sniffed_flow)
 
@@ -377,6 +433,24 @@ def process_pcap_background(filename: str, loop: asyncio.AbstractEventLoop, tena
             window_manager.add_observation(flow)
             redis_host_manager.add_flow(flow)
             recent_flows_buffer.append(flow)
+            
+            # Emit packet pulse for visualizer every packet (or sampled if high volume)
+            try:
+                pkt = {
+                    "id": str(uuid.uuid4())[:8],
+                    "timestamp": int(time.time() * 1000),
+                    "source_ip": getattr(flow, "source_ip", "185.220.101.34"),
+                    "destination_ip": getattr(flow, "destination_ip", "10.0.1.50"),
+                    "protocol": "TCP" if getattr(flow, "protocol", 6) == 6 else "UDP",
+                    "flags": ["SYN"] if getattr(flow, "tcp_syn_orig", False) else ["DATA"],
+                    "size": getattr(flow, "orig_ip_bytes", 74),
+                    "entropy": round(getattr(flow, "entropy", 4.12), 2),
+                    "is_threat": getattr(flow, "tcp_syn_orig", False) or getattr(flow, "dns_query", None) is not None
+                }
+                asyncio.run_coroutine_threadsafe(broadcast_packet_pulse(pkt), loop)
+            except Exception:
+                pass
+
             if packet_count % 50 == 0:
                 ready_windows = window_manager.flush_ready_windows(0, is_live=False)
                 for wid, src_ip, org_id, window_flows in ready_windows:
@@ -904,8 +978,22 @@ async def simulate_attack(attack_type: str, background_tasks: BackgroundTasks):
     }
     try:
         await broadcast_alert(_alert)
-    except Exception:
-        pass
+        for i in range(12):
+            _pkt = {
+                "id": str(uuid.uuid4())[:8],
+                "timestamp": int(time.time() * 1000) + (i * 60),
+                "source_ip": _alert["source_ip"],
+                "destination_ip": _alert["destination_ip"],
+                "protocol": "UDP" if "dns" in attack_norm else "TCP",
+                "flags": ["SYN"] if ("ddos" in attack_norm or "scan" in attack_norm) else ["DATA"],
+                "size": 74 if "ddos" in attack_norm else _rng.randint(250, 1400),
+                "entropy": round(4.85 if "dns" in attack_norm else (3.2 if "beacon" in attack_norm else 4.1), 2),
+                "threat_class": threat_class,
+                "is_threat": True
+            }
+            await broadcast_packet_pulse(_pkt)
+    except Exception as e:
+        logger.error(f"Error in simulate_attack packet pulse: {e}", exc_info=True)
     return {"status": "ok", "attack": attack_type, "threat_class": threat_class}
 
 

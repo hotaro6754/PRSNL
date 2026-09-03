@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { Skull, Target, Zap, Activity, Wifi, Radio, Upload, Play, CheckCircle2, Shield, RefreshCw } from 'lucide-react'
+import PacketFlowCanvas from '@/components/PacketFlowCanvas'
 
 const ATTACKS = [
   {
@@ -143,6 +144,9 @@ export default function ActionCenterPage() {
           </p>
         </div>
       </div>
+
+      {/* REAL-TIME SIMPLEX PACKET FLOW VISUALIZER */}
+      <PacketFlowCanvas />
 
       {/* SNIFFER CONTROL PANEL */}
       <div className="bg-[#111] border border-slate-800 p-5 rounded-xl flex flex-wrap items-center justify-between gap-4">

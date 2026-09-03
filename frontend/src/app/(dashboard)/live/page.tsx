@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Radar, ShieldAlert, Activity } from 'lucide-react'
 import Link from 'next/link'
+import PacketFlowCanvas from '@/components/PacketFlowCanvas'
 
 export default function LiveThreatsPage() {
   const [alerts, setAlerts] = useState<any[]>([])
@@ -69,7 +70,10 @@ export default function LiveThreatsPage() {
         </div>
       </div>
 
-      <div className="flex-1 rounded-xl border border-slate-800 bg-[#0c0f17] shadow-sm flex flex-col min-h-[600px]">
+      {/* REAL-TIME SIMPLEX PACKET FLOW VISUALIZER */}
+      <PacketFlowCanvas />
+
+      <div className="flex-1 rounded-xl border border-slate-800 bg-[#0c0f17] shadow-sm flex flex-col min-h-[500px]">
         <div className="flex-1 p-0 overflow-auto">
           <table className="w-full text-left text-sm">
             <thead className="bg-[#121620] text-slate-400 sticky top-0 z-10 shadow-sm border-b border-slate-800">
