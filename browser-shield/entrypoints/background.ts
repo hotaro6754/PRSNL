@@ -1,4 +1,4 @@
-import { defineBackground } from 'wxt/sandbox';
+import { defineBackground } from 'wxt/utils/define-background';
 
 export default defineBackground(() => {
   console.log('CyberOS Shield Background Service Worker Started.');
