@@ -5,13 +5,13 @@ import { Activity, Zap, Terminal, Target, Skull, Radar, BarChart3, Server, Searc
 const NAV_ITEMS = [
   { name: 'Diode Overview', href: '/', icon: <Activity className="w-4 h-4" /> },
   { name: 'Simplex Live Stream', href: '/live', icon: <Radar className="w-4 h-4" /> },
-  { name: 'Threat Investigations', href: '/cases', icon: <Target className="w-4 h-4" /> },
+  { name: 'Tunnel Investigations', href: '/cases', icon: <Target className="w-4 h-4" /> },
   { name: 'Flow Analytics', href: '/analytics', icon: <BarChart3 className="w-4 h-4" /> },
   { name: 'AI/ML Anomaly Lab', href: '/ml', icon: <Zap className="w-4 h-4" /> },
   { name: 'Diode Gateway Health', href: '/health', icon: <Server className="w-4 h-4" /> },
   { name: 'Ingress Audit Logs', href: '/logs', icon: <Terminal className="w-4 h-4" /> },
-  { name: 'Traffic Simulator', href: '/simulator', icon: <Skull className="w-4 h-4" /> },
-  { name: 'Passive Flow Ingest', href: '/scan', icon: <Search className="w-4 h-4" /> },
+  { name: 'Attack Replay Lab', href: '/simulator', icon: <Skull className="w-4 h-4" /> },
+  { name: 'Passive Flow Terminal', href: '/scan', icon: <Search className="w-4 h-4" /> },
 ]
 
 export default function DashboardLayout({

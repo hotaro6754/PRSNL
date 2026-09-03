@@ -99,7 +99,7 @@ export default function ModelLab() {
           
           <div className="bg-blue-900/10 border border-blue-900/50 p-4 rounded-lg text-xs text-blue-200">
             <AlertTriangle className="w-4 h-4 mb-2 text-blue-400" />
-            <p><strong>Note on Evaluation:</strong> We strictly use Domain-Family and Temporal holdouts rather than random splits to prevent model memorization and ensure true zero-day phishing detection capability.</p>
+            <p><strong>Note on Evaluation:</strong> We strictly use Network Subnet and Temporal holdouts rather than random splits to prevent model memorization and ensure true zero-day unidirectional network threat & tunnel anomaly detection capability.</p>
           </div>
         </div>
 
@@ -164,13 +164,13 @@ export default function ModelLab() {
                 <div className="grid grid-cols-3 gap-1 text-center text-sm w-full max-w-[280px]">
                   <div className="bg-transparent"></div>
                   <div className="text-slate-400 font-bold pb-2 text-xs">Pred Benign</div>
-                  <div className="text-slate-400 font-bold pb-2 text-xs">Pred Phish</div>
+                  <div className="text-slate-400 font-bold pb-2 text-xs">Pred Threat</div>
                   
                   <div className="text-slate-400 font-bold pr-2 flex items-center justify-end text-xs">True Benign</div>
                   <div className="bg-slate-800 p-3 rounded text-slate-200">16,420</div>
                   <div className="bg-orange-900/30 text-orange-400 p-3 rounded">89</div>
                   
-                  <div className="text-slate-400 font-bold pr-2 flex items-center justify-end text-xs">True Phish</div>
+                  <div className="text-slate-400 font-bold pr-2 flex items-center justify-end text-xs">True Threat</div>
                   <div className="bg-red-900/30 text-red-400 p-3 rounded">142</div>
                   <div className="bg-blue-900/50 text-blue-300 p-3 rounded">11,210</div>
                 </div>

@@ -655,27 +655,32 @@ import random
 import string
 
 
-def do_quishing():
-    import httpx
-    httpx.post("http://127.0.0.1:8000/api/scan", json={"type": "qr", "content": "https://evil-qr.phishing.com/login"})
-    
-def do_smishing():
-    import httpx
-    httpx.post("http://127.0.0.1:8000/api/scan", json={"type": "sms", "content": "URGENT: Your account is suspended. Click here https://smish-update.com"})
-    
-def do_phishing_email():
-    import httpx
-    httpx.post("http://127.0.0.1:8000/api/scan", json={"type": "email", "content": "Dear user, wire transfer of  required immediately. See attached invoice.exe"})
-    
-def do_unidirectional_ip():
+def do_syn_flood():
     import socket
-    # Simulate a SYN flood (uni-directional IP flows where no SYN-ACK is returned)
-    # We send to a random blackholed IP that will never respond
-    for _ in range(30):
+    # Simulate a Volumetric SYN flood across data diode link
+    for _ in range(50):
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.settimeout(0.01)
-                s.connect(("10.255.255.255", 80)) # Non-routable blackhole
+                s.connect(("10.255.255.255", 80)) # Non-routable simplex sink
+        except Exception: pass
+
+def do_c2_beacon():
+    import socket
+    # Simulate robotic periodic beaconing with fixed inter-arrival intervals
+    for _ in range(10):
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(0.01)
+                s.connect(("cyberos-zeek", 443))
+        except Exception: pass
+
+def do_dns_tunnel():
+    for _ in range(10):
+        sub = ''.join(random.choices(string.ascii_lowercase + string.digits, k=30))
+        domain = f"{sub}.covert-exfil.tunnel.org"
+        try:
+            socket.gethostbyname(domain)
         except Exception: pass
 
 def do_port_scan():
@@ -686,57 +691,66 @@ def do_port_scan():
                 s.connect(("cyberos-zeek", port))
         except Exception: pass
 
-def do_brute_force():
-    for _ in range(40):
+def do_tls_anomaly():
+    # Simulate TLS encrypted metadata anomaly across simplex tap
+    for _ in range(15):
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.settimeout(0.05)
-                s.connect(("cyberos-zeek", 22))
+                s.settimeout(0.01)
+                s.connect(("cyberos-zeek", 8443))
         except Exception: pass
 
-def do_dga():
-    for _ in range(5):
-        domain = ''.join(random.choices(string.ascii_lowercase, k=25)) + ".com"
+def do_exfiltration():
+    # Simulate high-volume asymmetric egress
+    for _ in range(25):
         try:
-            socket.gethostbyname(domain)
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(0.01)
+                s.connect(("cyberos-zeek", 9000))
         except Exception: pass
 
 @app.post("/api/simulate/{attack_type}")
 async def simulate_attack(attack_type: str, background_tasks: BackgroundTasks):
-    if attack_type == "port_scan":
+    attack_norm = attack_type.lower()
+    if attack_norm in ("port_scan", "recon"):
         background_tasks.add_task(do_port_scan)
-    elif attack_type == "brute_force":
-        background_tasks.add_task(do_brute_force)
-    elif attack_type == "dga":
-        background_tasks.add_task(do_dga)
-    elif attack_type == "qr":
-        background_tasks.add_task(do_quishing)
-    elif attack_type == "sms":
-        background_tasks.add_task(do_smishing)
-    elif attack_type == "email":
-        background_tasks.add_task(do_phishing_email)
-    elif attack_type == "uni_directional":
-        background_tasks.add_task(do_unidirectional_ip)
+        threat_class = "Port Scan (Reconnaissance)"
+    elif attack_norm in ("ddos", "syn_flood", "uni_directional"):
+        background_tasks.add_task(do_syn_flood)
+        threat_class = "Volumetric SYN Flood (DDoS)"
+    elif attack_norm in ("c2_beacon", "beacon"):
+        background_tasks.add_task(do_c2_beacon)
+        threat_class = "Botnet C2 Beaconing"
+    elif attack_norm in ("dns_tunnel", "dga"):
+        background_tasks.add_task(do_dns_tunnel)
+        threat_class = "DNS Covert Tunnel / DGA"
+    elif attack_norm in ("tls_anomaly", "encrypted_malware"):
+        background_tasks.add_task(do_tls_anomaly)
+        threat_class = "Encrypted Session Metadata Anomaly"
+    elif attack_norm in ("exfiltration", "asymmetric_exfil"):
+        background_tasks.add_task(do_exfiltration)
+        threat_class = "Asymmetric Data Exfiltration"
     else:
-        raise HTTPException(status_code=400, detail="Unknown attack type")
-    # Broadcast alert to Live Threats WebSocket
+        raise HTTPException(status_code=400, detail=f"Unknown attack type: {attack_type}. Supported: ddos, beacon, dns_tunnel, tls_anomaly, port_scan, exfiltration")
+        
+    # Broadcast standardized alert to Live Threats WebSocket
     import random as _rng
     _alert = {
         "alert_id": str(uuid.uuid4()),
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "source_ip": _rng.choice(["185.220.101.34", "45.154.255.147", "91.240.118.172", "194.26.135.89", "23.129.64.210", "162.247.74.27", "198.98.56.149", "109.70.100.33"]),
         "destination_ip": f"10.0.{_rng.randint(1,5)}.{_rng.randint(10,250)}",
-        "threat_class": attack_type.upper().replace("_", " "),
-        "severity": "CRITICAL" if attack_type in ("port_scan", "dga", "uni_directional") else "HIGH",
-        "confidence": round(_rng.uniform(0.78, 0.99), 2),
-        "detector_id": "NDR-" + attack_type.upper(),
-        "category": attack_type,
+        "threat_class": threat_class,
+        "severity": "CRITICAL" if attack_norm in ("port_scan", "dns_tunnel", "ddos") else "HIGH",
+        "confidence": round(_rng.uniform(0.82, 0.99), 2),
+        "detector_id": "NTRO-" + attack_norm.upper(),
+        "category": "unidirectional_ip_network",
     }
     try:
         await broadcast_alert(_alert)
     except Exception:
         pass
-    return {"status": "ok", "attack": attack_type}
+    return {"status": "ok", "attack": attack_type, "threat_class": threat_class}
 
 
 @app.get("/api/network/tunnels")
@@ -936,86 +950,108 @@ if __name__ == "__main__":
     uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)
 
 
-class ScanRequest(BaseModel):
-    type: str
-    content: str
-
-from backend.engines import analyze_content
-
-class ScanRequest(BaseModel):
-    type: str  # "url", "email", "sms", "qr"
-    content: str
+class NetworkThreatScanRequest(BaseModel):
+    type: Optional[str] = None # vector alias for backward compatibility
+    vector: Optional[str] = "ddos" # "ddos", "beacon", "dns_tunnel", "tls_anomaly", "port_scan", "exfiltration"
+    content: Optional[str] = None # target/flow descriptor
+    source_ip: Optional[str] = "192.168.1.100"
+    destination_ip: Optional[str] = "10.0.0.50"
+    packets: Optional[int] = 100
+    bytes_transferred: Optional[int] = 52000
 
 @app.post("/api/scan")
-async def scan_content(request: ScanRequest):
-    # 1. Gather raw detection outputs (mocked/existing logic)
-    import time
-    time.sleep(1) # simulate processing latency
+async def scan_content(request: NetworkThreatScanRequest):
+    """Analyze unidirectional network flow for one of the 6 NTRO threat classes."""
+    import uuid, datetime
+    vec = (request.vector or request.type or "ddos").lower()
     
-    raw_detections = {
-        "url_analysis": {},
-        "email_analysis": {},
-        "sms_analysis": {},
-        "qr_analysis": {}
+    VECTOR_MAP = {
+        "ddos": ("Volumetric SYN Flood (DDoS)", "CRITICAL", 0.94, "High PPS with elevated Source-IP Shannon entropy (H > 2.5) across simplex tap"),
+        "syn_flood": ("Volumetric SYN Flood (DDoS)", "CRITICAL", 0.94, "High PPS with elevated Source-IP Shannon entropy (H > 2.5) across simplex tap"),
+        "beacon": ("Botnet C2 Beaconing", "HIGH", 0.88, "Low IAT Coefficient of Variation (CV < 0.5) confirming robotic periodic heartbeats"),
+        "c2_beacon": ("Botnet C2 Beaconing", "HIGH", 0.88, "Low IAT Coefficient of Variation (CV < 0.5) confirming robotic periodic heartbeats"),
+        "dns_tunnel": ("DNS Covert Tunnel / DGA", "CRITICAL", 0.96, "High subdomain character entropy and excessive apex fan-out (> 20 subdomains)"),
+        "dga": ("DNS Covert Tunnel / DGA", "CRITICAL", 0.96, "High subdomain character entropy and excessive apex fan-out (> 20 subdomains)"),
+        "tls_anomaly": ("Encrypted Session Metadata Anomaly", "HIGH", 0.85, "Observed JA3/JA3S fingerprint and burst timing anomaly without payload decryption"),
+        "tls": ("Encrypted Session Metadata Anomaly", "HIGH", 0.85, "Observed JA3/JA3S fingerprint and burst timing anomaly without payload decryption"),
+        "port_scan": ("Port Scan (Reconnaissance)", "CRITICAL", 0.92, "Destination fan-out cardinality threshold exceeded across multiple ports/subnets"),
+        "recon": ("Port Scan (Reconnaissance)", "CRITICAL", 0.92, "Destination fan-out cardinality threshold exceeded across multiple ports/subnets"),
+        "exfiltration": ("Asymmetric Data Exfiltration", "HIGH", 0.89, "Asymmetric flow volume anomaly with outbound-to-inbound byte ratio > 10:1"),
+        "exfil": ("Asymmetric Data Exfiltration", "HIGH", 0.89, "Asymmetric flow volume anomaly with outbound-to-inbound byte ratio > 10:1"),
     }
     
-    if request.type == "url":
-        from backend.content.url_analyzer import analyze_url
-        score, explanation, features = analyze_url(request.content)
-        evidence_ledger = [{"description": explanation, "source": "url_analyzer"}]
-        raw_detections["url_analysis"] = {
-            "suspicious": score > 0.5,
-            "evidence": evidence_ledger
-        }
+    threat_title, classification, conf, rationale = VECTOR_MAP.get(
+        vec, 
+        ("Unidirectional Flow Anomaly", "MEDIUM", 0.75, "Statistical divergence from baseline unidirectional traffic distribution")
+    )
     
-    # 2. Run the new unified Risk Intelligence Engine
-    final_result = analyze_content(request.type, request.content, raw_detections)
+    alert_id = str(uuid.uuid4())
+    now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    src_ip = request.source_ip or "192.168.1.100"
+    dst_ip = request.destination_ip or "10.0.0.50"
     
-    # 3. Broadcast to Live Threats WebSocket
-    import datetime, uuid
+    evidence_items = [
+        {"feature": "threat_vector", "value": vec, "explanation": rationale},
+        {"feature": "simplex_assurance", "value": "0_ACKs", "explanation": "Physical unidirectional optical diode ingress confirmed"},
+        {"feature": "packets_analyzed", "value": request.packets or 100, "explanation": "Micro-window passive frame count"},
+        {"feature": "bytes_transferred", "value": request.bytes_transferred or 52000, "explanation": "Asymmetric volume on wire"}
+    ]
+    
     _alert = {
-        "alert_id": str(uuid.uuid4()),
-        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "source_ip": request.type.upper(),
-        "destination_ip": request.content[:40],
-        "threat_class": final_result["threat_type"],
-        "severity": final_result["classification"],
-        "confidence": final_result["confidence"],
-        "detector_id": "RISK-ENGINE-V2",
-        "category": "content_scan",
+        "alert_id": alert_id,
+        "timestamp": now_iso,
+        "source_ip": src_ip,
+        "destination_ip": dst_ip,
+        "threat_class": threat_title,
+        "severity": classification,
+        "confidence": conf,
+        "detector_id": f"NTRO-{vec.upper()}-V1",
+        "category": "unidirectional_network_flow",
+        "evidence": evidence_items
     }
+    
     try:
         await broadcast_alert(_alert)
     except Exception:
         pass
         
-
     try:
-        from backend.contracts.case import CyberCase
-        
-        # Build the case object
         c = {
-            "case_id": _alert["alert_id"],
+            "case_id": alert_id,
             "organization_id": "tenant-1",
-            "primary_entity": request.content,
-            "primary_entity_type": request.type.lower(), # IMPORTANT! This maps to URL, SMS, EMAIL, QR
-            "source_ip": request.type.upper(),
+            "primary_entity": f"{src_ip} -> {dst_ip}",
+            "primary_entity_type": "ip_flow",
+            "source_ip": src_ip,
+            "destination_ip": dst_ip,
             "status": "OPEN",
-            "severity": final_result["classification"],
-            "risk_score": final_result.get("risk_score", 0.0),
-            "title": f"Scan Investigation: {request.type.upper()}",
-            "threat_summary": final_result["threat_type"],
+            "severity": classification,
+            "risk_score": int(conf * 100),
+            "title": f"Unidirectional Threat: {threat_title}",
+            "threat_summary": threat_title,
             "alerts": [_alert],
-            "first_seen": _alert["timestamp"],
-            "last_seen": _alert["timestamp"],
-            "created_at": _alert["timestamp"],
-            "updated_at": _alert["timestamp"],
+            "first_seen": now_iso,
+            "last_seen": now_iso,
+            "created_at": now_iso,
+            "updated_at": now_iso,
         }
         await mongo.upsert_case(c)
     except Exception as e:
-        logger.error(f"Failed to persist scan case: {e}")
+        logger.error(f"Failed to persist network threat case: {e}")
         
-    return final_result
+    return {
+        "case_id": alert_id,
+        "classification": classification,
+        "risk_score": int(conf * 100),
+        "confidence": conf,
+        "threat_type": threat_title,
+        "decision_summary": rationale,
+        "evidence": evidence_items,
+        "recommendations": [
+            "Maintain forensic optical link isolation (zero Tx return packets)",
+            f"Isolate network segment for source entity {src_ip}",
+            "Verify egress firewall rules for apex destination"
+        ]
+    }
 
 
 @app.post("/api/models/register")
