@@ -135,14 +135,14 @@ export default function CaseDetailPage() {
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-bold transition-colors flex items-center gap-2"
           >
             <Cpu className="w-3.5 h-3.5" />
-            {showMlLab ? 'Hide Flow ML Lab' : 'Simplex Flow ML Lab'}
+            {showMlLab ? 'Hide Flow ML Lab' : 'Investigate Flow (Simplex ML Lab)'}
           </button>
           <button 
             onClick={() => setShowCloseModal(true)}
             className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-bold transition-colors flex items-center gap-2"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-green-400" />
-            Close Case with Awareness
+            Close Case (Awareness Protocol)
           </button>
         </div>
       </div>
