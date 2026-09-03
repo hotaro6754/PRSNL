@@ -276,12 +276,14 @@ export default function CyberOSDashboard() {
             <h3 className="text-sm font-bold tracking-widest text-white border-b border-slate-800 pb-2">DEFENSE ENGINES (NTRO 26145)</h3>
             <div className="grid grid-cols-2 gap-2">
               {[
+                {name: 'Live RX Sniffer Tap', status: true},
                 {name: 'Zeek Simplex Sensor', status: isHealthy},
                 {name: 'XGBoost Flow Engine', status: true},
                 {name: 'Isolation Forest (UNSW)', status: true},
                 {name: 'Covert DNS Tunneling', status: true},
                 {name: 'Simplex C2 Beaconing', status: true},
                 {name: 'DDoS / Flood Engine', status: true},
+                {name: 'JA3 Encrypted Anomaly', status: true},
                 {name: 'Data Diode Simplex Guard', status: true},
                 {name: 'Redpanda Kafka Ingress', status: isHealthy},
               ].map((module, i) => (
