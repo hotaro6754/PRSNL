@@ -63,9 +63,6 @@ services:
     ports:
     - 3000:3000
     restart: unless-stopped
-    volumes:
-    - ./frontend:/app
-    - /app/node_modules
   grafana:
     container_name: cyberos-grafana
     depends_on:

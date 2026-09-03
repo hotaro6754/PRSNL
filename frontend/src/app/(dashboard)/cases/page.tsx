@@ -75,12 +75,13 @@ export default function CasesPage() {
                 <th className="px-6 py-3 font-medium">Severity</th>
                 <th className="px-6 py-3 font-medium">Status</th>
                 <th className="px-6 py-3 font-medium">First Seen</th>
+                <th className="px-6 py-3 font-medium text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="p-12 text-center text-slate-500">
+                  <td colSpan={7} className="p-12 text-center text-slate-500">
                     <div className="flex flex-col items-center justify-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
                       Loading security cases...
@@ -89,7 +90,7 @@ export default function CasesPage() {
                 </tr>
               ) : filteredCases.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-12 text-center text-slate-500">
+                  <td colSpan={7} className="p-12 text-center text-slate-500">
                     <div className="flex flex-col items-center justify-center">
                       <AlertCircle className="h-8 w-8 text-slate-600 mb-4" />
                       {search ? "No cases match your search." : "No security cases observed in the selected time range."}
@@ -120,6 +121,14 @@ export default function CasesPage() {
                   </td>
                   <td className="px-6 py-4 text-slate-400 font-mono text-xs">
                     {new Date(c.first_seen || c.created_at || Date.now()).toLocaleTimeString('en-IN')}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <Link
+                      href={`/cases/${c.case_id}`}
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-bold transition-colors inline-block"
+                    >
+                      Investigate & Contain
+                    </Link>
                   </td>
                 </tr>
               ))}
