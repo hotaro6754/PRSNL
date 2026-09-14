@@ -1,23 +1,20 @@
-FROM node:20-alpine
-
+FROM node:22-alpine AS build
 WORKDIR /app
-
-# Install dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci
-
-# Copy source files
 COPY . .
-
-# Build the Next.js application (disable memory-heavy checks)
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV DISABLE_ESLINT_PLUGIN=true
+ARG NEXT_PUBLIC_SENTINEL_API=http://localhost:8000
+ENV NEXT_PUBLIC_SENTINEL_API=$NEXT_PUBLIC_SENTINEL_API NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
+FROM node:22-alpine
+WORKDIR /app
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
+COPY --from=build /app/package.json /app/package-lock.json* ./
+RUN npm ci --omit=dev
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
+COPY --from=build /app/next.config.ts ./next.config.ts
+USER node
 EXPOSE 3000
-
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-
-# Start the application
-CMD ["npm", "start"]
+CMD ["npx", "next", "start"]

@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - name: Unit, detector, custody and API tests
+        run: python -m pytest -q tests
+      - name: End-to-end on a labelled lab capture
+        run: |
+          python -m sentinel.lab.generate --out lab/captures/ci.pcap --hours 0.5
+          python ml/evaluate.py lab/captures/ci.pcap --report results/ci-evaluation.json
+          python - <<'EOF'
+          import json, sys
+          r = json.load(open("results/ci-evaluation.json"))
+          o = r["overall"]
+          print(o)
+          if not r["custody_chain"]["ok"]:
+              sys.exit("custody chain failed verification")
+          if o["recall"] < 1.0:
+              sys.exit(f"missed labelled attacks: recall {o['recall']}")
+          EOF
+
+  dashboard:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx next build

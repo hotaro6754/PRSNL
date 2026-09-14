@@ -1,0 +1,111 @@
+{
+  "format": "sentinel.lab-truth/1.0",
+  "capture": "lab-2h.pcap",
+  "seed": 26145,
+  "start": 1788000000.0,
+  "end": 1788007200.0,
+  "duration_hours": 2.0,
+  "packets": 2580796,
+  "internal_nets": [
+    "10.20.0.0/16"
+  ],
+  "allow_destinations": [
+    "203.0.113.200"
+  ],
+  "benign_background": [
+    "dns",
+    "https-browsing",
+    "ntp",
+    "update-polling",
+    "downloads",
+    "backup-upload",
+    "monitoring-poller"
+  ],
+  "attacks": [
+    {
+      "threat_class": "c2.beaconing",
+      "src": "10.20.5.23",
+      "dst": "185.225.17.91",
+      "t0": 1788000600.0,
+      "t1": 1788007140.0,
+      "interval_s": 60.0,
+      "jitter": 0.15
+    },
+    {
+      "threat_class": "tls.suspicious_session",
+      "src": "10.20.5.23",
+      "dst": "185.225.17.91",
+      "t0": 1788000600.0,
+      "t1": 1788007140.0,
+      "note": "rare Go-like fingerprint, no SNI"
+    },
+    {
+      "threat_class": "ddos.syn_flood",
+      "src": null,
+      "dst": "10.20.0.80",
+      "t0": 1788002160.0,
+      "t1": 1788002172.0,
+      "spoofed": true,
+      "rate_pps": 3000
+    },
+    {
+      "threat_class": "ddos.udp_amplification",
+      "src": null,
+      "dst": "10.20.0.53",
+      "t0": 1788003240.0,
+      "t1": 1788003250.0,
+      "reflectors": 400
+    },
+    {
+      "threat_class": "dns.dga",
+      "src": "10.20.7.41",
+      "dst": null,
+      "t0": 1788001440.0,
+      "t1": 1788001490.443,
+      "family": "necurs",
+      "domains": 30
+    },
+    {
+      "threat_class": "dns.tunnel",
+      "src": "10.20.8.12",
+      "dst": "cdn-sync-telemetry.xyz",
+      "t0": 1788003960.0,
+      "t1": 1788004049.13,
+      "queries": 400
+    },
+    {
+      "threat_class": "recon.scan",
+      "src": "10.20.9.99",
+      "dst": "10.20.0.10",
+      "t0": 1788004680.0,
+      "t1": 1788004684.0,
+      "ports": 1000
+    },
+    {
+      "threat_class": "ddos.slow_http",
+      "src": null,
+      "dst": "10.20.0.90",
+      "t0": 1788005040.0,
+      "t1": 1788005130.0,
+      "connections": 60,
+      "sources": 2
+    },
+    {
+      "threat_class": "exfil.volume",
+      "src": "10.20.6.77",
+      "dst": "91.215.85.14",
+      "t0": 1788005760.0,
+      "t1": 1788005891.15,
+      "bytes": 180000000
+    },
+    {
+      "threat_class": "tls.suspicious_session",
+      "src": "10.20.6.77",
+      "dst": "91.215.85.14",
+      "t0": 1788005760.0,
+      "t1": 1788005891.15,
+      "note": "exfiltration channel"
+    }
+  ],
+  "synthetic": true
+}

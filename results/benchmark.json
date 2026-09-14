@@ -1,0 +1,111 @@
+{
+  "generated_at": "2026-09-13T14:32:11Z",
+  "sentinel_version": "1.0.0",
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "cpus": 12,
+    "python": "3.14.4"
+  },
+  "mode": "single process on one core; all detectors enabled; alerts signed and persisted",
+  "sustained_rule": "p99 packet lag < 0.5 s and lag at end of run < 1 s",
+  "max_throughput": {
+    "capture": "lab-30m.pcap",
+    "packets": 976356,
+    "bytes": 1307303664,
+    "flows": 58868,
+    "elapsed_s": 18.201,
+    "packets_per_s": 53644.0,
+    "flows_per_s": 3234.4,
+    "mbit_per_s": 574.62,
+    "alerts": 16,
+    "event_latency_ms_p50": 0.09259999933419749,
+    "event_latency_ms_p99": 0.3418000051169656
+  },
+  "steady": [
+    {
+      "offered_flows_per_s": 500,
+      "offered_packets_per_s": 5579.9,
+      "offered_mbit_per_s": 14.6,
+      "seconds": 20,
+      "packets": 112000,
+      "flows": 10000,
+      "lag_s_p50": 0.0005,
+      "lag_s_p99": 0.087,
+      "lag_s_max": 0.124,
+      "lag_s_final": 0.0304,
+      "sustained": true,
+      "alerts": 0
+    },
+    {
+      "offered_flows_per_s": 1000,
+      "offered_packets_per_s": 11159.3,
+      "offered_mbit_per_s": 29.21,
+      "seconds": 20,
+      "packets": 224000,
+      "flows": 20000,
+      "lag_s_p50": 0.0007,
+      "lag_s_p99": 0.2592,
+      "lag_s_max": 0.3393,
+      "lag_s_final": 0.1482,
+      "sustained": true,
+      "alerts": 0
+    },
+    {
+      "offered_flows_per_s": 1500,
+      "offered_packets_per_s": 16738.6,
+      "offered_mbit_per_s": 43.82,
+      "seconds": 20,
+      "packets": 336000,
+      "flows": 30000,
+      "lag_s_p50": 0.0008,
+      "lag_s_p99": 0.4767,
+      "lag_s_max": 0.5982,
+      "lag_s_final": 0.1765,
+      "sustained": true,
+      "alerts": 0
+    },
+    {
+      "offered_flows_per_s": 2000,
+      "offered_packets_per_s": 22318.0,
+      "offered_mbit_per_s": 58.43,
+      "seconds": 20,
+      "packets": 448000,
+      "flows": 40000,
+      "lag_s_p50": 0.1106,
+      "lag_s_p99": 0.5334,
+      "lag_s_max": 0.583,
+      "lag_s_final": 0.2586,
+      "sustained": false,
+      "alerts": 0
+    },
+    {
+      "offered_flows_per_s": 3000,
+      "offered_packets_per_s": 33476.7,
+      "offered_mbit_per_s": 87.6,
+      "seconds": 20,
+      "packets": 672000,
+      "flows": 60000,
+      "lag_s_p50": 0.7872,
+      "lag_s_p99": 2.9862,
+      "lag_s_max": 3.0764,
+      "lag_s_final": 2.9658,
+      "sustained": false,
+      "alerts": 0
+    }
+  ],
+  "stated_target": {
+    "offered_flows_per_s": 1500,
+    "offered_packets_per_s": 16738.6,
+    "offered_mbit_per_s": 43.82,
+    "seconds": 20,
+    "packets": 336000,
+    "flows": 30000,
+    "lag_s_p50": 0.0008,
+    "lag_s_p99": 0.4767,
+    "lag_s_max": 0.5982,
+    "lag_s_final": 0.1765,
+    "sustained": true,
+    "alerts": 0
+  }
+}

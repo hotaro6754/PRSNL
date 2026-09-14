@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-09-13T14:37:32Z",
+  "capture": "lab-30m.pcap",
+  "mode": "flow-export (NetFlow v5)",
+  "netflow_records": 83176,
+  "flow_detectable_attacks": 6,
+  "detected": 6,
+  "recall_flow_classes": 1.0,
+  "false_alerts_flow_classes": 0,
+  "per_class": {
+    "c2.beaconing": {
+      "attacks": 1,
+      "detected": 1
+    },
+    "ddos.syn_flood": {
+      "attacks": 1,
+      "detected": 1
+    },
+    "ddos.udp_amplification": {
+      "attacks": 1,
+      "detected": 1
+    },
+    "recon.scan": {
+      "attacks": 1,
+      "detected": 1
+    },
+    "ddos.slow_http": {
+      "attacks": 1,
+      "detected": 1
+    },
+    "exfil.volume": {
+      "attacks": 1,
+      "detected": 1
+    }
+  },
+  "unavailable_in_flow_mode": [
+    "dns.dga",
+    "dns.tunnel",
+    "tls.suspicious_session",
+    "tls.known_bad_fingerprint"
+  ],
+  "pipeline": {
+    "flows": 83176,
+    "exports": 2773,
+    "flows_per_s": 4820.4,
+    "elapsed_s": 17.255,
+    "event_latency_ms_p99": 0.3549999964889139
+  },
+  "custody_chain_ok": true,
+  "note": "DNS and TLS classes cannot fire without packet payload; this run measures only flow-observable classes."
+}

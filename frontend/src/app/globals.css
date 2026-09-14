@@ -1,148 +1,86 @@
 @import "tailwindcss";
 
+/* Instrument-console palette: cool neutral ground, one interactive accent (sky),
+   severity colours reserved for severity only. No external fonts: the sensor
+   runs air-gapped. */
 :root {
-  --bg-canvas: #08090d;
-  --bg-surface: #111318;
-  --bg-surface-elevated: #161920;
-  --bg-surface-subtle: #1c202a;
-  
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-default: rgba(255, 255, 255, 0.10);
-  --border-strong: rgba(255, 255, 255, 0.16);
-  
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
-  --text-disabled: #52525b;
-
-  --accent-primary: #3b82f6;
-  --accent-subtle: rgba(59, 130, 246, 0.12);
-  --status-critical: #ef4444;
-  --status-critical-subtle: rgba(239, 68, 68, 0.12);
-  --status-warning: #f59e0b;
-  --status-warning-subtle: rgba(245, 158, 11, 0.12);
-  --status-secure: #10b981;
-  --status-secure-subtle: rgba(16, 185, 129, 0.12);
+  --ground: #0b0e12;
+  --surface: #11151b;
+  --surface-2: #161b22;
+  --line: #222932;
+  --line-strong: #323b46;
+  --text: #dfe5ec;
+  --muted: #8592a0;
+  --accent: #38bdf8;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
 }
 
-@theme {
-  --color-canvas: #08090d;
-  --color-surface: #111318;
-  --color-surface-elevated: #161920;
-  --color-surface-subtle: #1c202a;
-  
-  --color-border-subtle: rgba(255, 255, 255, 0.06);
-  --color-border-default: rgba(255, 255, 255, 0.10);
-  --color-border-strong: rgba(255, 255, 255, 0.16);
-  
-  --color-text-primary: #f4f4f5;
-  --color-text-secondary: #a1a1aa;
-  --color-text-muted: #71717a;
+html,
+body {
+  background: var(--ground);
+  color: var(--text);
 }
 
 body {
-  background-color: #07080b;
-  background-image: 
-    radial-gradient(ellipse 60% 40% at 20% 0%, rgba(59, 130, 246, 0.12), transparent),
-    radial-gradient(ellipse 50% 35% at 85% 10%, rgba(139, 92, 246, 0.10), transparent),
-    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(14, 165, 233, 0.05), transparent),
-    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(244, 63, 94, 0.06), transparent),
-    radial-gradient(ellipse 50% 35% at 15% 85%, rgba(16, 185, 129, 0.05), transparent);
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-  color: var(--text-primary);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* LIQUID GLASS DESIGN SYSTEM */
-.glass-panel {
-  background: rgba(16, 19, 27, 0.65);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  box-shadow: 
-    0 8px 32px 0 rgba(0, 0, 0, 0.37),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+.font-mono,
+code,
+pre {
+  font-family: var(--font-mono);
 }
 
-.glass-card {
-  background: rgba(17, 20, 29, 0.65);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 
-    0 4px 24px -1px rgba(0, 0, 0, 0.4),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.10);
+.tabular-nums,
+td,
+dd {
+  font-variant-numeric: tabular-nums;
 }
 
+/* Legacy component classes kept flat so existing primitives render consistently. */
+.glass-panel,
+.glass-card,
 .glass-card-interactive {
-  background: rgba(17, 20, 29, 0.65);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 
-    0 4px 24px -1px rgba(0, 0, 0, 0.4),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.10);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-card-interactive:hover {
-  background: rgba(23, 28, 40, 0.78);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 
-    0 12px 40px -2px rgba(0, 0, 0, 0.55),
-    inset 0 1px 2px 0 rgba(255, 255, 255, 0.20);
-  transform: translateY(-1px);
-}
-
-.glass-topbar {
-  background: rgba(11, 13, 19, 0.65);
-  backdrop-filter: blur(20px) saturate(190%);
-  -webkit-backdrop-filter: blur(20px) saturate(190%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
-}
-
-.glass-sidebar {
-  background: rgba(10, 12, 18, 0.70);
-  backdrop-filter: blur(20px) saturate(190%);
-  -webkit-backdrop-filter: blur(20px) saturate(190%);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--line);
 }
 
 .glass-drawer {
-  background: rgba(13, 16, 24, 0.85);
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 
-    -12px 0 40px 0 rgba(0, 0, 0, 0.7),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  background: var(--surface-2);
+  border-left: 1px solid var(--line-strong);
 }
 
-/* Custom minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: var(--line-strong);
+  border-radius: 3px;
 }
 
 ::selection {
-  background: rgba(59, 130, 246, 0.35);
-  color: #fff;
+  background: rgba(56, 189, 248, 0.3);
+}
+
+@keyframes arrive {
+  from {
+    background-color: rgba(56, 189, 248, 0.14);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+.row-arrive {
+  animation: arrive 1.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row-arrive {
+    animation: none;
+  }
 }

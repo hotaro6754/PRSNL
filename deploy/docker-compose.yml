@@ -1,0 +1,57 @@
+# Sentinel-26145 enclave stack.
+#
+#   cp deploy/.env.example deploy/.env    # set tokens
+#   docker compose -f deploy/docker-compose.yml --env-file deploy/.env up --build
+#
+# Dashboard: http://localhost:3000   API: http://localhost:8000/api/health
+#
+# Live capture (Linux sensor host with the tap/diode receive interface eth1):
+#   sudo tcpdump -i eth1 -U -s 0 -w - | docker compose -f deploy/docker-compose.yml exec -T sentinel \
+#        python -m sentinel --data-dir /var/lib/sentinel analyze - --live
+# tcpdump only receives; nothing in this stack transmits toward the monitored link.
+
+name: sentinel-26145
+
+services:
+  sentinel:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.sentinel
+    environment:
+      SENTINEL_SENSOR_ID: ${SENTINEL_SENSOR_ID:-sentinel-01}
+      SENTINEL_ANALYST_TOKEN: ${SENTINEL_ANALYST_TOKEN:?set SENTINEL_ANALYST_TOKEN in deploy/.env}
+      SENTINEL_ADMIN_TOKEN: ${SENTINEL_ADMIN_TOKEN:?set SENTINEL_ADMIN_TOKEN in deploy/.env}
+      SENTINEL_INTERNAL_NETS: ${SENTINEL_INTERNAL_NETS:-10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}
+      SENTINEL_ALLOW_DESTINATIONS: ${SENTINEL_ALLOW_DESTINATIONS:-}
+      SENTINEL_CORS_ORIGINS: ${SENTINEL_CORS_ORIGINS:-http://localhost:3000}
+      SENTINEL_EVALUATION_REPORT: /app/results/evaluation.json
+      SENTINEL_BENCHMARK_REPORT: /app/results/benchmark.json
+    volumes:
+      - sentinel-data:/var/lib/sentinel
+      - ../lab/captures:/var/lib/sentinel/captures
+      - ../results:/app/results:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ../frontend
+      args:
+        NEXT_PUBLIC_SENTINEL_API: ${SENTINEL_PUBLIC_API:-http://localhost:8000}
+    depends_on:
+      sentinel:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3000:3000"
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+
+volumes:
+  sentinel-data:

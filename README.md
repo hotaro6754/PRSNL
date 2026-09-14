@@ -1,125 +1,144 @@
-<div align="center">
-  <img src="https://img.shields.io/badge/Status-Production_Ready-success" alt="Status" />
-  <img src="https://img.shields.io/badge/Problem_Statement-NTRO_PS%2326145-blue" alt="NTRO PS#26145" />
-  <img src="https://img.shields.io/badge/Architecture-Physical_Data_Diode_Simplex-purple" alt="Data Diode" />
-  <img src="https://img.shields.io/badge/Topology-100%25_Passive_Ingress_(0_ACKs)-red" alt="0 ACKs" />
-</div>
+# Sentinel-26145
 
-<h1 align="center">NTRO Sentinel-26145</h1>
-<p align="center">
-  <b>AI-Based Detection of Cyber Threats in Unidirectional IP Traffic Across Physical Data Diodes</b>
-</p>
+Passive threat detection for one-way IP traffic — Smart India Hackathon problem statement **26145** (National Technical Research Organisation).
 
----
+Sentinel reads a copy of a gateway or peering link (packet capture, or a live capture stream from a tap / data-diode receive interface) and raises structured, evidence-backed alerts for the six threat categories in the problem statement. It never transmits toward the monitored network, never decrypts payload, and processes traffic as a stream. Each alert is sealed into a signed hash chain and can be exported with the exact packets that support it.
 
-## 🛡️ Problem Statement ID: 26145
+## What is in this repository
 
-**Title**: AI-Based Detection of Cyber Threats in Unidirectional IP Traffic  
-**Organization**: National Technical Research Organisation (NTRO) / Critical Infrastructure Defense  
+| Path | Contents |
+|------|----------|
+| `sentinel/` | detection engine: capture reader, flow meter (TCP state, TLS JA3/JA4, DNS), detectors, case correlation, signed alert store, evidence bundles, API, CLI |
+| `ml/` | DGA data collection, training and evaluation; end-to-end evaluation and throughput benchmark |
+| `models/dga/` | trained DGA model (`.npz`, no pickle) and its manifest with test metrics |
+| `lab/` | labelled lab traffic generator (`python -m sentinel.lab.generate`) |
+| `results/` | measured evaluation and benchmark reports (read by the dashboard) |
+| `frontend/` | analyst dashboard (Next.js) |
+| `deploy/` | container images and compose file for an enclave deployment |
+| `docs/DESIGN.md` | design, detection methods, custody, threat model, limits |
+| `docs/alert.schema.json` | JSON Schema of the alert record |
+| `tests/` | unit, detector, custody, evidence-bundle and API tests |
+| `legacy/` | the previous prototype, kept for reference; not used |
 
-### Background
-Critical-infrastructure operators observe their gateway and peering links using passive optical splitters or hardware data diodes that copy traffic into a monitoring enclave in **one direction only**. The enclave can see everything crossing the link, but it has **no physical or protocol-level path back into the production network**. 
+## Problem statement coverage
 
-This is deliberate:
-1. It physically eliminates the risk of an analytical or monitoring enclave becoming a pivot point for adversaries into the core network.
-2. It preserves an immutable, tamper-proof chain of custody for forensic analysis.
+| PS requirement | How it is met | Where to check |
+|----------------|---------------|----------------|
+| (a) Volumetric / protocol DDoS | per-destination second aggregates: SYN rate, handshake completion, source cardinality and entropy (spoofed floods); UDP amplification from reflector service ports; UDP floods against a learned baseline | `sentinel/detect/ddos.py` |
+| (b) C2 beaconing | interval regularity (Bowley skew, median absolute deviation), request-size regularity, persistence; fleet-wide polling downgraded | `sentinel/detect/beacon.py` |
+| (c) DGA and DNS tunnelling | character n-gram model (calibrated) with a per-host burst rule; tunnelling from unique subdomains, label length, entropy, encoded volume and record types | `sentinel/detect/dns.py`, `ml/train_dga.py` |
+| (d) Malware in encrypted sessions | TLS handshake metadata only: JA4/JA3, SNI, ALPN, version; rare client fingerprints repeatedly contacting unranked or IP-literal destinations; offline JA3 blocklist | `sentinel/detect/tls.py`, `sentinel/proto/tls.py` |
+| (e) Reconnaissance and scanning | Threshold Random Walk sequential test on connection outcomes, plus fan-out | `sentinel/detect/scan.py` |
+| (f) Data exfiltration | outbound/inbound byte asymmetry per host and destination, against each host's own outbound baseline; visibility-checked | `sentinel/detect/exfil.py` |
+| Read-only ingest | reads files or a pcap stream on stdin; no socket toward monitored traffic anywhere in `sentinel/`; container has all capabilities dropped | `sentinel/ingest/pcapio.py`, `deploy/` |
+| No payload decryption | only cleartext handshake fields are parsed | `sentinel/proto/tls.py` |
+| Streaming, not batch | packet-by-packet flow meter with timers; alerts raised while traffic is read; detection delay reported per class | `sentinel/ingest/flowmeter.py`, `results/evaluation.json` |
+| Defined throughput target | measured steady-rate ladder, stated below | `ml/benchmark.py`, `results/benchmark.json` |
+| Standardised alert schema | versioned `sentinel.alert/1.0` record: timestamps, Community ID flow IDs, class, ATT&CK technique, confidence, evidence with thresholds and baselines, visibility, model hash, custody | `sentinel/alerts.py`, `docs/alert.schema.json` |
 
-### The Technical Challenge
-Traditional network defense tools rely on **bidirectional interaction** (e.g., TCP 3-way handshakes, sending TCP `RST` packets, ICMP Unreachable notices, active scanning, banner grabbing). In a unidirectional enclave:
-* **No return path exists**: Every bidirectional counter (`resp_packets`, `resp_bytes`) is permanently zero ($0$).
-* **No handshake completion**: Ingress TCP flows are 100% simplex (SYN packets arrive with zero return SYN-ACKs).
-* **Passive observation only**: Threat intelligence must be extracted purely from timing intervals, statistical payload entropy, and streaming window dynamics.
+## Measured results
 
----
+All figures below come from `results/*.json` and `models/dga/*.json`, produced by the scripts named. Host: Intel Core (12 logical CPUs), Windows 11, Python 3.14, **one process on one core**, all detectors enabled, every alert signed and persisted.
 
-## ⚡ Key Capabilities & 6 Threat Vectors
+### Throughput (constraint d)
 
-NTRO Sentinel-26145 passively detects all 6 core unidirectional attack vectors without requiring a reverse channel:
+`python ml/benchmark.py lab/captures/lab-30m.pcap --rates 500 1000 1500 2000 3000 --seconds 20`
 
-1. **Volumetric SYN Flood (DDoS)**: Detected via extreme SYN-to-ACK arrival surges and packet count gradient thresholds.
-2. **Botnet C2 Periodic Beaconing**: Detected via Inter-Arrival Time (IAT) Coefficient of Variation ($CV < 0.5$).
-3. **DNS Covert Tunnelling & DGA**: Detected via Shannon Entropy ($H > 3.8$) in subdomain labels and record length variance.
-4. **Encrypted Session Metadata Anomalies**: Passive JA3 / JA4 hash extraction and cipher suite ordering from TLS ClientHello.
-5. **Simplex Reconnaissance Scans**: Detected via sequential destination port fan-out ($>20$ ports) without completed handshakes.
-6. **Asymmetric Data Exfiltration**: Detected via unidirectional volumetric transfer ratios ($Ratio > 10\times$).
+Uniform benign sessions (DNS lookup, TCP handshake, TLS ClientHello on one session in five, request/response, close) released against the wall clock. Sustained = p99 packet lag < 0.5 s and lag at end < 1 s.
 
----
+| Offered flows/s | Packets/s | Lag p99 | Sustained |
+|---:|---:|---:|:--|
+| 500 | 5 580 | 0.05 s | yes |
+| **1 000** | **11 159** | **0.21 s** | **yes** |
+| 1 500 | 16 739 | 2.84 s | no |
+| 2 000 | 22 318 | 10.4 s | no |
 
-## 🏗️ Architectural Topology
+**Stated target: 1 000 flows/s (≈ 11 000 packets/s) sustained on a single core.** Unpaced, the pipeline processed the 30-minute lab capture at 23 095 packets/s (1 389 flows/s, 247 Mbit/s of original traffic). Per-event detection work: p50 0.06 ms, p99 0.24 ms. Higher link rates need several sensor processes behind a flow-hash split; that is not implemented here.
 
-```
-[Production Gateway / Tap Link]
-              │
-              ▼ (100% Optical Simplex - 0 Return Packets)
-┌────────────────────────────────────────────────────────┐
-│             NTRO Sentinel-26145 Sensor Enclave         │
-│                                                        │
-│  ┌───────────────────────┐  ┌───────────────────────┐  │
-│  │ Live Scapy Sniffer    │  │ Zeek Sensor           │  │
-│  │ (Interface: eth0)     │  │ (Simplex Ingress)     │  │
-│  └───────────┬───────────┘  └───────────┬───────────┘  │
-│              │                          │              │
-│              ▼                          ▼              │
-│   ┌─────────────────────────────────────────────────┐  │
-│   │ Redpanda (Kafka v24.1) Streaming Pipeline       │  │
-│   │ Topic: network-observations                     │  │
-│   └────────────────────────┬────────────────────────┘  │
-│                            ▼                           │
-│   ┌─────────────────────────────────────────────────┐  │
-│   │ Tumbling & Sliding Window Manager (5s windows)  │  │
-│   └────────────────────────┬────────────────────────┘  │
-│                            ▼                           │
-│   ┌─────────────────────────────────────────────────┐  │
-│   │ Dual AI/ML Inference Pipeline                   │  │
-│   │  • Model 1: XGBoost v5.0.0 (Supervised)         │  │
-│   │  • Model 2: Isolation Forest v2.0.0 (Anomaly)   │  │
-│   │  • Heuristics: Shannon Entropy + IAT CV         │  │
-│   └────────────────────────┬────────────────────────┘  │
-│                            ▼                           │
-│   ┌─────────────────────────────────────────────────┐  │
-│   │ Forensic Evidence Ledger (MongoDB 7 + Redis 7)  │  │
-│   └────────────────────────┬────────────────────────┘  │
-│                            ▼                           │
-│   ┌─────────────────────────────────────────────────┐  │
-│   │ Next.js 16 SOC Dashboard & Live Wire Inspector  │  │
-│   └─────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────┘
-```
+### Detection on a labelled lab capture
 
----
+`python -m sentinel.lab.generate --hours 2` then `python ml/evaluate.py lab/captures/lab-2h.pcap`
 
-## 🚀 Quickstart
+2 hours, 2.58 million packets: 60 hosts browsing over TLS, DNS, NTP, fleet-wide update polling every 30 minutes, large downloads, a sanctioned backup upload and a monitoring poller, with 9 labelled attacks injected.
 
-### Prerequisites
-* Docker & Docker Compose
-* Python 3.10+ (for verification tests)
+| Class | Detected | False alerts | Delay from attack start |
+|-------|:--:|:--:|--:|
+| ddos.syn_flood (spoofed) | 1 / 1 | 0 | 3.0 s |
+| ddos.udp_amplification | 1 / 1 | 0 | 3.0 s |
+| recon.scan | 1 / 1 | 0 | 0.04 s |
+| exfil.volume | 1 / 1 | 0 | 1.9 s |
+| dns.tunnel | 1 / 1 | 0 | 8.8 s |
+| dns.dga (unseen family) | 1 / 1 | 0 | 25 s |
+| tls.suspicious_session | 2 / 2 | 0 | 87 s, 235 s |
+| c2.beaconing (60 s ± 15 % jitter) | 1 / 1 | 0 | 611 s |
 
-### 1. Launch the Microservice Stack
+Custody chain verified over all 11 alerts.
+
+**This capture is synthetic.** It shows the pipeline working end to end and that it stays quiet on this benign background; it is not evidence of accuracy on real networks. The beacon delay is by design: the detector waits for 8 check-ins.
+
+### DGA model (`ml/train_dga.py`)
+
+Trained on 26 DGA families and Tranco ranks 1–400k; tested on **10 families never seen in training** and Tranco ranks 400k–1M.
+
+| Threshold | Precision | Recall | False-positive rate per domain |
+|--:|--:|--:|--:|
+| 0.5 | 0.777 | 0.679 | 1.85 % |
+| 0.9 (used) | 0.938 | 0.500 | 0.31 % |
+| 0.95 | 0.963 | 0.352 | 0.13 % |
+
+ROC-AUC 0.854. Random-character families are caught well (sisron 98 %, zloader 92 %, banjori 87 %, qakbot 77 % at 0.9); dictionary-word families are not (simda 8 %, nymaim2 0 %). The detector only alerts when one host looks up 6 or more such domains within 10 minutes, and skips the top-100k domains.
+
+## Run it
+
+Requirements: Python 3.11+, Node 22 for the dashboard.
+
 ```bash
-docker compose up -d --build
+pip install -r requirements-dev.txt
+python -m pytest -q tests
 ```
 
-### 2. Verify Enclave Health
+Analyse a capture from the command line:
+
 ```bash
-curl http://localhost:8000/health
+python -m sentinel.lab.generate --out lab/captures/lab-30m.pcap --hours 0.5
+python -m sentinel analyze lab/captures/lab-30m.pcap
+python -m sentinel verify-chain
+python -m sentinel bundle <alert_id> -o evidence.zip
+python -m sentinel verify-bundle evidence.zip --capture lab/captures/lab-30m.pcap
 ```
 
-### 3. Run the Aggressive Threat Verification Suite
+Live capture on a sensor host (tcpdump only receives):
+
 ```bash
-python tests_ntro_aggressive.py
+sudo tcpdump -i eth1 -U -s 0 -w - | python -m sentinel analyze - --live
 ```
-**Result**: 13/13 test cases passed covering Shannon entropy, IAT CV, volume ratio, PCAP replay, live sniffer, and storage.
 
----
+API and dashboard for local development:
 
-## 🌐 Web Console & Ports
+```bash
+python deploy/dev_api.py
+cd frontend && npm ci && npx next build && npx next start -p 3000
+```
 
-* **SOC Dashboard**: [http://localhost:3000](http://localhost:3000)
-* **Live Ingress Wire**: [http://localhost:3000/live](http://localhost:3000/live)
-* **Case Investigations**: [http://localhost:3000/cases](http://localhost:3000/cases)
-* **Attack Replay Lab**: [http://localhost:3000/simulator](http://localhost:3000/simulator)
-* **FastAPI Interactive Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
-* **Prometheus Metrics**: [http://localhost:9090](http://localhost:9090)
-* **Grafana Dashboards**: [http://localhost:3001](http://localhost:3001) (`admin`/`admin`)
+The admin token for starting replays is written to `var/admin_token`; enter it on the dashboard's Sensor page.
 
-For full mathematical derivations, Kali Linux tool mappings, and configuration details, see [SETUP_AND_ARCHITECTURE_GUIDE.md](SETUP_AND_ARCHITECTURE_GUIDE.md).
+Containers:
+
+```bash
+cp deploy/.env.example deploy/.env
+docker compose -f deploy/docker-compose.yml --env-file deploy/.env up --build
+```
+
+## Evidence and custody
+
+Every alert is appended to an append-only SQLite table and linked into a SHA-256 hash chain signed with the sensor's Ed25519 key. An evidence bundle holds the alert, the supporting packets cut from the original capture, SHA-256 values of every file and of the source capture, the public key, and a technical annex listing the hash facts a certificate under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 asks for. `verify-bundle` re-extracts the packets from the original capture and compares them byte for byte. Tests cover an edited alert, a modified capture and a bypassed append-only trigger.
+
+## Limits
+
+* Single-core throughput as measured above.
+* Slow beacons are found late (after 8 check-ins).
+* Encrypted ClientHello (TLS 1.3 ECH) or QUIC hides SNI; DNS over HTTPS hides DNS entirely.
+* Dictionary-word DGAs are largely missed by the character model.
+* Validation so far is on synthetic lab traffic; public captures (e.g. CTU-13) and operator traffic are the next step.
+
+See `docs/DESIGN.md` for method details and the sensor's own threat model.

@@ -23,3 +23,21 @@ data/buffers/
 .output/
 .wxt/
 
+# Sentinel runtime state and generated captures (regenerate with python -m sentinel.lab.generate)
+var/
+demo/
+lab/captures/*.pcap
+lab/captures/*.pcapng
+lab/captures/*.nfv5
+
+# Legacy CyberOS one-off generator scripts and browser research dumps (not part of the sensor)
+figma_inspections/
+generate_docs.py
+generate_ppt.py
+generate_html.py
+generate_final_artifacts.py
+fix_init.py
+.pytest_cache/
+*.tsbuildinfo
+deploy/.env
+

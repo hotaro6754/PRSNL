@@ -1,0 +1,477 @@
+{
+  "$defs": {
+    "Custody": {
+      "properties": {
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Sha256"
+        },
+        "packets": {
+          "items": {
+            "$ref": "#/$defs/PacketPointer"
+          },
+          "title": "Packets",
+          "type": "array"
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvidenceScope"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "seq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seq"
+        },
+        "prev_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prev Hash"
+        },
+        "hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hash"
+        },
+        "signature": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Signature"
+        }
+      },
+      "required": [
+        "source_id"
+      ],
+      "title": "Custody",
+      "type": "object"
+    },
+    "Evidence": {
+      "properties": {
+        "feature": {
+          "title": "Feature",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value"
+        },
+        "baseline": {
+          "default": null,
+          "title": "Baseline"
+        },
+        "threshold": {
+          "default": null,
+          "title": "Threshold"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "feature",
+        "value"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "EvidenceScope": {
+      "description": "How to cut the supporting packets back out of the source capture.",
+      "properties": {
+        "hosts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Hosts",
+          "type": "array"
+        },
+        "ports": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Ports",
+          "type": "array"
+        },
+        "proto": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Proto"
+        },
+        "t0": {
+          "title": "T0",
+          "type": "number"
+        },
+        "t1": {
+          "title": "T1",
+          "type": "number"
+        },
+        "offset_lo": {
+          "default": -1,
+          "title": "Offset Lo",
+          "type": "integer"
+        },
+        "offset_hi": {
+          "default": -1,
+          "title": "Offset Hi",
+          "type": "integer"
+        },
+        "max_packets": {
+          "default": 5000,
+          "title": "Max Packets",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "t0",
+        "t1"
+      ],
+      "title": "EvidenceScope",
+      "type": "object"
+    },
+    "ModelRef": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "calibration": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calibration"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "sha256"
+      ],
+      "title": "ModelRef",
+      "type": "object"
+    },
+    "PacketPointer": {
+      "properties": {
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "offset": {
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "index",
+        "offset"
+      ],
+      "title": "PacketPointer",
+      "type": "object"
+    },
+    "ThreatClass": {
+      "enum": [
+        "ddos.syn_flood",
+        "ddos.udp_amplification",
+        "ddos.udp_flood",
+        "c2.beaconing",
+        "dns.dga",
+        "dns.tunnel",
+        "tls.known_bad_fingerprint",
+        "tls.suspicious_session",
+        "ddos.slow_http",
+        "recon.scan",
+        "exfil.volume",
+        "anomaly.behavioural"
+      ],
+      "title": "ThreatClass",
+      "type": "string"
+    },
+    "Visibility": {
+      "description": "What the sensor actually saw while forming this alert.",
+      "properties": {
+        "directions_seen": {
+          "description": "mean directions observed per contributing flow (1 or 2)",
+          "title": "Directions Seen",
+          "type": "number"
+        },
+        "handshake_seen": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Handshake Seen"
+        },
+        "est_loss_pct": {
+          "default": 0.0,
+          "title": "Est Loss Pct",
+          "type": "number"
+        },
+        "sufficient": {
+          "default": true,
+          "title": "Sufficient",
+          "type": "boolean"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "directions_seen"
+      ],
+      "title": "Visibility",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema": {
+      "default": "sentinel.alert/1.0",
+      "title": "Schema",
+      "type": "string"
+    },
+    "alert_id": {
+      "title": "Alert Id",
+      "type": "string"
+    },
+    "sensor_id": {
+      "default": "sentinel-01",
+      "title": "Sensor Id",
+      "type": "string"
+    },
+    "emitted_at": {
+      "format": "date-time",
+      "title": "Emitted At",
+      "type": "string"
+    },
+    "event_time": {
+      "description": "epoch seconds of the last observation that triggered the alert",
+      "title": "Event Time",
+      "type": "number"
+    },
+    "window_start": {
+      "title": "Window Start",
+      "type": "number"
+    },
+    "window_end": {
+      "title": "Window End",
+      "type": "number"
+    },
+    "processing_latency_ms": {
+      "default": 0.0,
+      "title": "Processing Latency Ms",
+      "type": "number"
+    },
+    "threat_class": {
+      "$ref": "#/$defs/ThreatClass"
+    },
+    "category": {
+      "title": "Category",
+      "type": "string"
+    },
+    "attack_technique": {
+      "title": "Attack Technique",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "severity": {
+      "title": "Severity",
+      "type": "string"
+    },
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "src": {
+      "title": "Src",
+      "type": "string"
+    },
+    "dst": {
+      "title": "Dst",
+      "type": "string"
+    },
+    "dport": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dport"
+    },
+    "flow_ids": {
+      "description": "Community ID v1 of contributing flows",
+      "items": {
+        "type": "string"
+      },
+      "title": "Flow Ids",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "visibility": {
+      "$ref": "#/$defs/Visibility"
+    },
+    "detector": {
+      "title": "Detector",
+      "type": "string"
+    },
+    "model": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "custody": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Custody"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "advisory": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Advisory",
+      "type": "array"
+    }
+  },
+  "required": [
+    "event_time",
+    "window_start",
+    "window_end",
+    "threat_class",
+    "category",
+    "attack_technique",
+    "title",
+    "severity",
+    "confidence",
+    "src",
+    "dst",
+    "evidence",
+    "visibility",
+    "detector"
+  ],
+  "title": "Alert",
+  "type": "object"
+}

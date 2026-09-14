@@ -1,0 +1,173 @@
+{
+  "generated_at": "2026-09-13T14:24:55Z",
+  "sentinel_version": "1.0.0",
+  "capture": "lab-30m.pcap",
+  "capture_sha256": "ac0e673c92a203e233a2c644aa1048bdf361423181091b9e4af9a09d696e18ba",
+  "synthetic": true,
+  "duration_hours": 0.5,
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+    "python": "3.14.4"
+  },
+  "overall": {
+    "attacks": 10,
+    "detected": 10,
+    "recall": 1.0,
+    "alerts": 15,
+    "false_alerts": 0,
+    "false_alerts_per_hour": 0.0
+  },
+  "per_class": {
+    "c2.beaconing": {
+      "attacks": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "alerts": 1,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        403.16
+      ]
+    },
+    "ddos.slow_http": {
+      "attacks": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "alerts": 1,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        77.45
+      ]
+    },
+    "ddos.syn_flood": {
+      "attacks": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "alerts": 1,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        3.0
+      ]
+    },
+    "ddos.udp_amplification": {
+      "attacks": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "alerts": 1,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        3.0
+      ]
+    },
+    "dns.dga": {
+      "attacks": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "alerts": 1,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        16.14
+      ]
+    },
+    "dns.tunnel": {
+      "attacks": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "alerts": 1,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        8.58
+      ]
+    },
+    "exfil.volume": {
+      "attacks": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "alerts": 1,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        1.86
+      ]
+    },
+    "recon.scan": {
+      "attacks": 1,
+      "detected": 1,
+      "recall": 1.0,
+      "alerts": 1,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        0.04
+      ]
+    },
+    "tls.suspicious_session": {
+      "attacks": 2,
+      "detected": 2,
+      "recall": 1.0,
+      "alerts": 2,
+      "false_alerts": 0,
+      "precision": 1.0,
+      "false_alerts_per_hour": 0.0,
+      "detection_delay_s": [
+        234.66,
+        87.45
+      ]
+    }
+  },
+  "anomaly_supporting": {
+    "alerts": 5,
+    "per_hour": 10.0,
+    "note": "unsupervised behavioural anomaly net; supporting signal only, not one of the six PS classes",
+    "hosts": [
+      "10.20.0.5",
+      "10.20.0.53",
+      "10.20.0.80",
+      "10.20.11.5",
+      "10.20.11.6"
+    ]
+  },
+  "false_alert_samples": [],
+  "pipeline": {
+    "packets": 976356,
+    "flows": 58868,
+    "elapsed_s": 20.985,
+    "packets_per_s": 46525.9,
+    "flows_per_s": 2805.2,
+    "mbit_per_s": 498.37,
+    "alert_latency_ms_p50": 0.346,
+    "alert_latency_ms_p99": 3.266,
+    "event_latency_ms_p50": 0.09419999696547166,
+    "event_latency_ms_p99": 0.36579999868990853,
+    "detector_errors": {}
+  },
+  "custody_chain": {
+    "ok": true,
+    "checked": 15,
+    "head_seq": 15,
+    "head_hash": "34a5e952cf25e4b20e3683132109d3224f15660bcb0ebe7200164b8967bc9533",
+    "hash_algorithm": "SHA-256",
+    "signature_algorithm": "Ed25519",
+    "sensor_key_fingerprint": "a5c94bcb656d1580a27cf6ce460d7e8d577a6601d86ff3c3fc2bf2178876ef19"
+  },
+  "dga_model": {
+    "name": "dga-char-ngram-lr",
+    "version": "2026.09.13",
+    "sha256": "643b9b130032f4b6f6427de809c7570927193dd749896aa2fe6be3aa37ef54f9",
+    "calibration": "isotonic (validation split)"
+  }
+}

@@ -1,0 +1,6 @@
+-r deploy/requirements-sentinel.txt
+# training, evaluation and tests
+scipy>=1.14
+scikit-learn>=1.5
+pytest>=8
+httpx>=0.27

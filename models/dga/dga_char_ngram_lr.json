@@ -1,0 +1,140 @@
+{
+  "name": "dga-char-ngram-lr",
+  "version": "2026.09.13",
+  "created_at": "2026-09-13T08:46:20.485084+00:00",
+  "calibration": "isotonic (validation split)",
+  "features": "hashed character 1-4 grams of the registrable label + length/digit/vowel/hyphen buckets, 262144 dims",
+  "classifier": "L2 logistic regression (liblinear, C=4, balanced class weights)",
+  "data": {
+    "dga_source": "outputs of reverse-engineered DGA implementations, github.com/baderj/domain_generation_algorithms",
+    "benign_source": "Tranco top-1M list (https://tranco-list.eu)",
+    "train_families": [
+      "bumblebee",
+      "chinad",
+      "darkcracks",
+      "fosniw",
+      "gozi",
+      "locky",
+      "m0yv",
+      "monerodownloader",
+      "mydoom",
+      "newgoz",
+      "ngioweb",
+      "nymaim",
+      "orchard",
+      "pitou",
+      "proslikefan",
+      "pushdo",
+      "qadars",
+      "qsnatch",
+      "reconyc",
+      "sharkbot",
+      "tempedreve",
+      "tufik",
+      "unnamed_downloader",
+      "unnamed_javascript_dga",
+      "vawtrak",
+      "verblecon"
+    ],
+    "test_families_held_out": [
+      "banjori",
+      "necurs",
+      "nymaim2",
+      "padcrypt",
+      "qakbot",
+      "ramdo",
+      "simda",
+      "sisron",
+      "tinba",
+      "zloader"
+    ],
+    "counts": {
+      "train_benign": 63102,
+      "train_dga": 10517,
+      "val_benign": 20000,
+      "val_dga": 2635,
+      "test_benign": 100000,
+      "test_dga": 9500
+    },
+    "benign_split": "train/val ranks 1-400k, test ranks 400k-1M"
+  },
+  "test_metrics": {
+    "roc_auc": 0.8543,
+    "average_precision": 0.7238,
+    "brier": 0.03842,
+    "operating_points": [
+      {
+        "threshold": 0.5,
+        "precision": 0.7771,
+        "recall": 0.6787,
+        "f1": 0.7246,
+        "false_positive_rate": 0.01849
+      },
+      {
+        "threshold": 0.8,
+        "precision": 0.8928,
+        "recall": 0.5945,
+        "f1": 0.7138,
+        "false_positive_rate": 0.00678
+      },
+      {
+        "threshold": 0.9,
+        "precision": 0.938,
+        "recall": 0.5001,
+        "f1": 0.6524,
+        "false_positive_rate": 0.00314
+      },
+      {
+        "threshold": 0.95,
+        "precision": 0.9634,
+        "recall": 0.3519,
+        "f1": 0.5155,
+        "false_positive_rate": 0.00127
+      }
+    ],
+    "per_held_out_family": {
+      "necurs": {
+        "domains": 1957,
+        "recall_at_0.9": 0.6536
+      },
+      "qakbot": {
+        "domains": 2000,
+        "recall_at_0.9": 0.7655
+      },
+      "simda": {
+        "domains": 1000,
+        "recall_at_0.9": 0.083
+      },
+      "nymaim2": {
+        "domains": 2000,
+        "recall_at_0.9": 0.0
+      },
+      "tinba": {
+        "domains": 1259,
+        "recall_at_0.9": 0.6021
+      },
+      "ramdo": {
+        "domains": 20,
+        "recall_at_0.9": 0.6
+      },
+      "zloader": {
+        "domains": 128,
+        "recall_at_0.9": 0.9219
+      },
+      "padcrypt": {
+        "domains": 96,
+        "recall_at_0.9": 0.6146
+      },
+      "sisron": {
+        "domains": 40,
+        "recall_at_0.9": 0.975
+      },
+      "banjori": {
+        "domains": 1000,
+        "recall_at_0.9": 0.872
+      }
+    },
+    "note": "single-domain scores; the detector additionally requires several such domains from one host and skips top-100k domains, which lowers false alerts further"
+  },
+  "sha256": "643b9b130032f4b6f6427de809c7570927193dd749896aa2fe6be3aa37ef54f9"
+}
